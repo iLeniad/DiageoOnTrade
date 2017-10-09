@@ -14,6 +14,13 @@
 		BDFEAF661F8B4008008EF209 /* DiageoOnTrade.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF641F8B4008008EF209 /* DiageoOnTrade.xcdatamodeld */; };
 		BDFEAF681F8B4008008EF209 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDFEAF671F8B4008008EF209 /* Assets.xcassets */; };
 		BDFEAF6B1F8B4008008EF209 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDFEAF691F8B4008008EF209 /* LaunchScreen.storyboard */; };
+		BDFEAF741F8B4C1E008EF209 /* sincronizador.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF731F8B4C1E008EF209 /* sincronizador.swift */; };
+		BDFEAF761F8B4F26008EF209 /* SQLSW4.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF751F8B4F26008EF209 /* SQLSW4.swift */; };
+		BDFEAF781F8B4F63008EF209 /* Extensiones.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF771F8B4F63008EF209 /* Extensiones.swift */; };
+		BDFEAF7B1F8B5057008EF209 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BDFEAF791F8B5057008EF209 /* libsqlite3.tbd */; };
+		BDFEAF7C1F8B5057008EF209 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BDFEAF7A1F8B5057008EF209 /* libsqlite3.0.tbd */; };
+		BDFEAF811F8B5158008EF209 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF7F1F8B5157008EF209 /* SWRevealViewController.m */; };
+		BDFEAF831F8B545F008EF209 /* InicioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF821F8B545F008EF209 /* InicioController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +33,15 @@
 		BDFEAF671F8B4008008EF209 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BDFEAF6A1F8B4008008EF209 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BDFEAF6C1F8B4008008EF209 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BDFEAF731F8B4C1E008EF209 /* sincronizador.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sincronizador.swift; sourceTree = "<group>"; };
+		BDFEAF751F8B4F26008EF209 /* SQLSW4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLSW4.swift; sourceTree = "<group>"; };
+		BDFEAF771F8B4F63008EF209 /* Extensiones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensiones.swift; sourceTree = "<group>"; };
+		BDFEAF791F8B5057008EF209 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		BDFEAF7A1F8B5057008EF209 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		BDFEAF7E1F8B5156008EF209 /* DiageoOnTrade-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DiageoOnTrade-Bridging-Header.h"; sourceTree = "<group>"; };
+		BDFEAF7F1F8B5157008EF209 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		BDFEAF801F8B5157008EF209 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		BDFEAF821F8B545F008EF209 /* InicioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InicioController.swift; sourceTree = "<group>"; };
 		E7FA0889BD9D8806273829CC /* Pods_DiageoOnTrade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DiageoOnTrade.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB8DD93314C86A72A512F850 /* Pods-DiageoOnTrade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiageoOnTrade.release.xcconfig"; path = "Pods/Target Support Files/Pods-DiageoOnTrade/Pods-DiageoOnTrade.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -35,6 +51,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDFEAF7B1F8B5057008EF209 /* libsqlite3.tbd in Frameworks */,
+				BDFEAF7C1F8B5057008EF209 /* libsqlite3.0.tbd in Frameworks */,
 				ACB5D2D8BAEE179B518A0A5E /* Pods_DiageoOnTrade.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,8 +81,11 @@
 		BDFEAF5C1F8B4007008EF209 /* DiageoOnTrade */ = {
 			isa = PBXGroup;
 			children = (
+				BDFEAF7D1F8B5117008EF209 /* Object-C */,
+				BDFEAF721F8B4BEE008EF209 /* Mis Librerias */,
 				BDFEAF5D1F8B4007008EF209 /* AppDelegate.swift */,
 				BDFEAF5F1F8B4007008EF209 /* ViewController.swift */,
+				BDFEAF821F8B545F008EF209 /* InicioController.swift */,
 				BDFEAF611F8B4008008EF209 /* Main.storyboard */,
 				BDFEAF671F8B4008008EF209 /* Assets.xcassets */,
 				BDFEAF691F8B4008008EF209 /* LaunchScreen.storyboard */,
@@ -72,6 +93,26 @@
 				BDFEAF641F8B4008008EF209 /* DiageoOnTrade.xcdatamodeld */,
 			);
 			path = DiageoOnTrade;
+			sourceTree = "<group>";
+		};
+		BDFEAF721F8B4BEE008EF209 /* Mis Librerias */ = {
+			isa = PBXGroup;
+			children = (
+				BDFEAF731F8B4C1E008EF209 /* sincronizador.swift */,
+				BDFEAF751F8B4F26008EF209 /* SQLSW4.swift */,
+				BDFEAF771F8B4F63008EF209 /* Extensiones.swift */,
+			);
+			path = "Mis Librerias";
+			sourceTree = "<group>";
+		};
+		BDFEAF7D1F8B5117008EF209 /* Object-C */ = {
+			isa = PBXGroup;
+			children = (
+				BDFEAF801F8B5157008EF209 /* SWRevealViewController.h */,
+				BDFEAF7F1F8B5157008EF209 /* SWRevealViewController.m */,
+				BDFEAF7E1F8B5156008EF209 /* DiageoOnTrade-Bridging-Header.h */,
+			);
+			path = "Object-C";
 			sourceTree = "<group>";
 		};
 		DEAAA8CDE2F0F8902B22ACC3 /* Pods */ = {
@@ -86,6 +127,8 @@
 		EF359F999D61B923563C2B34 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BDFEAF7A1F8B5057008EF209 /* libsqlite3.0.tbd */,
+				BDFEAF791F8B5057008EF209 /* libsqlite3.tbd */,
 				E7FA0889BD9D8806273829CC /* Pods_DiageoOnTrade.framework */,
 			);
 			name = Frameworks;
@@ -126,6 +169,7 @@
 				TargetAttributes = {
 					BDFEAF591F8B4007008EF209 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -169,11 +213,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-DiageoOnTrade/Pods-DiageoOnTrade-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
 			);
@@ -225,9 +271,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDFEAF831F8B545F008EF209 /* InicioController.swift in Sources */,
+				BDFEAF811F8B5158008EF209 /* SWRevealViewController.m in Sources */,
+				BDFEAF761F8B4F26008EF209 /* SQLSW4.swift in Sources */,
 				BDFEAF601F8B4007008EF209 /* ViewController.swift in Sources */,
 				BDFEAF5E1F8B4007008EF209 /* AppDelegate.swift in Sources */,
+				BDFEAF781F8B4F63008EF209 /* Extensiones.swift in Sources */,
 				BDFEAF661F8B4008008EF209 /* DiageoOnTrade.xcdatamodeld in Sources */,
+				BDFEAF741F8B4C1E008EF209 /* sincronizador.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +417,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K6K7N36U8G;
 				INFOPLIST_FILE = DiageoOnTrade/Info.plist;
@@ -373,6 +425,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.go-sharp.DiageoOnTrade";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DiageoOnTrade/Object-C/DiageoOnTrade-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -384,6 +438,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K6K7N36U8G;
 				INFOPLIST_FILE = DiageoOnTrade/Info.plist;
@@ -391,6 +446,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.go-sharp.DiageoOnTrade";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DiageoOnTrade/Object-C/DiageoOnTrade-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

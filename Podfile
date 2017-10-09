@@ -16,5 +16,7 @@ pod 'CryptoSwift'
 
 pod 'NVActivityIndicatorView'
 
+pod 'Alamofire'
+
 
 end
