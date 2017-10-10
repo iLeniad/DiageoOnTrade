@@ -20,9 +20,288 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <segue destination="hH3-kB-hpw" kind="presentation" identifier="logintoinicio" id="6Hr-0r-n9o"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
+        <!--Reveal View Controller-->
+        <scene sceneID="VtV-Ex-SGl">
+            <objects>
+                <viewController id="hH3-kB-hpw" customClass="SWRevealViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="U6V-xm-gNZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="p4y-Xr-mHj"/>
+                    </view>
+                    <connections>
+                        <segue destination="13E-PB-TcI" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="8YO-C1-7gA"/>
+                        <segue destination="iFz-mg-lRO" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegueSetController" id="J1W-vf-CG2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TUM-Y0-7y4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1343" y="33"/>
+        </scene>
+        <!--Promociones Controller-->
+        <scene sceneID="JT8-jg-CPe">
+            <objects>
+                <viewController id="byZ-ir-A9C" customClass="PromocionesController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FVt-XO-VB8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="YXl-1r-ErM"/>
+                    </view>
+                    <connections>
+                        <segue destination="Fj1-lq-oZe" kind="custom" identifier="promocionestopromocion" customClass="SWRevealViewControllerSeguePushController" id="AMi-c7-dhR"/>
+                        <segue destination="UFt-5t-w1G" kind="custom" identifier="promociontomodulos" customClass="SWRevealViewControllerSeguePushController" id="OrA-8f-lQP"/>
+                        <segue destination="UFt-5t-w1G" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="Cvo-7V-WBL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZbS-q0-EnJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2030" y="-640"/>
+        </scene>
+        <!--Promocion Controller-->
+        <scene sceneID="abe-7h-8Vd">
+            <objects>
+                <viewController id="Fj1-lq-oZe" customClass="PromocionController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TiQ-gf-Bjo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="50k-2n-RxU"/>
+                    </view>
+                    <connections>
+                        <segue destination="byZ-ir-A9C" kind="custom" identifier="promociontopromociones" customClass="SWRevealViewControllerSeguePushController" id="2rs-Yt-2q5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iVh-jK-EE2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2810" y="-663"/>
+        </scene>
+        <!--Encuestas Controller-->
+        <scene sceneID="Wzs-O5-jOO">
+            <objects>
+                <viewController id="IoK-VM-8O1" customClass="EncuestasController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CQg-Fb-4Dg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="3Rf-dE-7Ob"/>
+                    </view>
+                    <connections>
+                        <segue destination="XvO-J6-xKn" kind="custom" identifier="encuestastoencuesta" customClass="SWRevealViewControllerSeguePushController" id="DZT-Nc-AJh"/>
+                        <segue destination="loh-gJ-ASF" kind="custom" identifier="encuestastoencuestasrepeticiones" customClass="SWRevealViewControllerSeguePushController" id="8OK-Bm-1FQ"/>
+                        <segue destination="UFt-5t-w1G" kind="custom" identifier="encuestastomodulos" customClass="SWRevealViewControllerSeguePushController" id="Wrj-wm-oHU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="irM-fg-OGq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3502" y="-1916"/>
+        </scene>
+        <!--Encuestas Repeticiones-->
+        <scene sceneID="hwr-P5-X8x">
+            <objects>
+                <viewController id="loh-gJ-ASF" customClass="EncuestasRepeticiones" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Mhs-kb-595">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="CeE-Q0-s9x"/>
+                    </view>
+                    <connections>
+                        <segue destination="XvO-J6-xKn" kind="custom" identifier="encuestasrepeticionestoencuesta" customClass="SWRevealViewControllerSeguePushController" id="LC3-uq-fIT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vgN-XK-KO2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4139" y="-1933"/>
+        </scene>
+        <!--Encuesta Controller-->
+        <scene sceneID="vcg-nf-a9E">
+            <objects>
+                <viewController id="XvO-J6-xKn" customClass="EncuestaController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wzK-nF-CKS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="W8D-oi-tfH"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hJc-on-sHq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4908" y="-1792"/>
+        </scene>
+        <!--Modulos Controller-->
+        <scene sceneID="IwZ-q4-GoE">
+            <objects>
+                <viewController id="UFt-5t-w1G" customClass="ModulosController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Q7C-hl-DCu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="mdH-SB-2N1"/>
+                    </view>
+                    <connections>
+                        <segue destination="byZ-ir-A9C" kind="custom" identifier="modulostopromociones" customClass="SWRevealViewControllerSeguePushController" id="Tpf-Ff-4KT"/>
+                        <segue destination="B0Z-F1-bhQ" kind="custom" identifier="modulostovisibilidadlista" customClass="SWRevealViewControllerSeguePushController" id="8QC-zQ-kcs"/>
+                        <segue destination="IoK-VM-8O1" kind="custom" identifier="modulostoencuestas" customClass="SWRevealViewControllerSeguePushController" id="uaV-BL-tjc"/>
+                        <segue destination="zAl-tS-foh" kind="custom" identifier="modulostomodulo" customClass="SWRevealViewControllerSeguePushController" id="edy-yB-8td"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2E7-Ox-xON" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3599" y="-708"/>
+        </scene>
+        <!--Modulo Controller-->
+        <scene sceneID="wKV-if-Sn8">
+            <objects>
+                <viewController id="zAl-tS-foh" customClass="ModuloController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pyg-jL-hIW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="5Ym-Vo-dnx"/>
+                    </view>
+                    <connections>
+                        <segue destination="UFt-5t-w1G" kind="custom" identifier="modulotomodulos" customClass="SWRevealViewControllerSeguePushController" id="3Su-be-Lix"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Hb-2M-gwA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4354" y="-1225"/>
+        </scene>
+        <!--Visibilidad Lista Controller-->
+        <scene sceneID="lfe-XT-AeJ">
+            <objects>
+                <viewController id="B0Z-F1-bhQ" customClass="VisibilidadListaController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Uhp-qd-0Rl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="pi7-fU-4i7"/>
+                    </view>
+                    <connections>
+                        <segue destination="UFt-5t-w1G" kind="custom" identifier="visibilidadtomodulos" customClass="SWRevealViewControllerSeguePushController" id="s4U-xA-vMJ"/>
+                        <segue destination="U4s-mE-mEM" kind="custom" identifier="visibilidadlistatovisibilidad" customClass="SWRevealViewControllerSeguePushController" id="8qb-fL-UFl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Cco-Te-IK8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4410" y="-708"/>
+        </scene>
+        <!--Visibilidad Controller-->
+        <scene sceneID="8Pt-Bv-T5o">
+            <objects>
+                <viewController id="U4s-mE-mEM" customClass="VisibilidadController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ysj-FI-yIY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="oqh-K7-uZk"/>
+                    </view>
+                    <connections>
+                        <segue destination="B0Z-F1-bhQ" kind="custom" identifier="visibilidadtolistavisibilidad" customClass="SWRevealViewControllerSeguePushController" id="I30-Jc-jpp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rvz-lB-l5m" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5167" y="-708"/>
+        </scene>
+        <!--Menu Controller-->
+        <scene sceneID="9dO-dR-FS2">
+            <objects>
+                <viewController id="iFz-mg-lRO" customClass="MenuController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gyU-es-spU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="OPS-qg-E5v"/>
+                    </view>
+                    <connections>
+                        <segue destination="xpo-G2-jhZ" kind="custom" identifier="menutocdc" customClass="SWRevealViewControllerSeguePushController" id="Xjt-fn-zyE"/>
+                        <segue destination="UFt-5t-w1G" kind="custom" identifier="menutomodulos" customClass="SWRevealViewControllerSeguePushController" id="70a-09-8cI"/>
+                        <segue destination="VzS-ta-rvl" kind="custom" identifier="menutoreportesenviados" customClass="SWRevealViewControllerSeguePushController" id="JL4-HS-0q7"/>
+                        <segue destination="Ujb-c6-jeZ" kind="custom" identifier="menutoreportesnoenviados" customClass="SWRevealViewControllerSeguePushController" id="WuC-A5-LYA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="siV-n9-RCY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2014" y="41"/>
+        </scene>
+        <!--Reportes No Enviados Controller-->
+        <scene sceneID="DWl-dH-V9q">
+            <objects>
+                <viewController id="Ujb-c6-jeZ" customClass="ReportesNoEnviadosController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eNw-BA-RKt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="REN-D5-ctb"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Se7-kd-zfe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2014" y="714"/>
+        </scene>
+        <!--Controller-->
+        <scene sceneID="p1l-dz-mYh">
+            <objects>
+                <viewController id="xpo-G2-jhZ" customClass="CDCController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jUJ-15-mWl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="3sN-tb-gTs"/>
+                    </view>
+                    <connections>
+                        <segue destination="UFt-5t-w1G" kind="custom" identifier="cdctomodulos" customClass="SWRevealViewControllerSeguePushController" id="jXN-Cc-2Jp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0sL-Bc-CXQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3039" y="191"/>
+        </scene>
+        <!--Reportes Enviados Controller-->
+        <scene sceneID="0CR-Wu-5bb">
+            <objects>
+                <viewController id="VzS-ta-rvl" customClass="ReportesEnviadosController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NCr-N2-Agq">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="cKX-Y1-PfB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EGw-7r-C7Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2682" y="360"/>
+        </scene>
+        <!--Inicio Controller-->
+        <scene sceneID="nqt-qB-8gO">
+            <objects>
+                <viewController id="13E-PB-TcI" customClass="InicioController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N3V-kC-4jR">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="v1Q-t1-6vS"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9eJ-VA-4Yb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="839" y="817"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="8QC-zQ-kcs"/>
+        <segue reference="3Su-be-Lix"/>
+        <segue reference="LC3-uq-fIT"/>
+        <segue reference="Tpf-Ff-4KT"/>
+    </inferredMetricsTieBreakers>
 </document>

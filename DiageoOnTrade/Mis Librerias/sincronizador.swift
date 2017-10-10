@@ -9,6 +9,7 @@
 import Foundation
 import CryptoSwift
 import Alamofire
+import NVActivityIndicatorView
 
 
 class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
@@ -44,6 +45,8 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
     
     var reporteAEnviar = 0
     
+    
+    
     //fin variables
     
     
@@ -55,7 +58,6 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
         
         defaults.set("OnTrade2.sqlite", forKey: "base")
         defaults.set("OnTradeR.sqlite", forKey: "baseR")
-        
         
         
         
@@ -227,15 +229,32 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                     
                 case 200:
                     
+                    //actualizar texto cargador
+                    
+                    let controladorActual = UIApplication.topViewController()
+                    
                     DispatchQueue.main.async {
                         
-                        //_ =  SwiftSpinner.show(self.servicios_json.arreglo[indice!]["etiqueta"] as! String).addTapHandler({
+                        let subvistas = controladorActual?.view!.subviews
+                        
+                        for subvista in subvistas! where subvista.tag == 179 {
                             
-                            //SwiftSpinner.hide()
+                            let subvistasCargador = subvista.subviews
                             
-                        //})
+                            for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                
+                                (subvistaCargador as! UIButton).setTitle(self.servicios_json.arreglo[indice!]["etiqueta"] as? String, for: .normal)
+                                
+                            }
+                            
+                        }
                         
                     }
+                    
+                    //fin actualizar texto cargador
+                    
+                    
+                    
                     
                     do {
                         
@@ -436,6 +455,26 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                     
                 case 200:
                     
+                    let controladorActual = UIApplication.topViewController()
+                    
+                    DispatchQueue.main.async {
+                    
+                    let subvistas = controladorActual?.view!.subviews
+                    
+                    for subvista in subvistas! where subvista.tag == 179 {
+                        
+                        let subvistasCargador = subvista.subviews
+                        
+                        for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                            
+                            (subvistaCargador as! UIButton).setTitle(self.servicios_json.arreglo[indice!]["etiqueta"] as? String, for: .normal)
+                            
+                        }
+                        
+                    }
+                        
+                    }
+                    
                     /*
                     _ =  SwiftSpinner.show(self.servicios_json.arreglo[indice!]["etiqueta"] as! String).addTapHandler({
                         
@@ -491,6 +530,37 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                                     })
                                     */
                                     
+                                    
+                                    
+                                    //actualizar texto cargador
+                                    
+                                    let controladorActual = UIApplication.topViewController()
+                                    
+                                    DispatchQueue.main.async {
+                                        
+                                        let subvistas = controladorActual?.view!.subviews
+                                        
+                                        for subvista in subvistas! where subvista.tag == 179 {
+                                            
+                                            let subvistasCargador = subvista.subviews
+                                            
+                                            for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                                
+                                                (subvistaCargador as! UIButton).setTitle("Actualizando Base de Datos...", for: .normal)
+                                                
+                                            }
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    //fin actualizar texto cargador
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                     self.llenar_tablas(ids: servicios_indices,controlador: controlador,funcion: "inicio")
                                     
                                     return
@@ -527,6 +597,32 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                             let hoy = Date()
                             
                             self.defaults.set(hoy, forKey: "ultimaActualizacion")
+                            
+                            
+                            
+                            //actualizar texto cargador
+                            
+                            let controladorActual = UIApplication.topViewController()
+                            
+                            DispatchQueue.main.async {
+                                
+                                let subvistas = controladorActual?.view!.subviews
+                                
+                                for subvista in subvistas! where subvista.tag == 179 {
+                                    
+                                    let subvistasCargador = subvista.subviews
+                                    
+                                    for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                        
+                                        (subvistaCargador as! UIButton).setTitle("Actualizando Base de Datos...", for: .normal)
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                            //fin actualizar texto cargador
                             
                             
                             //SwiftSpinner.hide()
@@ -576,6 +672,31 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                         let hoy = Date()
                         
                         self.defaults.set(hoy, forKey: "ultimaActualizacion")
+                        
+                        
+                        //actualizar texto cargador
+                        
+                        let controladorActual = UIApplication.topViewController()
+                        
+                        DispatchQueue.main.async {
+                            
+                            let subvistas = controladorActual?.view!.subviews
+                            
+                            for subvista in subvistas! where subvista.tag == 179 {
+                                
+                                let subvistasCargador = subvista.subviews
+                                
+                                for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                    
+                                    (subvistaCargador as! UIButton).setTitle("Actualizando Base de Datos...", for: .normal)
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                        //fin actualizar texto cargador
                         
                         
                         //SwiftSpinner.hide()
@@ -735,6 +856,31 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                              let hoy = Date()
                              
                              self.defaults.set(hoy, forKey: "ultimaActualizacion")
+                                
+                                
+                                //actualizar texto cargador
+                                
+                                let controladorActual = UIApplication.topViewController()
+                                
+                                DispatchQueue.main.async {
+                                    
+                                    let subvistas = controladorActual?.view!.subviews
+                                    
+                                    for subvista in subvistas! where subvista.tag == 179 {
+                                        
+                                        let subvistasCargador = subvista.subviews
+                                        
+                                        for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                            
+                                            (subvistaCargador as! UIButton).setTitle("Actualizando Base de Datos...", for: .normal)
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                
+                                //fin actualizar texto cargador
                              
                              
                              //SwiftSpinner.hide()
@@ -785,6 +931,31 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                         let hoy = Date()
                         
                         self.defaults.set(hoy, forKey: "ultimaActualizacion")
+                        
+                        
+                        //actualizar texto cargador
+                        
+                        let controladorActual = UIApplication.topViewController()
+                        
+                        DispatchQueue.main.async {
+                            
+                            let subvistas = controladorActual?.view!.subviews
+                            
+                            for subvista in subvistas! where subvista.tag == 179 {
+                                
+                                let subvistasCargador = subvista.subviews
+                                
+                                for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                    
+                                    (subvistaCargador as! UIButton).setTitle("Actualizando Base de Datos...", for: .normal)
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                        //fin actualizar texto cargador
                         
                         
                         //SwiftSpinner.hide()
@@ -845,6 +1016,31 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                 let hoy = Date()
                 
                 self.defaults.set(hoy, forKey: "ultimaActualizacion")
+                
+                
+                //actualizar texto cargador
+                
+                let controladorActual = UIApplication.topViewController()
+                
+                DispatchQueue.main.async {
+                    
+                    let subvistas = controladorActual?.view!.subviews
+                    
+                    for subvista in subvistas! where subvista.tag == 179 {
+                        
+                        let subvistasCargador = subvista.subviews
+                        
+                        for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                            
+                            (subvistaCargador as! UIButton).setTitle("Actualizando Base de Datos...", for: .normal)
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                //fin actualizar texto cargador
                 
                 
                 //SwiftSpinner.hide()
@@ -917,11 +1113,29 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
             
             print("Credenciales incorrectas")
             
+            //actualizar texto cargador
+            
+            let controladorActual = UIApplication.topViewController()
+            
             DispatchQueue.main.async {
                 
-                //_ = SwiftSpinner.show("Credenciales incorrectas").addTapHandler({SwiftSpinner.hide()})
+                let subvistas = controladorActual?.view!.subviews
+                
+                for subvista in subvistas! where subvista.tag == 179 {
+                    
+                    let subvistasCargador = subvista.subviews
+                    
+                    for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                        
+                        (subvistaCargador as! UIButton).setTitle("Credenciales incorrectas...", for: .normal)
+                        
+                    }
+                    
+                }
                 
             }
+            
+            //fin actualizar texto cargador
             
             completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil)
         } else {
@@ -1371,6 +1585,32 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
         }
         else{
             
+            
+            //actualizar texto cargador
+            
+            let controladorActual = UIApplication.topViewController()
+            
+            DispatchQueue.main.async {
+                
+                let subvistas = controladorActual?.view!.subviews
+                
+                for subvista in subvistas! where subvista.tag == 179 {
+                    
+                    let subvistasCargador = subvista.subviews
+                    
+                    for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                        
+                        (subvistaCargador as! UIButton).setTitle("Necesitas tener una conexión a internet", for: .normal)
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            //fin actualizar texto cargador
+            
+            
             //SwiftSpinner.show("Necesitas tener una conexión a internet").addTapHandler({SwiftSpinner.hide()})
             
         }
@@ -1464,6 +1704,31 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                 self.reporteAEnviar = resultadoTotal.count
                     
                 }
+                
+                
+                //actualizar texto cargador
+                
+                let controladorActual = UIApplication.topViewController()
+                
+                DispatchQueue.main.async {
+                    
+                    let subvistas = controladorActual?.view!.subviews
+                    
+                    for subvista in subvistas! where subvista.tag == 179 {
+                        
+                        let subvistasCargador = subvista.subviews
+                        
+                        for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                            
+                            (subvistaCargador as! UIButton).setTitle("\(self.servicios_json_enviar.arreglo[indice]["etiqueta"] as! String) \(self.reporteAEnviar) Reportes", for: .normal)
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                //fin actualizar texto cargador
                 
                 
                 
@@ -1872,9 +2137,37 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
             else{
                 print("todo enviado")
                     
-                     DispatchQueue.main.async {
-                    //_ = SwiftSpinner.show("Todo enviado. Toque para cerrar").addTapHandler({SwiftSpinner.hide()})
+                    //actualizar texto cargador
+                    
+                    let controladorActual = UIApplication.topViewController()
+                    
+                    DispatchQueue.main.async {
+                        
+                        let subvistas = controladorActual?.view!.subviews
+                        
+                        for subvista in subvistas! where subvista.tag == 179 {
+                            
+                            let subvistasCargador = subvista.subviews
+                            
+                            for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                
+                                (subvistaCargador as! UIButton).setTitle("Todo enviado toque para cerrar", for: .normal)
+                                
+                            }
+                            
+                            let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.ocultarCargador(sender:)))
+                            singleTap.cancelsTouchesInView = false
+                            singleTap.numberOfTapsRequired = 1
+                            subvista.addGestureRecognizer(singleTap)
+                            
+                        }
+                        
+                        
+                        
+                        
                     }
+                    
+                    //fin actualizar texto cargador
                 
                 }
                 
@@ -1973,7 +2266,15 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
     
     //fin servicio seriado enviar
     
-    
+    @objc func ocultarCargador(sender:UITapGestureRecognizer){
+        
+        DispatchQueue.main.async {
+        
+        sender.view!.removeFromSuperview()
+            
+        }
+        
+    }
     
     func completar_envio(idReportServer:String){
     
@@ -2065,10 +2366,32 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
         else{
             
             
+            //actualizar texto cargador
+            
+            let controladorActual = UIApplication.topViewController()
+            
             DispatchQueue.main.async {
                 
-                //_ =  SwiftSpinner.show("Mandando Fotos \(indice + 1) de \(fotos.count)")
+                let subvistas = controladorActual?.view!.subviews
+                
+                for subvista in subvistas! where subvista.tag == 179 {
+                    
+                    let subvistasCargador = subvista.subviews
+                    
+                    for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                        
+                        (subvistaCargador as! UIButton).setTitle("Mandando Fotos \(indice + 1) de \(fotos.count)", for: .normal)
+                        
+                    }
+                    
+                }
+                
             }
+            
+            //fin actualizar texto cargador
+            
+            
+            
             
             
             guard let _ = NSData(contentsOfFile: fotos[indice]["ruta"] as! String) else {
@@ -2148,6 +2471,40 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                         }
                         upload.responseString { response in
                             debugPrint(response)
+                            
+                            
+                            //actualizar texto cargador
+                            
+                            let controladorActual = UIApplication.topViewController()
+                            
+                            DispatchQueue.main.async {
+                                
+                                let subvistas = controladorActual?.view!.subviews
+                                
+                                for subvista in subvistas! where subvista.tag == 179 {
+                                    
+                                    let subvistasCargador = subvista.subviews
+                                    
+                                    for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                        
+                                        (subvistaCargador as! UIButton).setTitle("Base enviada. Toque para cerrar", for: .normal)
+                                        
+                                    }
+                                    
+                                    let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.ocultarCargador(sender:)))
+                                    singleTap.cancelsTouchesInView = false
+                                    singleTap.numberOfTapsRequired = 1
+                                    subvista.addGestureRecognizer(singleTap)
+                                    
+                                    
+                                }
+                                
+                            }
+                            
+                            //fin actualizar texto cargador
+                            
+                            
+                            
                             
                             /* DispatchQueue.main.async {
                              
@@ -2332,6 +2689,38 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
                         upload.responseString { response in
                             debugPrint(response)
                             
+                            
+                            //actualizar texto cargador
+                            
+                            let controladorActual = UIApplication.topViewController()
+                            
+                            DispatchQueue.main.async {
+                                
+                                let subvistas = controladorActual?.view!.subviews
+                                
+                                for subvista in subvistas! where subvista.tag == 179 {
+                                    
+                                    let subvistasCargador = subvista.subviews
+                                    
+                                    for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                        
+                                        (subvistaCargador as! UIButton).setTitle("Base Enviada. Toque Para Cerrar", for: .normal)
+                                        
+                                    }
+                                    
+                                    
+                                    let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.ocultarCargador(sender:)))
+                                    singleTap.cancelsTouchesInView = false
+                                    singleTap.numberOfTapsRequired = 1
+                                    subvista.addGestureRecognizer(singleTap)
+                                    
+                                }
+                                
+                            }
+                            
+                            //fin actualizar texto cargador
+                            
+                            
                             /* DispatchQueue.main.async {
                              
                              _ = SwiftSpinner.show("Base enviada. Toque para cerrar").addTapHandler({SwiftSpinner.hide()})
@@ -2419,6 +2808,33 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
         let aux = indice + 1
         
         //_ = SwiftSpinner.show("Enviando foto \(aux) de \(total)")
+        
+        
+        //actualizar texto cargador
+        
+        let controladorActual = UIApplication.topViewController()
+        
+        DispatchQueue.main.async {
+            
+            let subvistas = controladorActual?.view!.subviews
+            
+            for subvista in subvistas! where subvista.tag == 179 {
+                
+                let subvistasCargador = subvista.subviews
+                
+                for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                    
+                    (subvistaCargador as! UIButton).setTitle("Enviando foto \(aux) de \(total)", for: .normal)
+                    
+                }
+                
+            }
+            
+        }
+        
+        //fin actualizar texto cargador
+        
+        
         
         if indice >= total {
             
@@ -3516,22 +3932,34 @@ class Sincronizador: NSObject,URLSessionDelegate,URLSessionTaskDelegate {
  
         
         
+        //actualizar texto cargador
+        
+        let controladorActual = UIApplication.topViewController()
+        
         DispatchQueue.main.async {
-        
-        /*
-        SwiftSpinner.show("Sincronización Completa. Toque para cerar").addTapHandler({
             
+            let subvistas = controladorActual?.view!.subviews
             
+            for subvista in subvistas! where subvista.tag == 179 {
+                
+                let subvistasCargador = subvista.subviews
+                
+                for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                    
+                    (subvistaCargador as! UIButton).setTitle("Sincronización Completa. Toque para cerrar", for: .normal)
+                    
+                }
+                
+                let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.ocultarCargador(sender:)))
+                singleTap.cancelsTouchesInView = false
+                singleTap.numberOfTapsRequired = 1
+                subvista.addGestureRecognizer(singleTap)
+                
+            }
             
-            
-            self.defaults.set(1, forKey: "sesion")
-            
-            SwiftSpinner.hide()
-            
-        })
-        */
-        
         }
+        
+        //fin actualizar texto cargador
         
     }
     

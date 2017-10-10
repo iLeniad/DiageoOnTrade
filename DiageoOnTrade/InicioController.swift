@@ -998,7 +998,9 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                     
                     if version != auxVersion {
                         
-                        self.performSegue(withIdentifier: "iniciotoactualizarapp", sender: self)
+                        print("la versión es diferente")
+                        
+                        //self.performSegue(withIdentifier: "iniciotoactualizarapp", sender: self)
                         
                         
                     }
@@ -1127,36 +1129,6 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
     }
     
     
-    //fin checar estatus contraseña
-    
-    //funciones backgroud
-    
-    
-    /*func checarBackgroud(notification : NSNotification) {
-     print("Estamos en backgroud")
-     
-     timer.invalidate()
-     
-     defaults.set(1, forKey: "enBackground")
-     
-     self.locationManager.stopUpdatingLocation()
-     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-     self.locationManager.distanceFilter = kCLDistanceFilterNone
-     self.locationManager.pausesLocationUpdatesAutomatically = false
-     
-     self.locationManager.startUpdatingLocation()
-     
-     guadar_ubicacion()
-     
-     }
-     
-     */
-    
-    
-    
-    
-    
-    
     @objc func guadar_ubicacion(){
         
         print("timer empezo")
@@ -1262,94 +1234,6 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
     }
     
     
-    /*
-     func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutableRawPointer) {
-     
-     
-     
-     checar_servicio_locacion()
-     
-     
-     
-     if let _ = self.locationManager.location {
-     
-     
-     
-     }
-     else{
-     
-     
-     
-     print("no tenemos location si es este")
-     
-     let aux_location = CLLocation(latitude: 0, longitude: 0)
-     
-     let defaults = UserDefaults.standard
-     
-     defaults.set("0", forKey: "satelliteUTC")
-     
-     defaults.set(aux_location.coordinate.latitude, forKey: "miLatitude")
-     
-     defaults.set(aux_location.coordinate.longitude, forKey: "miLongitude")
-     
-     
-     
-     
-     didFindMyLocation = true
-     
-     
-     
-     
-     
-     
-     
-     }
-     
-     
-     if !didFindMyLocation {
-     
-     /* let defaults = UserDefaults.standard
-     
-     
-     
-     
-     
-     let dateFormatter = DateFormatter()
-     
-     satelliteUTC = dateFormatter.string(from: (self.locationManager.location!.timestamp))
-     
-     
-     
-     
-     dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"
-     
-     satelliteUTC = dateFormatter.string(from: self.locationManager.location!.timestamp)
-     
-     defaults.set(satelliteUTC, forKey: "satelliteUTC")
-     
-     //print("satelliteUTC es: \(satelliteUTC)", terminator: "")
-     
-     let myLocation: CLLocation = change?[NSKeyValueChangeNewKey] as! CLLocation
-     
-     //print(myLocation)
-     
-     defaults.set(myLocation.coordinate.latitude, forKey: "miLatitude")
-     
-     defaults.set(myLocation.coordinate.longitude, forKey: "miLongitude")
-     
-     let camera = GMSCameraPosition.camera(withLatitude: myLocation.coordinate.latitude, longitude: myLocation.coordinate.longitude, zoom: 16)
-     
-     el_mapa.camera = camera
-     el_mapa.settings.myLocationButton = true
-     
-     didFindMyLocation = true
-     
-     */
-     }
-     
-     
-     }
-     */
     
     
     //fin funciones de localizacion
