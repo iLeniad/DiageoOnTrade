@@ -294,18 +294,6 @@ class Constructor: NSObject {
             
             
             
-            //let idReporteLocal = (defaults.objectForKey("idReporteLocal") as! NSNumber).stringValue
-            
-            //let sql_respuesta = "select respuesta from EARespuesta where idPregunta='\(preguntasArreglo[indice][0])' and idReporteLocal='\(idReporteLocal)' and idEncuesta='\(idEncuesta)' and numeroEncuesta='\(NumeroEncuesta)'"
-            
-            //let resultado_respuesta = db.select_query(sql_respuesta)
-            
-            /*for renglon_respuesta in resultado_respuesta {
-             
-             respuesta = renglon_respuesta[0] as! String
-             contestada = 1
-             }
-             */
             
             
             if renglon["seleccionado"] as! NSNumber == 1 {
@@ -467,12 +455,6 @@ class Constructor: NSObject {
         
         //aux_b_guardar.frame = CGRect(x: 10 + cuadros[cuadro], y: offset - 8, width: 44, height: 44)
         
-        /*
-         aux_b_foto.contentEdgeInsets = UIEdgeInsetsMake(0, 0, aux_b_foto.titleLabel!.bounds.height + 4, 0)
-         aux_b_foto.titleEdgeInsets = UIEdgeInsetsMake((aux_b_foto.imageView?.image!.size.height)! + 18, -(aux_b_foto.imageView?.image!.size.width)!, 0, 0)
-         aux_b_foto.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -aux_b_foto.titleLabel!.bounds.width)
-         */
-        
         
         
         
@@ -573,11 +555,7 @@ class Constructor: NSObject {
         
         //aux_b_guardar.frame = CGRect(x: 10 + cuadros[cuadro], y: offset - 8, width: 44, height: 44)
         
-        /*
-         aux_b_foto.contentEdgeInsets = UIEdgeInsetsMake(0, 0, aux_b_foto.titleLabel!.bounds.height + 4, 0)
-         aux_b_foto.titleEdgeInsets = UIEdgeInsetsMake((aux_b_foto.imageView?.image!.size.height)! + 18, -(aux_b_foto.imageView?.image!.size.width)!, 0, 0)
-         aux_b_foto.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -aux_b_foto.titleLabel!.bounds.width)
-         */
+        
         
         
         

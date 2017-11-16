@@ -65,6 +65,7 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     
     //fin variables
     
+    // MARK: - Funciones inicio de vista
     
     //view didload
     
@@ -240,6 +241,9 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     
     //fin viewdidappear
     
+    
+    // MARK: - Funciones de busqueda
+    
     @objc func limpiar_busqueda(sender:UITextField){
         
         sender.text = ""
@@ -257,6 +261,9 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         
     }
     
+    
+    // MARK: - Delegados
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         
@@ -268,6 +275,8 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         return true
     }
     
+    
+    // MARK: - Funciones que muestran en pantalla
     
     func mostrar_cdc(filtro:String){
         
@@ -412,6 +421,9 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         
         
     }
+   
+    
+    // MARK: Funciones para ir a otro modulo
     
     @objc func iramodulos(sender:UIButton){
         
@@ -431,60 +443,9 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     //view will disappear
+   
     
-    //funciones backgroud
-    
-    
-    /*func checarBackgroud(notification : NSNotification) {
-     print("Estamos en backgroud")
-     
-     timer.invalidate()
-     
-     defaults.set(1, forKey: "enBackground")
-     
-     self.locationManager.stopUpdatingLocation()
-     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-     self.locationManager.distanceFilter = kCLDistanceFilterNone
-     self.locationManager.pausesLocationUpdatesAutomatically = false
-     
-     self.locationManager.startUpdatingLocation()
-     
-     guadar_ubicacion()
-     
-     }
-     
-     */
-    
-    
-    
-    
-    
-    
-    func guadar_ubicacion(){
-        
-        print("timer empezo")
-        
-        db.open_database("Loreal.db")
-        
-        var sql = "insert into locations (lon,lat,fecha) values ('1','2','1')"
-        
-        _ = db.execute_query(sql)
-        
-        sql = "select * from locations"
-        
-        let resultado_locations = db.select_query(sql)
-        
-        print(resultado_locations)
-        
-        ultima_fecha_locacion = NSDate().timeIntervalSince1970
-        
-        
-    }
-    
-    func enviar_ubicacion(){}
-    
-    //fin funciones backgroud
-    
+    // MARK: - Funciones de Localizacion
     
     //funciones de localizacion
     
@@ -531,15 +492,7 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         if UIApplication.shared.applicationState == .active {
             //el_mapa.showAnnotations(locations, animated: true)
             
-            if defaults.object(forKey: "enBackground") != nil {
-                
-                timer.invalidate()
-                
-                timer = Timer.scheduledTimer(timeInterval: 1800, target: self, selector: #selector(InicioController.guadar_ubicacion), userInfo: nil, repeats: true)
-                
-                defaults.removeObject(forKey: "enBackground")
-                
-            }
+            
             
             //print("App is fortground. New location is %@", newLocation)
             
@@ -548,111 +501,10 @@ class CDCController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         } else {
             //print("App is backgrounded. New location is %@", newLocation)
             
-            let actual = Int64(NSDate().timeIntervalSince1970*1000)
-            
-            let aux = actual - Int64(ultima_fecha_locacion*1000)
-            
-            print(aux)
-            
-            if aux >= 1800000
-                //if aux >= 60000
-            {
-                
-                guadar_ubicacion()
-                
-            }
         }
     }
     
     
-    /*
-     func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutableRawPointer) {
-     
-     
-     
-     checar_servicio_locacion()
-     
-     
-     
-     if let _ = self.locationManager.location {
-     
-     
-     
-     }
-     else{
-     
-     
-     
-     print("no tenemos location si es este")
-     
-     let aux_location = CLLocation(latitude: 0, longitude: 0)
-     
-     let defaults = UserDefaults.standard
-     
-     defaults.set("0", forKey: "satelliteUTC")
-     
-     defaults.set(aux_location.coordinate.latitude, forKey: "miLatitude")
-     
-     defaults.set(aux_location.coordinate.longitude, forKey: "miLongitude")
-     
-     
-     
-     
-     didFindMyLocation = true
-     
-     
-     
-     
-     
-     
-     
-     }
-     
-     
-     if !didFindMyLocation {
-     
-     /* let defaults = UserDefaults.standard
-     
-     
-     
-     
-     
-     let dateFormatter = DateFormatter()
-     
-     satelliteUTC = dateFormatter.string(from: (self.locationManager.location!.timestamp))
-     
-     
-     
-     
-     dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"
-     
-     satelliteUTC = dateFormatter.string(from: self.locationManager.location!.timestamp)
-     
-     defaults.set(satelliteUTC, forKey: "satelliteUTC")
-     
-     //print("satelliteUTC es: \(satelliteUTC)", terminator: "")
-     
-     let myLocation: CLLocation = change?[NSKeyValueChangeNewKey] as! CLLocation
-     
-     //print(myLocation)
-     
-     defaults.set(myLocation.coordinate.latitude, forKey: "miLatitude")
-     
-     defaults.set(myLocation.coordinate.longitude, forKey: "miLongitude")
-     
-     let camera = GMSCameraPosition.camera(withLatitude: myLocation.coordinate.latitude, longitude: myLocation.coordinate.longitude, zoom: 16)
-     
-     el_mapa.camera = camera
-     el_mapa.settings.myLocationButton = true
-     
-     didFindMyLocation = true
-     
-     */
-     }
-     
-     
-     }
-     */
     
     
     //fin funciones de localizacion

@@ -11,6 +11,7 @@ import UIKit
 import GoogleMaps
 import Crashlytics
 import Alamofire
+import NVActivityIndicatorView
 
 class LoginController: UIViewController {
     
@@ -31,6 +32,8 @@ class LoginController: UIViewController {
     
     var vistaTerminos:UIScrollView = UIScrollView()
     
+    var vistaCargador:UIScrollView = UIScrollView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,6 +43,8 @@ class LoginController: UIViewController {
         
         
     }
+    
+    // MARK: - inicio de la vista
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -61,170 +66,6 @@ class LoginController: UIViewController {
         
     }
     
-    @objc func aceptar_terminos(sender:UIButton){
-        
-        
-        sender.removeFromSuperview()
-        vistaTerminos.removeFromSuperview()
-        
-    }
-    
-    @objc func cargar_terminos(sender:UIButton){
-        
-        
-        //_ = SwiftSpinner.show("Buscando Replicas")
-        
-        
-        /*
-         let sqlInfoUser = "select * from user_info"
-         
-         let resultadoInfoUser = db.select_query_columns(sqlInfoUser)
-         
-         var miIdUser:NSNumber = 0
-         
-         for rengloInfoUser in resultadoInfoUser {
-         
-         miIdUser = rengloInfoUser["id"] as! NSNumber
-         
-         }
-         
-         */
-        
-        //let idUser = defaults.object(forKey: "idUser") as! Int
-        
-        let dominio = defaults.object(forKey: "dominio") as! String
-        
-        
-        let aux_url = "http://\(dominio)/capabilities-rest/rest/version/data/terms"
-        
-        print(aux_url)
-        
-        
-        
-        //let auxJsonstring = "[{\"name\":\"idRol\",\"value\":\"1\"},{\"name\":\"usuario\",\"value\":\"\(idUser)\"},{\"name\":\"tipo\",\"value\":\"1\"}]"
-        
-        
-        
-        
-        //let parameters: Parameters = ["json": auxJsonstring]
-        
-        //print(parameters)
-        
-        //let usuario = defaults.object(forKey: "usuario") as! String
-        //let contrasena = defaults.object(forKey: "contrasena") as! String
-        
-        //let credenciales = URLCredential(user: usuario, password: contrasena, persistence: .none)
-        
-        Alamofire.request(aux_url, method: .get, encoding: JSONEncoding.default)
-            //Alamofire.request(.GET, "\(protocolo)://\(dominio)\(servicios_json.arreglo[indice]["servicio"])",headers:headers)
-            //.authenticate(usingCredential: credenciales)
-            .responseJSON { response in
-                //print(response.request)  // original URL request
-                //print(response.response) // URL response
-                //print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                
-                //SwiftSpinner.hide()
-                
-                if response.result.isFailure {
-                    
-                    //print(response.request)
-                    //SwiftSpinner.show("Error al contactar el servidor").addTapHandler({SwiftSpinner.hide()})
-                    
-                    
-                    
-                }
-                if  let data = response.result.value as? NSDictionary {
-                    
-                    print("simon scorecard dictionary")
-                    
-                    let botonTerminos:UIButton = UIButton()
-                    
-                    botonTerminos.titleLabel!.font = UIFont(name: self.fontFamilia, size: CGFloat(3))
-                    
-                    botonTerminos.titleLabel!.font = botonTerminos.titleLabel!.font.withSize(CGFloat(15))
-                    
-                    
-                    botonTerminos.setAttributedTitle(nil, for: UIControlState())
-                    botonTerminos.setTitle("Aceptar Terminos y Condiciones", for: UIControlState())
-                    botonTerminos.tag = 0
-                    
-                    botonTerminos.isSelected = false
-                    botonTerminos.setTitleColor(UIColor(rgba: "#ffffff"), for: UIControlState())
-                    
-                    
-                    
-                    botonTerminos.titleLabel!.textColor = UIColor(rgba: "#ffffff")
-                    botonTerminos.titleLabel!.numberOfLines = 0
-                    botonTerminos.titleLabel!.textAlignment = .center
-                    
-                    
-                    botonTerminos.sizeToFit()
-                    
-                    botonTerminos.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
-                    
-                    
-                    
-                    botonTerminos.contentHorizontalAlignment = .center
-                    botonTerminos.contentVerticalAlignment = .center
-                    
-                    botonTerminos.setImage(UIImage(named:"BotonEntrar"), for: .normal)
-                    
-                    botonTerminos.titleEdgeInsets = UIEdgeInsetsMake(0, -botonTerminos.imageView!.frame.size.width, 0, 0)
-                    
-                    botonTerminos.imageEdgeInsets = UIEdgeInsetsMake(0, 45, 0, 0)
-                    
-                    botonTerminos.imageView?.contentMode = .scaleToFill
-                    
-                    botonTerminos.addTarget(self, action:#selector(LoginController.aceptar_terminos(sender:)), for:.touchDown)
-                    
-                    self.view.addSubview(botonTerminos)
-                    
-                    let terminos = data["md5"] as! String
-                    
-                    
-                    
-                    let textoterminos:UITextView = UITextView()
-                    
-                    textoterminos.text = terminos
-                    
-                    textoterminos.frame = CGRect(x: 5, y: 5, width: self.view.frame.width, height: self.view.frame.height - 30)
-                    
-                    self.vistaTerminos.frame = CGRect(x: 0, y: botonTerminos.frame.height, width: self.view.frame.width, height: self.view.frame.height-30)
-                    
-                    self.vistaTerminos.addSubview(textoterminos)
-                    
-                    self.view.addSubview(self.vistaTerminos)
-                    
-                }
-                
-                
-                if  let data = response.result.value as? NSArray {
-                    
-                    print("simon scorecard")
-                    
-                    //self.arregloServiciosListos.append(1)
-                    
-                    //print(data)
-                    
-                    //print(data["attempts"]!)
-                    
-                    //let respuesta = JSON(cadena: data as! String)
-                    
-                    
-                    
-                    let aux_elementos = data as! [[String:AnyObject]]
-                    
-                    print(aux_elementos)
-                    
-                }
-                
-                
-        }
-        
-        
-        
-    }
     
     func crear_login(){
         
@@ -237,10 +78,7 @@ class LoginController: UIViewController {
         
         logoCabecera.titleLabel!.font = logoCabecera.titleLabel!.font.withSize(CGFloat(15))
         
-        /*
-         botonEntrar.setAttributedTitle(nil, for: UIControlState())
-         botonEntrar.setTitle("ENTRAR", for: UIControlState())
-         */
+        
         
         logoCabecera.tag = 0
         
@@ -522,13 +360,264 @@ class LoginController: UIViewController {
         
     }
     
-    @objc func enviar_base(sender:UIButton){
+    
+    // MARK: - Funciones de botones
+    
+    @objc func aceptar_terminos(sender:UIButton){
+        
+        
+        sender.removeFromSuperview()
+        vistaTerminos.removeFromSuperview()
+        
+    }
+    
+    @objc func cargar_terminos(sender:UIButton){
+        
+        
+        //_ = SwiftSpinner.show("Buscando Replicas")
+        
+        
+        
+        
+        //let idUser = defaults.object(forKey: "idUser") as! Int
+        
+        let dominio = defaults.object(forKey: "dominio") as! String
+        
+        
+        let aux_url = "http://\(dominio)/capabilities-rest/rest/version/data/terms"
+        
+        print(aux_url)
+        
+        
+        
+        //let auxJsonstring = "[{\"name\":\"idRol\",\"value\":\"1\"},{\"name\":\"usuario\",\"value\":\"\(idUser)\"},{\"name\":\"tipo\",\"value\":\"1\"}]"
+        
+        
+        
+        
+        //let parameters: Parameters = ["json": auxJsonstring]
+        
+        //print(parameters)
+        
+        //let usuario = defaults.object(forKey: "usuario") as! String
+        //let contrasena = defaults.object(forKey: "contrasena") as! String
+        
+        //let credenciales = URLCredential(user: usuario, password: contrasena, persistence: .none)
+        
+        Alamofire.request(aux_url, method: .get, encoding: JSONEncoding.default)
+            //Alamofire.request(.GET, "\(protocolo)://\(dominio)\(servicios_json.arreglo[indice]["servicio"])",headers:headers)
+            //.authenticate(usingCredential: credenciales)
+            .responseJSON { response in
+                //print(response.request)  // original URL request
+                //print(response.response) // URL response
+                //print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                
+                //SwiftSpinner.hide()
+                
+                if response.result.isFailure {
+                    
+                    //print(response.request)
+                    //SwiftSpinner.show("Error al contactar el servidor").addTapHandler({SwiftSpinner.hide()})
+                    
+                    
+                    
+                }
+                if  let data = response.result.value as? NSDictionary {
+                    
+                    print("simon scorecard dictionary")
+                    
+                    let botonTerminos:UIButton = UIButton()
+                    
+                    botonTerminos.titleLabel!.font = UIFont(name: self.fontFamilia, size: CGFloat(3))
+                    
+                    botonTerminos.titleLabel!.font = botonTerminos.titleLabel!.font.withSize(CGFloat(15))
+                    
+                    
+                    botonTerminos.setAttributedTitle(nil, for: UIControlState())
+                    botonTerminos.setTitle("Aceptar Terminos y Condiciones", for: UIControlState())
+                    botonTerminos.tag = 0
+                    
+                    botonTerminos.isSelected = false
+                    botonTerminos.setTitleColor(UIColor(rgba: "#ffffff"), for: UIControlState())
+                    
+                    
+                    
+                    botonTerminos.titleLabel!.textColor = UIColor(rgba: "#ffffff")
+                    botonTerminos.titleLabel!.numberOfLines = 0
+                    botonTerminos.titleLabel!.textAlignment = .center
+                    
+                    
+                    botonTerminos.sizeToFit()
+                    
+                    botonTerminos.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
+                    
+                    
+                    
+                    botonTerminos.contentHorizontalAlignment = .center
+                    botonTerminos.contentVerticalAlignment = .center
+                    
+                    botonTerminos.setImage(UIImage(named:"BotonEntrar"), for: .normal)
+                    
+                    botonTerminos.titleEdgeInsets = UIEdgeInsetsMake(0, -botonTerminos.imageView!.frame.size.width, 0, 0)
+                    
+                    botonTerminos.imageEdgeInsets = UIEdgeInsetsMake(0, 45, 0, 0)
+                    
+                    botonTerminos.imageView?.contentMode = .scaleToFill
+                    
+                    botonTerminos.addTarget(self, action:#selector(LoginController.aceptar_terminos(sender:)), for:.touchDown)
+                    
+                    self.view.addSubview(botonTerminos)
+                    
+                    let terminos = data["md5"] as! String
+                    
+                    
+                    
+                    let textoterminos:UITextView = UITextView()
+                    
+                    textoterminos.text = terminos
+                    
+                    textoterminos.frame = CGRect(x: 5, y: 5, width: self.view.frame.width, height: self.view.frame.height - 30)
+                    
+                    self.vistaTerminos.frame = CGRect(x: 0, y: botonTerminos.frame.height, width: self.view.frame.width, height: self.view.frame.height-30)
+                    
+                    self.vistaTerminos.addSubview(textoterminos)
+                    
+                    self.view.addSubview(self.vistaTerminos)
+                    
+                }
+                
+                
+                if  let data = response.result.value as? NSArray {
+                    
+                    print("simon scorecard")
+                    
+                    //self.arregloServiciosListos.append(1)
+                    
+                    //print(data)
+                    
+                    //print(data["attempts"]!)
+                    
+                    //let respuesta = JSON(cadena: data as! String)
+                    
+                    
+                    
+                    let aux_elementos = data as! [[String:AnyObject]]
+                    
+                    print(aux_elementos)
+                    
+                }
+                
+                
+        }
+        
+        
+        
+    }
+   
+    
+    // MARK: - Funciones que muestran en vista
+    
+    
+    func mostrarCargador(){
+        
+        let controladorActual = UIApplication.topViewController()
+        
+        //print(controladorActual as Any)
+        
+        self.vistaCargador.tag = 179
+        
+        self.vistaCargador.frame = (controladorActual?.view!.frame)!
+        
+        self.vistaCargador.backgroundColor = UIColor.white
+        
+        let auxColor:UIColor = UIColor(rgba: "#ba243d")
+        
+        let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+        
+        vistaLoading.type = .ballScaleMultiple
+        
+        self.vistaCargador.addSubview(vistaLoading)
+        
+        controladorActual?.view!.addSubview(self.vistaCargador)
+        
+        vistaLoading.startAnimating()
+        
+        let textoCargador:UIButton = UIButton()
+        
+        textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+        
+        textoCargador.setTitle("Sincronizando...", for: .normal)
+        textoCargador.setTitleColor(auxColor, for: .normal)
+        
+        textoCargador.setAttributedTitle(nil, for: UIControlState())
+        
+        textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+        
+        textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+        
+        
+        textoCargador.isSelected = false
+        
+        //textoCargador.backgroundColor = auxColor
+        
+        
+        textoCargador.titleLabel!.textColor = auxColor
+        textoCargador.titleLabel!.numberOfLines = 0
+        textoCargador.titleLabel!.textAlignment = .center
+        
+        vistaCargador.addSubview(textoCargador)
+        
+        
+    }
+    
+    @objc func ocultarCargador(sender:UITapGestureRecognizer){
         
         DispatchQueue.main.async {
             
-            //_ = SwiftSpinner.show("Enviando...").addTapHandler({SwiftSpinner.hide()})
+            sender.view!.removeFromSuperview()
             
         }
+        
+    }
+    
+    
+    // MARK: - Funciones de base de datos
+    
+    @objc func enviar_base(sender:UIButton){
+        
+        //actualizar texto cargador
+        
+        let controladorActual = UIApplication.topViewController()
+        
+        DispatchQueue.main.async {
+            
+            self.mostrarCargador()
+            
+            let subvistas = controladorActual?.view!.subviews
+            
+            for subvista in subvistas! where subvista.tag == 179 {
+                
+                let subvistasCargador = subvista.subviews
+                
+                for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                    
+                    (subvistaCargador as! UIButton).setTitle("Enviando...", for: .normal)
+                    
+                }
+                
+                
+                let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.ocultarCargador(sender:)))
+                singleTap.cancelsTouchesInView = false
+                singleTap.numberOfTapsRequired = 1
+                subvista.addGestureRecognizer(singleTap)
+                
+                
+            }
+            
+        }
+        
+        //fin actualizar texto cargador
         
         
         print("simon enviar base")
@@ -572,11 +661,38 @@ class LoginController: UIViewController {
                         upload.responseString { response in
                             debugPrint(response)
                             
+                            //actualizar texto cargador
+                            
+                            let controladorActual = UIApplication.topViewController()
+                            
                             DispatchQueue.main.async {
                                 
-                                //_ = SwiftSpinner.show("Base enviada. Toque para cerrar").addTapHandler({SwiftSpinner.hide()})
+                                self.mostrarCargador()
+                                
+                                let subvistas = controladorActual?.view!.subviews
+                                
+                                for subvista in subvistas! where subvista.tag == 179 {
+                                    
+                                    let subvistasCargador = subvista.subviews
+                                    
+                                    for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                                        
+                                        (subvistaCargador as! UIButton).setTitle("Base Enviada. Toque para cerrar", for: .normal)
+                                        
+                                    }
+                                    
+                                    
+                                    let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.ocultarCargador(sender:)))
+                                    singleTap.cancelsTouchesInView = false
+                                    singleTap.numberOfTapsRequired = 1
+                                    subvista.addGestureRecognizer(singleTap)
+                                    
+                                    
+                                }
                                 
                             }
+                            
+                            //fin actualizar texto cargador
                             
                         }
                     case .failure(let encodingError):
@@ -592,81 +708,16 @@ class LoginController: UIViewController {
             
             
         }
-        else{
-            
-            DispatchQueue.main.async {
-                
-                //_ = SwiftSpinner.show("Aun no hay base para enviar. Toque para cerrar").addTapHandler({SwiftSpinner.hide()})
-                
-            }
-            
-        }
         
-        /*
-         let headers = ["Content-Type": "multipart/form-data"]
-         
-         let url = "http://216.22.63.155/rest/user-file"
-         
-         //let base = "OnTrade.db"
-         
-         let documents_path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-         
-         
-         
-         
-         
-         let path_documents = documents_path.stringByAppendingPathComponent(self.base)
-         
-         
-         
-         
-         let aux_url = NSURL(fileURLWithPath: path_documents)
-         */
         
-        /*Alamofire.upload(
-         .POST,
-         url, headers: headers,
-         multipartFormData: { multipartFormData in
-         multipartFormData.appendBodyPart(fileURL: aux_url, name: "imagen")
-         
-         },
-         encodingCompletion: { encodingResult in
-         switch encodingResult {
-         case .Success(let upload, _, _):
-         upload.authenticate(user: usuario, password: contrasena)
-         .progress { bytesWritten, totalBytesWritten, totalBytesExpectedToWrite in
-         print("a: \(bytesWritten) b: \(totalBytesWritten) c: \(totalBytesExpectedToWrite)")
-         
-         }
-         upload.responseJSON { response in
-         
-         //Spinner.hide()
-         
-         
-         debugPrint(response)
-         Spinner.show("Base Enviada").addTapHandler({
-         Spinner.hide()
-         })
-         
-         
-         
-         
-         
-         
-         
-         }
-         case .Failure(let encodingError):
-         print(encodingError)
-         }
-         }
-         )
-         
-         */
         
         
         
         
     }
+    
+    
+    // MARK: Funciones para ir a otro modulo
     
     @objc func cambiar_contrasena(sender:UIButton){
         
@@ -677,19 +728,90 @@ class LoginController: UIViewController {
     
     @objc func iniciar_sesion(_ sender:UIButton){
         
+        let subvistas = self.vistaCargador.subviews
+        
+        for subvista in subvistas {
+            
+            subvista.removeFromSuperview()
+            
+        }
+        
         defaults.set(0, forKey: "sesion")
-        defaults.removeObject(forKey: "idReporteLocal")
+        //defaults.removeObject(forKey: "idReporteLocal")
         
         //defaults.addObserver(self, forKeyPath: "sesion", options: NSKeyValueObservingOptions(), context: &defaultsContext)
         
         if usuario.text! != "" && contrasena.text! != "" {
             
             
-            DispatchQueue.main.async {
+            let controladorActual = UIApplication.topViewController()
+            
+            
+            let subvistas = controladorActual?.view!.subviews
+            
+            for subvista in subvistas! where subvista.tag == 179 {
                 
-                //_ = SwiftSpinner.show("Conectando con servidor")
+                let subvistasV = subvista.subviews
+                
+                for subvistaV in subvistasV {
+                    
+                subvistaV.removeFromSuperview()
+                    
+                }
+                
+                
+                    subvista.removeFromSuperview()
+                    
+                
                 
             }
+            
+            
+            
+            print(controladorActual as Any)
+            
+            self.vistaCargador.tag = 179
+            
+            self.vistaCargador.frame = (controladorActual?.view!.frame)!
+            
+            self.vistaCargador.backgroundColor = UIColor.white
+            
+            let auxColor:UIColor = UIColor(rgba: "#ba243d")
+            
+            let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+            
+            vistaLoading.type = .ballScaleMultiple
+            
+            self.vistaCargador.addSubview(vistaLoading)
+            
+            controladorActual?.view!.addSubview(self.vistaCargador)
+            
+            vistaLoading.startAnimating()
+            
+            let textoCargador:UIButton = UIButton()
+            
+            textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+            
+            textoCargador.setTitle("Contactando al servidor...", for: .normal)
+            textoCargador.setTitleColor(auxColor, for: .normal)
+            
+            textoCargador.setAttributedTitle(nil, for: UIControlState())
+            
+            textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+            
+            textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+            
+            
+            textoCargador.isSelected = false
+            
+            //textoCargador.backgroundColor = auxColor
+            
+            
+            textoCargador.titleLabel!.textColor = auxColor
+            textoCargador.titleLabel!.numberOfLines = 0
+            textoCargador.titleLabel!.textAlignment = .center
+            
+            vistaCargador.addSubview(textoCargador)
             
             
             el_sync.iniciar_sesion(usuario: usuario.text!, contrasena: contrasena.text!,controlador: self)
@@ -733,8 +855,6 @@ class LoginController: UIViewController {
         
     }
     
-    
-    
     func ir_inicio(){
         
         crashlytics_user()
@@ -748,12 +868,19 @@ class LoginController: UIViewController {
         }
     }
     
+    
+    
+    // MARK: - Delegados
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         textField.endEditing(true)
         
         return true
     }
+    
+    
+    // MARK: Crashlytics
     
     func crashlytics_user() {
         // TODO: Use the current user's information

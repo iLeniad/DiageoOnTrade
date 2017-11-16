@@ -20,6 +20,16 @@ class DB_Manager: NSObject {
         
     }
     
+    func close_database(_ base:String?){
+        
+        
+        
+        if db != nil {
+            sqlite3_close(db)
+        }
+        
+    }
+    
     func open_database(_ base:String?){
         
         

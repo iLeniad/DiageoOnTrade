@@ -22,10 +22,12 @@
                     </view>
                     <connections>
                         <segue destination="hH3-kB-hpw" kind="presentation" identifier="logintoinicio" id="6Hr-0r-n9o"/>
+                        <segue destination="FtP-qt-qhm" kind="presentation" identifier="logintocambiocontrasena" id="IpG-kg-fET"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="87" y="331"/>
         </scene>
         <!--Reveal View Controller-->
         <scene sceneID="VtV-Ex-SGl">
@@ -64,7 +66,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZbS-q0-EnJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2030" y="-640"/>
+            <point key="canvasLocation" x="2436" y="-613"/>
         </scene>
         <!--Promocion Controller-->
         <scene sceneID="abe-7h-8Vd">
@@ -102,7 +104,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="irM-fg-OGq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3502" y="-1916"/>
+            <point key="canvasLocation" x="3026" y="-1925"/>
         </scene>
         <!--Encuestas Repeticiones-->
         <scene sceneID="hwr-P5-X8x">
@@ -116,11 +118,12 @@
                     </view>
                     <connections>
                         <segue destination="XvO-J6-xKn" kind="custom" identifier="encuestasrepeticionestoencuesta" customClass="SWRevealViewControllerSeguePushController" id="LC3-uq-fIT"/>
+                        <segue destination="IoK-VM-8O1" kind="custom" identifier="encuestastolistaencuestas" customClass="SWRevealViewControllerSeguePushController" id="s2K-M4-Bz7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vgN-XK-KO2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4139" y="-1933"/>
+            <point key="canvasLocation" x="3884" y="-1988"/>
         </scene>
         <!--Encuesta Controller-->
         <scene sceneID="vcg-nf-a9E">
@@ -132,10 +135,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="W8D-oi-tfH"/>
                     </view>
+                    <connections>
+                        <segue destination="IoK-VM-8O1" kind="custom" identifier="encuestastolistaencuestas" customClass="SWRevealViewControllerSeguePushController" id="Z7r-ZN-vZ4"/>
+                        <segue destination="loh-gJ-ASF" kind="custom" identifier="encuestatolistaencuestas" customClass="SWRevealViewControllerSeguePushController" id="pAC-Os-EZv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hJc-on-sHq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4908" y="-1792"/>
+            <point key="canvasLocation" x="4660" y="-2139"/>
         </scene>
         <!--Modulos Controller-->
         <scene sceneID="IwZ-q4-GoE">
@@ -152,11 +159,12 @@
                         <segue destination="B0Z-F1-bhQ" kind="custom" identifier="modulostovisibilidadlista" customClass="SWRevealViewControllerSeguePushController" id="8QC-zQ-kcs"/>
                         <segue destination="IoK-VM-8O1" kind="custom" identifier="modulostoencuestas" customClass="SWRevealViewControllerSeguePushController" id="uaV-BL-tjc"/>
                         <segue destination="zAl-tS-foh" kind="custom" identifier="modulostomodulo" customClass="SWRevealViewControllerSeguePushController" id="edy-yB-8td"/>
+                        <segue destination="13E-PB-TcI" kind="custom" identifier="modulostoinicio" customClass="SWRevealViewControllerSeguePushController" id="fgl-uF-5Vk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2E7-Ox-xON" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3599" y="-708"/>
+            <point key="canvasLocation" x="1994" y="-596"/>
         </scene>
         <!--Modulo Controller-->
         <scene sceneID="wKV-if-Sn8">
@@ -174,7 +182,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Hb-2M-gwA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4354" y="-1225"/>
+            <point key="canvasLocation" x="3900" y="-1231"/>
         </scene>
         <!--Visibilidad Lista Controller-->
         <scene sceneID="lfe-XT-AeJ">
@@ -228,6 +236,8 @@
                         <segue destination="UFt-5t-w1G" kind="custom" identifier="menutomodulos" customClass="SWRevealViewControllerSeguePushController" id="70a-09-8cI"/>
                         <segue destination="VzS-ta-rvl" kind="custom" identifier="menutoreportesenviados" customClass="SWRevealViewControllerSeguePushController" id="JL4-HS-0q7"/>
                         <segue destination="Ujb-c6-jeZ" kind="custom" identifier="menutoreportesnoenviados" customClass="SWRevealViewControllerSeguePushController" id="WuC-A5-LYA"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="menutologin" id="f0P-M5-Ipr"/>
+                        <segue destination="13E-PB-TcI" kind="custom" identifier="menutoinicio" customClass="SWRevealViewControllerSeguePushController" id="yaa-c6-m9Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="siV-n9-RCY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -282,6 +292,40 @@
             </objects>
             <point key="canvasLocation" x="2682" y="360"/>
         </scene>
+        <!--Actualizar App Controller-->
+        <scene sceneID="MYM-zD-zCs">
+            <objects>
+                <viewController id="KHI-eR-SJT" customClass="ActualizarAppController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2Mc-2k-l4F">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="iIc-pW-b04"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0bd-yD-Z4u" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="311" y="-589"/>
+        </scene>
+        <!--Cambio Contrasena Controller-->
+        <scene sceneID="v8v-9l-BsZ">
+            <objects>
+                <viewController id="FtP-qt-qhm" customClass="CambioContrasenaController" customModule="DiageoOnTrade" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2gR-sm-Gy6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="Byt-H8-6kO"/>
+                    </view>
+                    <connections>
+                        <segue destination="hH3-kB-hpw" kind="presentation" identifier="cambiocontrasenatoinicio" id="k01-jf-xsD"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="cambiocontrasenatologin" id="fWf-3T-rCz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iDI-fJ-RCa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="310" y="-738"/>
+        </scene>
         <!--Inicio Controller-->
         <scene sceneID="nqt-qB-8gO">
             <objects>
@@ -292,16 +336,27 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="v1Q-t1-6vS"/>
                     </view>
+                    <connections>
+                        <segue destination="KHI-eR-SJT" kind="presentation" identifier="iniciotoactualizarapp" id="Cp7-4y-rRv"/>
+                        <segue destination="FtP-qt-qhm" kind="presentation" identifier="iniciotocambiocontrasena" id="9LY-Uf-aJ3"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="iniciotologin" id="jzF-Cu-x25"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9eJ-VA-4Yb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="839" y="817"/>
+            <point key="canvasLocation" x="1703" y="-764"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="fgl-uF-5Vk"/>
+        <segue reference="9LY-Uf-aJ3"/>
         <segue reference="8QC-zQ-kcs"/>
-        <segue reference="3Su-be-Lix"/>
+        <segue reference="Wrj-wm-oHU"/>
         <segue reference="LC3-uq-fIT"/>
+        <segue reference="8OK-Bm-1FQ"/>
+        <segue reference="s2K-M4-Bz7"/>
         <segue reference="Tpf-Ff-4KT"/>
+        <segue reference="6Hr-0r-n9o"/>
+        <segue reference="f0P-M5-Ipr"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -102,7 +102,7 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
     
     
     
-    
+    // MARK: - Funciones de inicio de visita
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,9 +126,7 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
         
         idReporteLocal = defaults.object(forKey: "idReporteLocal") as! Int
         
-        /*let dataFromString = aux_string.data(using: String.Encoding.utf8, allowLossyConversion: false)
-         estructura = JSON(cadena: dataFromString!)
-         */
+        
         //print(aux_string)
         
         
@@ -415,6 +413,8 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
         
     
     }
+    
+    // MARK: - Funciones que crean la vista
     
     func llenar_estructura(aux_vista_scroll:UIScrollView,elementos_estructura:[[String:AnyObject]],estructura_y:Int,indice_subestructura:Int)->[String:AnyObject]{
         
@@ -1372,6 +1372,214 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
     }
     
     
+    //acomodar objetos
+    
+    
+    func acomodar_objetos(indices:[Int],offset_lista:CGFloat,renglones:Int)->[String:AnyObject]{
+        
+        var offset_lista = offset_lista
+        
+        var indice_cabecera = 0
+        
+        let elementos_estructura = elementos["estructura"] as! [[String:AnyObject]]
+        
+        let estructura_y = elementos["estructura_y"] as! Int
+        
+        let aux_vista_scroll = laVista
+        
+        for renglon in elementos_estructura {
+            
+            if renglon["tipo"] as! String != "CABECERA" {
+                
+                indice_cabecera += 1
+            }
+            else{
+                
+                break
+                
+            }
+            
+        }
+        
+        //let base = defaults.object(forKey: "base") as! String
+        
+        //db.open_database(base)
+        
+        
+        //let sql = "select t2.idItemRelation,t2.value,t2.idMeasurement,t1.description,t1.startDate,t1.endDate,t1.extra1 from ma_sku t2 left join ma_availability t1 where t1.id = t2.idMeasurement"
+        
+        
+        let color_renglon = elementos_estructura[indice_cabecera]["color_renglon"] as! String
+        let color_texto0 = elementos_estructura[indice_cabecera]["color_texto0"] as! String
+        let color_texto1 = elementos_estructura[indice_cabecera]["color_texto1"] as! String
+        
+        //print(renglones)
+        
+        var color_texto = ""
+        
+        if renglones % 2 == 0 {
+            
+            el_constructor.colorTexto = color_texto1
+            
+            color_texto = color_texto0
+            
+            let cuadro = dibujar_cuadro(CGSize(width: (aux_vista_scroll?.frame.width)!, height: CGFloat(estructura_y)),color:color_renglon)
+            
+            let aux_cuadro = UIImageView()
+            
+            
+            aux_cuadro.frame = CGRect(x: 0, y: CGFloat(offset_lista), width: (aux_vista_scroll?.frame.width)!, height: CGFloat(estructura_y))
+            
+            aux_cuadro.image = cuadro
+            
+            aux_vista_scroll?.addSubview(aux_cuadro)
+            
+            aux_vista_scroll?.sendSubview(toBack: aux_cuadro)
+            
+        }
+        else{
+            
+            el_constructor.colorTexto = color_texto0
+            
+            color_texto = color_texto1
+            
+        }
+        
+        for aux_indice in indices {
+            
+            let aux_elemento = elementos_lista[aux_indice]
+            
+            //print(aux_elemento)
+            
+            switch aux_elemento["tipo"] as! String{
+                
+            case "LABEL":
+                
+                let aux_elemento_lista = aux_elemento["elemento"] as! UILabel
+                
+                aux_elemento_lista.textColor = UIColor(rgba: "#\(color_texto)")
+                
+                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                laVista.addSubview(aux_elemento_lista)
+                
+            case "SELECT_ONE_RADIO":
+                
+                //print(aux_elemento)
+                
+                let aux_label = aux_elemento["label"] as! UILabel
+                
+                aux_label.textColor = UIColor(rgba: "#\(color_texto)")
+                
+                aux_label.frame.origin.y = aux_elemento["label_y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                laVista.addSubview(aux_label)
+                
+                
+                let aux_botontes = aux_elemento["botones"] as! [[String:AnyObject]]
+                
+                for boton in aux_botontes {
+                    
+                    //print(boton)
+                    
+                    let aux_boton = boton["elemento"] as! UIButton
+                    
+                    aux_boton.frame.origin.y = boton["y_original"] as! CGFloat + CGFloat(offset_lista)
+                    
+                    let aux_opcion = boton["opcion"] as! UILabel
+                    
+                    aux_opcion.textColor = UIColor(rgba: "#\(color_texto)")
+                    
+                    aux_opcion.frame.origin.y = boton["opcion_y_original"] as! CGFloat + CGFloat(offset_lista)
+                    
+                    laVista.addSubview(aux_boton)
+                    laVista.addSubview(aux_opcion)
+                    
+                }
+                
+            case "REAL", "NUMERIC":
+                
+                let aux_campo_texto = aux_elemento["elemento"] as! UITextField
+                
+                aux_campo_texto.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                let aux_label = aux_elemento["label"] as! UILabel
+                
+                aux_label.textColor = UIColor(rgba: "#\(color_texto)")
+                
+                aux_label.frame.origin.y = aux_elemento["label_y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                laVista.addSubview(aux_campo_texto)
+                laVista.addSubview(aux_label)
+                
+            case "FOTO":
+                
+                let aux_elemento_lista = aux_elemento["elemento"] as! UIButton
+                
+                aux_elemento_lista.titleLabel!.textColor = UIColor(rgba: "#\(color_texto)")
+                
+                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                laVista.addSubview(aux_elemento_lista)
+                
+            case "SELECT_ONE_SPINNER":
+                
+                
+                let aux_elemento_lista = aux_elemento["elemento"] as! UIButton
+                
+                aux_elemento_lista.setTitleColor(UIColor(rgba: "#\(color_texto)"), for: .normal)
+                
+                aux_elemento_lista.titleLabel!.textColor = UIColor(rgba: "#\(color_texto)")
+                
+                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                laVista.addSubview(aux_elemento_lista)
+                
+            case "SUBESTRUCTURA":
+                
+                let aux_elemento_lista = aux_elemento["elemento"] as! UIButton
+                
+                aux_elemento_lista.titleLabel!.textColor = UIColor(rgba: "#\(color_texto)")
+                
+                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                let aux_elemento_lista_ojo = aux_elemento["elemento_ojo"] as! UIButton
+                
+                aux_elemento_lista_ojo.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
+                
+                laVista.addSubview(aux_elemento_lista)
+                laVista.addSubview(aux_elemento_lista_ojo)
+                
+                
+            default:
+                print("tipo no manejado al llenar \(String(describing: aux_elemento["tipo"]))")
+            }
+            
+            
+        }
+        
+        
+        offset_lista += CGFloat(estructura_y)
+        
+        
+        
+        
+        
+        self.aux_posicion.frame = CGRect(x: 10, y: offset_lista, width: 50, height: 50)
+        
+        aux_vista_scroll?.contentSize = CGSize(width: (aux_vista_scroll?.contentSize.width)!, height: aux_posicion.frame.origin.y +  aux_posicion.frame.size.height+300)
+        
+        
+        let datos = ["offset_lista":offset_lista,"renglones":renglones] as [String : Any]
+        
+        return datos as [String : AnyObject]
+    }
+    
+    
+    //fin acomodar objetos
+    
+    // MARK: - Delegados
+    
     //TextDelegate
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -1444,9 +1652,139 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
     }
     
     
+    func imagePickerControllerDidCancel(_ picker:UIImagePickerController)
+    {
+        //imagePicker.dismissViewControllerAnimated(true, completion: nil)
+        
+        print("si cancelo")
+        
+        imagePicker.view.removeFromSuperview()
+        imagePicker.removeFromParentViewController()
+        
+    }
+    
+    
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController,didFinishPickingMediaWithInfo info: [String : Any])
+    {
+        
+        print("si tomo la foto")
+        
+        if(picker.sourceType == UIImagePickerControllerSourceType.camera)
+        {
+            
+            let aux_foto: UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
+            
+            let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
+            
+            let random = Int(arc4random_uniform(1000))
+            
+            let el_hash=tiempo_milisegundos + String(random)
+            
+            let hash = el_hash.md5()
+            
+            //Donde vamos a guardar la foto
+            let nombre_foto = "\(tipo)\(hash).jpg"
+            let foto_ruta_absoluta = ruta_absoluta(nombre_foto)
+            
+            
+            
+            let respuesta_guardar = guardar_foto(imagen: aux_foto, ruta: foto_ruta_absoluta)
+            
+            //print("se guarda la imagen? \(respuesta_guardar)")
+            
+            
+            if respuesta_guardar {
+                
+                fotoEstatus = true
+                
+                mostrar_botonGuardar()
+                
+                if elementos_lista[foto_tag]["fotos"] == nil{
+                    
+                    let fotos:[[String:AnyObject]] = []
+                    //fotos.append([String : AnyObject]())
+                    
+                    elementos_lista[foto_tag]["fotos"] = fotos as AnyObject?
+                }
+                
+                var aux_fotos = elementos_lista[foto_tag]["fotos"] as! [[String:AnyObject]]
+                
+                
+                aux_fotos.append([String : AnyObject]())
+                
+                aux_fotos[aux_fotos.count - 1]["nombre"] = nombre_foto as AnyObject?
+                aux_fotos[aux_fotos.count - 1]["ruta"] = foto_ruta_absoluta as AnyObject?
+                
+                let aux_b_foto = elementos_lista[foto_tag]["elemento"] as! UIButton
+                
+                aux_b_foto.setTitle("Tomar Foto \(aux_fotos.count)/\(elementos_lista[foto_tag]["total"]!)", for: .normal)
+                
+                aux_b_foto.setImage(UIImage(named: "BotonCamaraRoja2"), for: .normal)
+                
+                aux_b_foto.setTitleColor(UIColor(rgba: "#000000"), for: .normal)
+                
+                aux_b_foto.titleLabel!.font = aux_b_foto.titleLabel?.font
+                aux_b_foto.titleLabel!.textColor = UIColor(rgba: "#000000")
+                
+                elementos_lista[foto_tag]["fotos"] = aux_fotos as AnyObject?
+                
+                let total = Int(elementos_lista[foto_tag]["total"] as! String)
+                
+                if total! <= aux_fotos.count {
+                    
+                    aux_b_foto.isUserInteractionEnabled = false
+                }
+                
+                
+                
+                // Create the alert controller
+                let alertController = UIAlertController(title: "¡Alerta!", message: "Foto Guardada", preferredStyle: .alert)
+                
+                // Create the actions
+                
+                
+                
+                let okAction = UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.default) {
+                    UIAlertAction in
+                    NSLog("click ok")
+                    
+                    self.imagePicker.view.removeFromSuperview()
+                    self.imagePicker.removeFromParentViewController()
+                    //SwiftSpinner.hide()
+                    
+                }
+                
+                
+                // Add the actions
+                alertController.addAction(okAction)
+                
+                
+                
+                // Present the controller
+                self.present(alertController, animated: true, completion: nil)
+                
+                
+                
+                
+            }
+            
+            
+            
+            
+            
+            
+        }
+        
+    }
+    
+    
     
     //Fin TextDelegate
     
+    
+    // MARK: - Funciones de botones
     
     //funcion radio button
     
@@ -1555,304 +1893,6 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
         self.view.addSubview(imagePicker.view)
         
         
-        
-    }
-    
-    
-    func imagePickerControllerDidCancel(_ picker:UIImagePickerController)
-    {
-        //imagePicker.dismissViewControllerAnimated(true, completion: nil)
-        
-        print("si cancelo")
-        
-        imagePicker.view.removeFromSuperview()
-        imagePicker.removeFromParentViewController()
-        
-    }
-    
-    
-    
-    
-    func imagePickerController(_ picker: UIImagePickerController,didFinishPickingMediaWithInfo info: [String : Any])
-    {
-        
-        print("si tomo la foto")
-        
-        if(picker.sourceType == UIImagePickerControllerSourceType.camera)
-        {
-            
-            let aux_foto: UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
-            
-            let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
-            
-            let random = Int(arc4random_uniform(1000))
-            
-            let el_hash=tiempo_milisegundos + String(random)
-            
-            let hash = el_hash.md5()
-            
-            //Donde vamos a guardar la foto
-            let nombre_foto = "\(tipo)\(hash).jpg"
-            let foto_ruta_absoluta = ruta_absoluta(nombre_foto)
-            
-            
-            
-            let respuesta_guardar = guardar_foto(imagen: aux_foto, ruta: foto_ruta_absoluta)
-            
-            //print("se guarda la imagen? \(respuesta_guardar)")
-            
-            
-            if respuesta_guardar {
-                
-                fotoEstatus = true
-                
-                mostrar_botonGuardar()
-                
-                if elementos_lista[foto_tag]["fotos"] == nil{
-                    
-                    let fotos:[[String:AnyObject]] = []
-                    //fotos.append([String : AnyObject]())
-                    
-                    elementos_lista[foto_tag]["fotos"] = fotos as AnyObject?
-                }
-                
-                var aux_fotos = elementos_lista[foto_tag]["fotos"] as! [[String:AnyObject]]
-                
-                
-                aux_fotos.append([String : AnyObject]())
-                
-                aux_fotos[aux_fotos.count - 1]["nombre"] = nombre_foto as AnyObject?
-                aux_fotos[aux_fotos.count - 1]["ruta"] = foto_ruta_absoluta as AnyObject?
-                
-                let aux_b_foto = elementos_lista[foto_tag]["elemento"] as! UIButton
-                
-                aux_b_foto.setTitle("Tomar Foto \(aux_fotos.count)/\(elementos_lista[foto_tag]["total"]!)", for: .normal)
-                
-                aux_b_foto.setImage(UIImage(named: "BotonCamaraRoja2"), for: .normal)
-                
-                aux_b_foto.setTitleColor(UIColor(rgba: "#000000"), for: .normal)
-                
-                aux_b_foto.titleLabel!.font = aux_b_foto.titleLabel?.font
-                aux_b_foto.titleLabel!.textColor = UIColor(rgba: "#000000")
-                
-                elementos_lista[foto_tag]["fotos"] = aux_fotos as AnyObject?
-                
-                let total = Int(elementos_lista[foto_tag]["total"] as! String)
-                
-                if total! <= aux_fotos.count {
-                    
-                    aux_b_foto.isUserInteractionEnabled = false
-                }
-                
-                /*
-                var sql = "select id from \(elementos_lista[foto_tag]["tabla_padre"] as! String) where \(elementos_lista[foto_tag]["id_padre"] as! String) = '\(elementos_lista[foto_tag]["id"]!)' and id_report_local = '\(idReporteLocal)'"
-                
-                print(sql)
-                
-                let resultado_distribution = db.select_query_columns(sql)
-                
-                var id_padre = 0
-                
-                if resultado_distribution.count > 0 {
-                    
-                    for renglon in resultado_distribution {
-                        
-                        id_padre = renglon["id"] as! Int
-                        
-                    }
-                    
-                }
-                else{
-                    
-                    
-                    let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
-                    
-                    let random = Int(arc4random_uniform(1000))
-                    
-                    let el_hash=String(tiempo_milisegundos) + String(describing: defaults.object(forKey: "idReporteLocal")!) + String(random)
-                    
-                    sql = "insert into report_distribution ('idReporteLocal','id_item','cup_price','bootle_price','hash','distribution') values ('\(idReporteLocal)','\(elementos_lista[foto_tag]["id"]!)','0.0','0.0','\(el_hash.md5())','2')"
-                    
-                    //print(sql)
-                    
-                    _ = db.execute_query(sql)
-                    
-                    sql = "select id from \(elementos_lista[foto_tag]["tabla_padre"] as! String) where \(elementos_lista[foto_tag]["id_padre"] as! String) = '\(elementos_lista[foto_tag]["id"]!)' and idReporteLocal = '\(idReporteLocal)'"
-                    
-                    let resultado_distribution = db.select_query_columns(sql)
-                    
-                    for renglon in resultado_distribution {
-                        
-                        id_padre = renglon["id"] as! Int
-                        
-                    }
-                    
-                    
-                }
-                
-                
-                
-                sql = "insert into \(elementos_lista[foto_tag]["tabla"] as! String) (idReporteLocal,\(elementos_lista[foto_tag]["id_padre_fk"] as! String),path,hash,is_send) values ('\(idReporteLocal)','\(id_padre)','\(nombre_foto)','\(hash)','0')"
-                
-                //print(sql)
-                
-                let _ = db.execute_query(sql)
-                
-                //print(resultado_foto)
-                */
-                
-                /*
-                SwiftSpinner.show("Foto Guardada").addTapHandler({
-                    
-                    self.imagePicker.view.removeFromSuperview()
-                    self.imagePicker.removeFromParentViewController()
-                    SwiftSpinner.hide()
-                    
-                })
-                */
-                
-                // Create the alert controller
-                let alertController = UIAlertController(title: "¡Alerta!", message: "Foto Guardada", preferredStyle: .alert)
-                
-                // Create the actions
-                
-                
-                
-                let okAction = UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.default) {
-                    UIAlertAction in
-                    NSLog("click ok")
-                    
-                    self.imagePicker.view.removeFromSuperview()
-                    self.imagePicker.removeFromParentViewController()
-                    //SwiftSpinner.hide()
-                    
-                }
-                
-                
-                // Add the actions
-                alertController.addAction(okAction)
-                
-                
-                
-                // Present the controller
-                self.present(alertController, animated: true, completion: nil)
-                
-                
-                
-                
-            }
-            else{
-                
-                
-                /*SwiftSpinner.show("Hubo problema al guardar la foto intentalo nuevamente por favor").addTapHandler({
-                    
-                    self.imagePicker.view.removeFromSuperview()
-                    self.imagePicker.removeFromParentViewController()
-                    //SwiftSpinner.hide()
-                    
-                })
-                */
-                
-            }
-            
-            
-            //self.arregloFotos[self.foto_tag].append(imagePath)
-            
-            
-            //let idReporteLocal = self.defaults.objectForKey("idReporteLocal")
-            
-            
-            
-            //let sql = "insert into report_photo_distribution (id_report_local,id_report_distribution,path,hash,is_send,filter2) values ('\(idReporteLocal!)','\(self.arregloDistributionId[self.foto_tag][0])','\(self.arregloFotos[self.foto_tag][self.arregloFotos[self.foto_tag].count - 1] as! String)','\(el_hash.md5)','0','\(arregloFotosCategoria[self.foto_tag][0])')"
-            
-            //print(sql)
-            
-            // let resultado_query = self.db.execute_query(sql)
-            
-            
-            // print(resultado_query)
-            
-            
-            
-            
-            /*let sql_fotos = "select * from report_photo_distribution where id_report_local = '\(idReporteLocal!)' and filter2='\(self.arregloFotosCategoria[self.foto_tag][0])'"
-             
-             //print(sql)
-             
-             let resultadoFotos = self.db.select_query(sql_fotos)
-             
-             self.arregloMarcas[self.foto_tag][3].setTitle("\(resultadoFotos.count)/4", forState: .Normal)
-             
-             if resultadoFotos.count == 4 {
-             
-             (self.arregloMarcas[self.foto_tag][3] as! UIButton).userInteractionEnabled = false
-             
-             
-             }
-             else{
-             
-             (self.arregloMarcas[self.foto_tag][3] as! UIButton).userInteractionEnabled = true
-             
-             }
-             
-             
-             var kq = 0
-             
-             for renglon_categoria in arregloFotosCategoria {
-             
-             if renglon_categoria[0] as! String == self.arregloFotosCategoria[self.foto_tag][0] as! String {
-             
-             
-             var imagen_camara = ""
-             
-             if resultadoFotos.count == 0 {
-             
-             imagen_camara = "CamaraGris"
-             (self.arregloMarcas[kq][3] as! UIButton).userInteractionEnabled = true
-             
-             }
-             else{
-             
-             imagen_camara = "CamaraRoja"
-             
-             }
-             
-             self.arregloMarcas[kq][3].setTitle("\(resultadoFotos.count)/4", forState: .Normal)
-             
-             self.arregloMarcas[kq][3].setImage(UIImage(named: imagen_camara), forState: .Normal)
-             
-             
-             if resultadoFotos.count == 4 {
-             
-             (self.arregloMarcas[kq][3] as! UIButton).userInteractionEnabled = false
-             
-             
-             }
-             else{
-             
-             (self.arregloMarcas[kq][3] as! UIButton).userInteractionEnabled = true
-             
-             }
-             
-             }
-             
-             
-             
-             
-             kq += 1
-             
-             }
-             
-             */
-            
-            
-            
-            
-            
-            
-            
-            
-        }
         
     }
     
@@ -2336,25 +2376,7 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
             
             //print("si lo ve como valor final")
             
-            /*
-             let aux_b_agregar = elementos_lista[indice_subestructura]["b_agregar"] as! UIButton
-             
-             
-             
-             if valor_final == "si" {
-             
-             
-             
-             aux_b_agregar.isHidden = false
-             
-             
-             }
-             else{
-             
-             aux_b_agregar.isHidden = true
-             
-             }
-             */
+            
         }
         
         
@@ -2778,22 +2800,6 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
         subestructura.bringSubview(toFront: b_cerrar)
         
         
-        //subestructura.contentSize = CGSizeMake(subestructura.contentSize.width, CGFloat(offset) + 300)
-        
-        /*let cuadro = dibujar_cuadro(CGSize(width: aux_vista_scroll.frame.width,height: CGFloat(offset) + 300), color: "FFFFFF")
-         
-         let aux_cuadro = UIImageView()
-         
-         
-         aux_cuadro.frame = CGRect(x: 0, y: 0, width: Int(aux_vista_scroll.frame.width), height: offset+300 + Int(aux_vista_scroll.frame.height))
-         
-         aux_cuadro.image = cuadro
-         
-         
-         subestructura.addSubview(aux_cuadro)
-         
-         subestructura.sendSubviewToBack(aux_cuadro)
-         */
         
         
         UIView.animate(withDuration: 0.5, delay: 0.1, options: [],animations: {
@@ -2913,53 +2919,10 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
                                         
                                         if resultado_distribution.count > 0 {
                                             
-                                            /*
-                                            for renglon in resultado_distribution {
-                                                
-                                                id_padre = renglon["id"] as! Int
-                                                
-                                            }
-                                             */
+                                            
                                             
                                         }
-                                        else{
-                                            /*
-                                             
-                                             let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
-                                             
-                                             let random = Int(arc4random_uniform(1000))
-                                             
-                                             let el_hash=String(tiempo_milisegundos) + String(describing: defaults.object(forKey: "idReporteLocal")!) + String(random)
-                                             
-                                             sql = "insert into report_distribution ('id_report_local','id_item','idMeasurement','precio','hash','is_send','distribution') values ('\(idReporteLocal)','\(elementos_lista[q]["id"]!)','idMeasurement','0','\(el_hash.md5())','0','0')"
-                                             
-                                             //print(sql)
-                                             
-                                             _ = db.execute_query(sql)
-                                             
-                                             sql = "select id from \(elementos_lista[q]["tabla_padre"] as! String) where \(elementos_lista[q]["id_padre"] as! String) = '\(elementos_lista[q]["id"]!)' and id_report_local = '\(idReporteLocal)'"
-                                             
-                                             let resultado_distribution = db.select_query_columns(sql)
-                                             
-                                             for renglon in resultado_distribution {
-                                             
-                                             id_padre = renglon["id"] as! Int
-                                             
-                                             }
-                                             
-                                             */
-                                        }
                                         
-                                        
-                                        //fin obtener o crear id reporte padre
-                                        
-                                        //sql = "insert into \(elementos_lista[q]["tabla_guardar"]!) (\(elementos_lista[q]["columna_guardar"]!),\(elementos_lista[q]["columna_guardar_padre"]!),id_reporte_local) values ('\(opcion["id"]!)','\(id_padre)','\(idReporteLocal)')"
-                                        
-                                        //print(sql)
-                                        
-                                        //let _ = db.execute_query(sql)
-                                        
-                                        //print(resultado_agregar_subestructura)
                                         
                                     }
                                     
@@ -3348,17 +3311,7 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
         
         
         let aux_vista_scroll = sender.superview
-        /*
-         
-         
-         aux_vista_scroll.frame = CGRect(x: 0, y: 0, width: self.view.frame.width+10, height: self.view.frame.height)
-         
-         
-         
-         aux_vista_scroll.contentSize = CGSizeMake(aux_vista_scroll.contentSize.width, aux_vista_scroll.frame.height)
-         
-         //print(elementos_lista[sender.tag])
-         */
+        
         
         let elementos_estructura = elementos["estructura"] as! [[String:AnyObject]]
         
@@ -3598,17 +3551,7 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
         print("mostrando opciones filtro")
         
         let aux_vista_scroll = sender.superview
-        /*
-         
-         
-         aux_vista_scroll.frame = CGRect(x: 0, y: 0, width: self.view.frame.width+10, height: self.view.frame.height)
-         
-         
-         
-         aux_vista_scroll.contentSize = CGSizeMake(aux_vista_scroll.contentSize.width, aux_vista_scroll.frame.height)
-         
-         //print(elementos_lista[sender.tag])
-         */
+        
         
         let elementos_estructura = elementos["estructura"] as! [[String:AnyObject]]
         
@@ -3792,18 +3735,7 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
             
             if aux_grupo[sender.columna!] as! Int == sender.id! {
                 
-                /*for aux_indice in aux_grupo["elementos"] as! [Int] {
-                 
-                 print(elementos_lista[aux_indice])
-                 
-                 if let aux_elemento_lista = elementos_lista[aux_indice]["elemento"] as? UIView {
-                 
-                 VistaScroll.addSubview(aux_elemento_lista)
-                 
-                 }
-                 
-                 }
-                 */
+                
                 
                 let datos = acomodar_objetos(indices: aux_grupo["elementos"] as! [Int], offset_lista: offset_lista,renglones: renglones)
                 
@@ -3820,225 +3752,8 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
     //fin ejecutar filtro
     
     
-    //acomodar objetos
     
     
-    func acomodar_objetos(indices:[Int],offset_lista:CGFloat,renglones:Int)->[String:AnyObject]{
-        
-        var offset_lista = offset_lista
-        
-        var indice_cabecera = 0
-        
-        let elementos_estructura = elementos["estructura"] as! [[String:AnyObject]]
-        
-        let estructura_y = elementos["estructura_y"] as! Int
-        
-        let aux_vista_scroll = laVista
-        
-        for renglon in elementos_estructura {
-            
-            if renglon["tipo"] as! String != "CABECERA" {
-                
-                indice_cabecera += 1
-            }
-            else{
-                
-                break
-                
-            }
-            
-        }
-        
-        //let base = defaults.object(forKey: "base") as! String
-        
-        //db.open_database(base)
-        
-        
-        //let sql = "select t2.idItemRelation,t2.value,t2.idMeasurement,t1.description,t1.startDate,t1.endDate,t1.extra1 from ma_sku t2 left join ma_availability t1 where t1.id = t2.idMeasurement"
-        
-        
-        let color_renglon = elementos_estructura[indice_cabecera]["color_renglon"] as! String
-        let color_texto0 = elementos_estructura[indice_cabecera]["color_texto0"] as! String
-        let color_texto1 = elementos_estructura[indice_cabecera]["color_texto1"] as! String
-        
-        //print(renglones)
-        
-        var color_texto = ""
-        
-        if renglones % 2 == 0 {
-            
-            el_constructor.colorTexto = color_texto1
-            
-            color_texto = color_texto0
-            
-            let cuadro = dibujar_cuadro(CGSize(width: (aux_vista_scroll?.frame.width)!, height: CGFloat(estructura_y)),color:color_renglon)
-            
-            let aux_cuadro = UIImageView()
-            
-            
-            aux_cuadro.frame = CGRect(x: 0, y: CGFloat(offset_lista), width: (aux_vista_scroll?.frame.width)!, height: CGFloat(estructura_y))
-            
-            aux_cuadro.image = cuadro
-            
-            aux_vista_scroll?.addSubview(aux_cuadro)
-            
-            aux_vista_scroll?.sendSubview(toBack: aux_cuadro)
-            
-        }
-        else{
-            
-            el_constructor.colorTexto = color_texto0
-            
-            color_texto = color_texto1
-            
-        }
-        
-        for aux_indice in indices {
-            
-            let aux_elemento = elementos_lista[aux_indice]
-            
-            //print(aux_elemento)
-            
-            switch aux_elemento["tipo"] as! String{
-                
-            case "LABEL":
-                
-                let aux_elemento_lista = aux_elemento["elemento"] as! UILabel
-                
-                aux_elemento_lista.textColor = UIColor(rgba: "#\(color_texto)")
-                
-                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                laVista.addSubview(aux_elemento_lista)
-                
-            case "SELECT_ONE_RADIO":
-                
-                //print(aux_elemento)
-                
-                let aux_label = aux_elemento["label"] as! UILabel
-                
-                aux_label.textColor = UIColor(rgba: "#\(color_texto)")
-                
-                aux_label.frame.origin.y = aux_elemento["label_y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                laVista.addSubview(aux_label)
-                
-                
-                let aux_botontes = aux_elemento["botones"] as! [[String:AnyObject]]
-                
-                for boton in aux_botontes {
-                    
-                    //print(boton)
-                    
-                    let aux_boton = boton["elemento"] as! UIButton
-                    
-                    aux_boton.frame.origin.y = boton["y_original"] as! CGFloat + CGFloat(offset_lista)
-                    
-                    let aux_opcion = boton["opcion"] as! UILabel
-                    
-                    aux_opcion.textColor = UIColor(rgba: "#\(color_texto)")
-                    
-                    aux_opcion.frame.origin.y = boton["opcion_y_original"] as! CGFloat + CGFloat(offset_lista)
-                    
-                    laVista.addSubview(aux_boton)
-                    laVista.addSubview(aux_opcion)
-                    
-                }
-                
-            case "REAL", "NUMERIC":
-                
-                let aux_campo_texto = aux_elemento["elemento"] as! UITextField
-                
-                aux_campo_texto.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                let aux_label = aux_elemento["label"] as! UILabel
-                
-                aux_label.textColor = UIColor(rgba: "#\(color_texto)")
-                
-                aux_label.frame.origin.y = aux_elemento["label_y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                laVista.addSubview(aux_campo_texto)
-                laVista.addSubview(aux_label)
-                
-            case "FOTO":
-                
-                let aux_elemento_lista = aux_elemento["elemento"] as! UIButton
-                
-                aux_elemento_lista.titleLabel!.textColor = UIColor(rgba: "#\(color_texto)")
-                
-                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                laVista.addSubview(aux_elemento_lista)
-                
-            case "SELECT_ONE_SPINNER":
-                
-                
-                let aux_elemento_lista = aux_elemento["elemento"] as! UIButton
-                
-                aux_elemento_lista.setTitleColor(UIColor(rgba: "#\(color_texto)"), for: .normal)
-                
-                aux_elemento_lista.titleLabel!.textColor = UIColor(rgba: "#\(color_texto)")
-                
-                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                laVista.addSubview(aux_elemento_lista)
-                
-            case "SUBESTRUCTURA":
-                
-                let aux_elemento_lista = aux_elemento["elemento"] as! UIButton
-                
-                aux_elemento_lista.titleLabel!.textColor = UIColor(rgba: "#\(color_texto)")
-                
-                aux_elemento_lista.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                let aux_elemento_lista_ojo = aux_elemento["elemento_ojo"] as! UIButton
-                
-                aux_elemento_lista_ojo.frame.origin.y = aux_elemento["y_original"] as! CGFloat + CGFloat(offset_lista)
-                
-                laVista.addSubview(aux_elemento_lista)
-                laVista.addSubview(aux_elemento_lista_ojo)
-                
-                
-            default:
-                print("tipo no manejado al llenar \(String(describing: aux_elemento["tipo"]))")
-            }
-            
-            
-        }
-        
-        
-        offset_lista += CGFloat(estructura_y)
-        
-        
-        
-        
-        
-        self.aux_posicion.frame = CGRect(x: 10, y: offset_lista, width: 50, height: 50)
-        
-        aux_vista_scroll?.contentSize = CGSize(width: (aux_vista_scroll?.contentSize.width)!, height: aux_posicion.frame.origin.y +  aux_posicion.frame.size.height+300)
-        
-        
-        let datos = ["offset_lista":offset_lista,"renglones":renglones] as [String : Any]
-        
-        return datos as [String : AnyObject]
-    }
-    
-    
-    //fin acomodar objetos
-    
-    /*
-     override func didReceiveMemoryWarning() {
-     super.didReceiveMemoryWarning()
-     
-     print("sin memoria")
-     
-     // Dispose of any resources that can be recreated.
-     let sharedURLCache:NSURLCache = NSURLCache()
-     
-     sharedURLCache.removeAllCachedResponses()
-     
-     }
-     */
     
     @objc func guardar_reporte(sender:UIButton){
         
@@ -4203,25 +3918,6 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
         }
         
         
-        /*
-         for var i=0;i<self.fotos.count;i+=1{
-         
-         random = Int(arc4random_uniform(1000))
-         
-         tiempo_milisegundos = NSDate().timeIntervalSince1970
-         
-         el_hash=String(tiempo_milisegundos) + String(i) + String(random)
-         
-         print(self.fotos[i])
-         
-         sql = "insert into report_photo_promotions (id_report_local,id_report_promotion,path,hash,is_send) values ('\(idReporteLocal!)','\(idReportPromotion!)','\(self.fotos[i])','\(el_hash.md5!)',0)"
-         
-         _ = db.execute_query(sql)
-         
-         
-         
-         }
-         */
         
         var q = 0
         
@@ -4834,11 +4530,7 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
             nuevo_b_guardar.frame = aux_b_guardar.frame
             
             nuevo_b_guardar.frame.origin.y = aux_b_guardar.frame.origin.y + CGFloat(offset_lista)
-            /*
-             nuevo_b_guardar.contentEdgeInsets = aux_b_foto.contentEdgeInsets
-             nuevo_b_guardar.titleEdgeInsets = aux_b_foto.titleEdgeInsets
-             nuevo_b_guardar.imageEdgeInsets = aux_b_foto.imageEdgeInsets
-             */
+            
             
             
             var nuevo_elemento = [String:AnyObject]()
@@ -4903,11 +4595,6 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
             nuevo_b_guardar.frame = aux_b_guardar.frame
             
             nuevo_b_guardar.frame.origin.y = aux_b_guardar.frame.origin.y + CGFloat(offset_lista)
-            /*
-             nuevo_b_guardar.contentEdgeInsets = aux_b_foto.contentEdgeInsets
-             nuevo_b_guardar.titleEdgeInsets = aux_b_foto.titleEdgeInsets
-             nuevo_b_guardar.imageEdgeInsets = aux_b_foto.imageEdgeInsets
-             */
             
             
             var nuevo_elemento = [String:AnyObject]()
@@ -5219,40 +4906,6 @@ class VisibilidadController: UIViewController,UINavigationControllerDelegate,UII
             }
             
             
-            /*
-             
-             let aux_b_select_menu = aux_elemento["elemento"] as! UIButton
-             
-             nuevo_b_select_menu.tag = indice
-             
-             
-             
-             nuevo_b_select_menu.setImage(aux_b_select_menu.imageView?.image!, for: .normal)
-             
-             
-             
-             nuevo_b_select_menu.setAttributedTitle(nil, for: .normal)
-             nuevo_b_select_menu.setTitle(aux_b_select_menu.titleLabel?.text!, for: .normal)
-             
-             nuevo_b_select_menu.isSelected = false
-             nuevo_b_select_menu.setTitleColor(UIColor(rgba: "#\(colorTexto)"), for: .normal)
-             
-             nuevo_b_select_menu.titleLabel!.font = aux_b_select_menu.titleLabel?.font
-             nuevo_b_select_menu.titleLabel!.textColor = UIColor(rgba: "#\(colorTexto)")
-             nuevo_b_select_menu.titleLabel!.numberOfLines = aux_b_select_menu.titleLabel!.numberOfLines
-             nuevo_b_select_menu.titleLabel!.textAlignment = aux_b_select_menu.titleLabel!.textAlignment
-             
-             nuevo_b_select_menu.contentHorizontalAlignment = aux_b_select_menu.contentHorizontalAlignment
-             
-             nuevo_b_select_menu.frame = aux_b_select_menu.frame
-             
-             nuevo_b_select_menu.frame.origin.y = aux_b_select_menu.frame.origin.y + CGFloat(offset_lista)
-             
-             nuevo_b_select_menu.contentEdgeInsets = aux_b_select_menu.contentEdgeInsets
-             nuevo_b_select_menu.titleEdgeInsets = aux_b_select_menu.titleEdgeInsets
-             nuevo_b_select_menu.imageEdgeInsets = aux_b_select_menu.imageEdgeInsets
-             
-             */
             
             
             var nuevo_elemento = [String:AnyObject]()

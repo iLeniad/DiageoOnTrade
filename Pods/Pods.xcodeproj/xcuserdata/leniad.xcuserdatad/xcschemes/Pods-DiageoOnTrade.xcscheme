@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B627744347CEAE077E93C751D64885AF"
+               BlueprintIdentifier = "2DC2BE60786B1CB13231635D9563C882"
                BuildableName = "Pods_DiageoOnTrade.framework"
                BlueprintName = "Pods-DiageoOnTrade"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B627744347CEAE077E93C751D64885AF"
+            BlueprintIdentifier = "2DC2BE60786B1CB13231635D9563C882"
             BuildableName = "Pods_DiageoOnTrade.framework"
             BlueprintName = "Pods-DiageoOnTrade"
             ReferencedContainer = "container:Pods.xcodeproj">

@@ -87,6 +87,8 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
     
     //fin variables
     
+    // MARK: - Funciones inicio de vista
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -755,6 +757,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
         
     }
     
+    // MARK: - Funciones de Boton de Menu
     
     @objc func hacer_checkin(sender:UIButton){
         
@@ -780,10 +783,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                     
                 }
                 
-                let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.ocultarCargador(sender:)))
-                singleTap.cancelsTouchesInView = false
-                singleTap.numberOfTapsRequired = 1
-                subvista.addGestureRecognizer(singleTap)
+                subvista.gestureRecognizers?.removeAll()
                 
                 
             }
@@ -1001,35 +1001,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                 
                 
                 
-            /*
-            DispatchQueue.main.async {
-                
-                _ = SwiftSpinner.show("CHECKIN LISTO, Toque para cerrar").addTapHandler({SwiftSpinner.hide()
-                    
-                    
-                    self.botonCheckin.isUserInteractionEnabled = false
-                    self.botonDistribucion.isUserInteractionEnabled = true
-                    self.botonPromocion.isUserInteractionEnabled = true
-                    self.botonVisibilidad.isUserInteractionEnabled = true
-                    self.botonEncuesta.isUserInteractionEnabled = true
-                    self.botonCheckout.isUserInteractionEnabled = true
-                    
-                    self.botonCheckin.setImage(UIImage(named: "TareaCompleta"), for: .normal)
-                    
-                    self.botonCheckin.imageView?.contentMode = .left
-                    
-                    self.botonCheckin.titleEdgeInsets = UIEdgeInsetsMake(0, self.botonDistribucion.imageView!.frame.size.width, 0, 0)
-                    
-                    self.botonCheckin.imageEdgeInsets = UIEdgeInsetsMake(0, -self.botonCheckin.imageView!.frame.size.width, 0, self.botonCheckin.imageView!.frame.size.width)
-                    //self.botonCheckin.titleEdgeInsets = UIEdgeInsetsMake(18, self.botonCheckin.titleLabel!.frame.size.width + 10, 18, -self.botonCheckin.titleLabel!.frame.size.width)
-                    
-                    self.defaults.set(0, forKey: "moduloDistribucion")
-                    
-                })
-                
-            }
-            */
-            
+        
             
             
         })
@@ -1048,6 +1020,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
     
     //incidencias
     
+    // MARK: - Funciones que muestran en pantalla
     
     @objc func ocultarCargador(sender:UITapGestureRecognizer){
         
@@ -1058,6 +1031,70 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
         }
         
     }
+    
+    
+    func mostrarCargador(){
+        
+        let controladorActual = UIApplication.topViewController()
+        
+        print(controladorActual as Any)
+        
+        let subvistas = self.vistaCargador.subviews
+        
+        for subvista in subvistas {
+            
+            subvista.removeFromSuperview()
+            
+        }
+        
+        self.vistaCargador.tag = 179
+        
+        self.vistaCargador.frame = (controladorActual?.view!.frame)!
+        
+        self.vistaCargador.backgroundColor = UIColor.white
+        
+        let auxColor:UIColor = UIColor(rgba: "#ba243d")
+        
+        let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+        
+        vistaLoading.type = .ballScaleMultiple
+        
+        self.vistaCargador.addSubview(vistaLoading)
+        
+        controladorActual?.view!.addSubview(self.vistaCargador)
+        
+        vistaLoading.startAnimating()
+        
+        let textoCargador:UIButton = UIButton()
+        
+        textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+        
+        textoCargador.setTitle("Sincronizando...", for: .normal)
+        textoCargador.setTitleColor(auxColor, for: .normal)
+        
+        textoCargador.setAttributedTitle(nil, for: UIControlState())
+        
+        textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+        
+        textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+        
+        
+        textoCargador.isSelected = false
+        
+        //textoCargador.backgroundColor = auxColor
+        
+        
+        textoCargador.titleLabel!.textColor = auxColor
+        textoCargador.titleLabel!.numberOfLines = 0
+        textoCargador.titleLabel!.textAlignment = .center
+        
+        vistaCargador.addSubview(textoCargador)
+        
+        
+    }
+    
+   
+    // MARK: - Funciones de check out y check in
     
     @objc func checkOutListo(sender:UITapGestureRecognizer)
     {
@@ -1356,6 +1393,9 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
         
         
     }
+    
+    
+    // MARK: - Delegados
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
@@ -1715,10 +1755,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                         
                     }
                     
-                    let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.checkListo(sender:)))
-                    singleTap.cancelsTouchesInView = false
-                    singleTap.numberOfTapsRequired = 1
-                    subvista.addGestureRecognizer(singleTap)
+                    subvista.gestureRecognizers?.removeAll()
                     
                     
                 }
@@ -1774,59 +1811,21 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                 }
                
         totalReplicas += 1
+                
+                var q = 0
         
         for (indice,renglon) in self.skaPdv.enumerated() where renglon["seleccionado"] as! Bool == true {
             
             //print(renglon)
             
-            DispatchQueue.main.async {
-                
             
                 
-                //actualizar texto cargador
-                
-                let controladorActual = UIApplication.topViewController()
-                
-                DispatchQueue.main.async {
-                    
-                    self.mostrarCargador()
-                    
-                    let subvistas = controladorActual?.view!.subviews
-                    
-                    for subvista in subvistas! where subvista.tag == 179 {
-                        
-                        let subvistasCargador = subvista.subviews
-                        
-                        for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
-                            
-                            (subvistaCargador as! UIButton).setTitle("Replicado Reporte \(indice) de \(totalReplicas)", for: .normal)
-                            
-                        }
-                        
-                        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.checkListo(sender:)))
-                        singleTap.cancelsTouchesInView = false
-                        singleTap.numberOfTapsRequired = 1
-                        subvista.addGestureRecognizer(singleTap)
-                        
-                        
-                    }
-                    
-                }
-                
-                //fin actualizar texto cargador
-                
-                
-            
-            
-            //_ = SwiftSpinner.show("Replicado Reporte \(indice) de \(totalReplicas)")
-                
-            
-            
-            //DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
             
             
         
             if renglon["seleccionado"] as! Bool {
+                
+                q += 1
                 
                 let random = Int(arc4random_uniform(1000))
                 
@@ -1841,453 +1840,14 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                 print("resultado de replicar SKA")
                 print(resultadoInsertSKA)
                 
-                /*
-            
-                let sqlReporte = "insert into report (idSchedule,version,idTipo,place,hash,checkIn,checkInTz,checkInLat,checkInLon,checkInImei,checkInAccuracy,checkInSateliteUTC,checkOut,checkOutTz,checkOutLat,checkOutLon,checkOutImei,checkOutAccuracy,checkOutSateliteUTC,idReportServer,enviado) select idSchedule,version,'11','\(renglon["id"] as! NSNumber)',hash,checkIn,checkInTz,checkInLat,checkInLon,checkInImei,checkInAccuracy,checkInSateliteUTC,checkOut,checkOutTz,checkOutLat,checkOutLon,checkOutImei,checkOutAccuracy,checkOutSateliteUTC,idReportServer,enviado from report where id = '\(idReporteLocal)'"
                 
-                print(sqlReporte)
-                
-                let resultadoInsertReporte = self.db.execute_query(sqlReporte)
-                
-                print("resultado de replicar reporte")
-                print(resultadoInsertReporte)
-                
-                
-                let resultado_reporte = self.db.select_query_columns("select * from report order by id desc limit 1")
-                
-                print(resultado_reporte)
-                
-                var idReporteLocal2 = 0
-                
-                for renglon in resultado_reporte {
-                    
-                    idReporteLocal2 = renglon["id"] as! Int
-                    
-                    
-                    
-                }
-                
-                
-                random = Int(arc4random_uniform(1000))
-                
-                el_hash=String(tiempo_milisegundos) + String(describing: idReporteLocal2) + String(random)
-                
-                let sqlHashReporte2 = "update report set hash = '\(el_hash.md5())' where id = '\(idReporteLocal2)'"
-                
-                _ = self.db.execute_query(sqlHashReporte2)
-                
-                 */
-                
-                /*
-                
-                //reporte distribution
-                
-                
-                var sqlReporteDistribution = "insert into report_distribution (idReportServer,id_pdv,hash,id_measurement_item,bootle_price,value,cup_price,check_in_date,distribution,id_item,idReporteLocal,is_send) select idReportServer,'\(renglon["id"] as! NSNumber)',hash,id_measurement_item,bootle_price,value,cup_price,check_in_date,distribution,id_item,'\(idReporteLocal2)',is_send from report_distribution where idReporteLocal = '\(idReporteLocal)'"
-                
-                print(sqlReporteDistribution)
-                let resultadoInsertReporteDistribution = self.db.execute_query(sqlReporteDistribution)
-                
-                print("resultado de replicar reporte distribution")
-                print(resultadoInsertReporteDistribution)
-                
-                
-                sqlReporteDistribution = "select * from report_distribution where idReporteLocal = '\(idReporteLocal2)'"
-                
-                print(sqlReporteDistribution)
-                
-                let restultadoDistribucion = self.db.select_query_columns(sqlReporteDistribution)
-                
-                print(restultadoDistribucion)
-                
-                for renglon in restultadoDistribucion {
-                
-                    
-                    let random = Int(arc4random_uniform(1000))
-                    
-                    let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                    
-                    let sqlUpdateDistribucion = "update report_distribution set hash = '\(el_hash.md5())' where id = \(renglon["id"] as! Int)"
-                    
-                    print(sqlUpdateDistribucion)
-                    
-                    let resultadoUpdateDistribucion = self.db.execute_query(sqlUpdateDistribucion)
-                    
-                    print(resultadoUpdateDistribucion)
-                
-                }
-                
-                
-                //reporte distribution
-                
-                */
-                
-                /*
-                
-                //reporte promocion
-                
-                let sqlPromociones = "select * from report_promotions where id_report_local = '\(idReporteLocal)'"
-                
-                let resultadoPromociones = self.db.select_query_columns(sqlPromociones)
-                
-                
-                for renglonPromociones in resultadoPromociones {
-                
-                
-                
-                var sqlReportePromocion = "insert into report_promotions (idReportServer,id_category,id_brand,id_type_promotion,hash,is_send,id_report_local) select idReportServer,id_category,id_brand,id_type_promotion,hash,is_send,'\(idReporteLocal2)' from report_promotions where id_report_local = '\(idReporteLocal)' and id = '\(renglonPromociones["id"]!)'"
-                
-                print(sqlReportePromocion)
-                let resultadoInsertReportePromocion = self.db.execute_query(sqlReportePromocion)
-                
-                print("resultado de replicar reporte promocion")
-                print(resultadoInsertReportePromocion)
-                
-                
-                sqlReportePromocion = "select * from report_promotions where id_report_local = '\(idReporteLocal2)' order by id desc limit 1"
-                
-                print(sqlReportePromocion)
-                
-                let restultadoPromocion = self.db.select_query_columns(sqlReportePromocion)
-                
-                print(restultadoPromocion)
-                
-                for renglon in restultadoPromocion {
-                    
-                    
-                    let random = Int(arc4random_uniform(1000))
-                    
-                    let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                    
-                    let sqlUpdate = "update report_promotions set hash = '\(el_hash.md5())' where id = \(renglon["id"] as! Int)"
-                    
-                    print(sqlUpdate)
-                    
-                    let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                    
-                    print(resultadoUpdate)
-                    
-                    
-                    
-                    //fotos y marcas
-                    /*
-                    var sqlFotos = "insert into report_photo_promotions (id_report_local,id_report_promotion,path,hash,is_send,idReportServer) select '\(idReporteLocal2)','\(renglon["id"]!)',path,hash,is_send,idReportServer from report_photo_promotions where id_report_promotion in (select id from report_promotions where id_report_local = '\(idReporteLocal)' and id = '\(renglonPromociones["id"]!)')"
-                    
-                    let resultadoPromocionFotos = self.db.execute_query(sqlFotos)
-                    
-                    print("resultado promocion fotos")
-                    print(resultadoPromocionFotos)
-                    
-                    
-                    sqlFotos = "select * from report_photo_promotions where id_report_promotion = '\(renglon["id"]!)'"
-                    
-                    let resultadoFotos = self.db.select_query_columns(sqlFotos)
-                    
-                    for foto in resultadoFotos {
-                    
-                        let random = Int(arc4random_uniform(1000))
-                        
-                        let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                        
-                        let sqlUpdate = "update report_photo_promotions set hash = '\(el_hash.md5())' where id = \(foto["id"] as! Int)"
-                        
-                        print(sqlUpdate)
-                        
-                        let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                        
-                        print(resultadoUpdate)
-                        
-                    
-                    }
-                    
-                    */
-                    
-                    
-                    var sqlMarcas = "insert into report_promtions_brands (id_brand,id_category,id_report_promotion,hash,is_send,id_report_local,idReportServer) select id_brand,id_category,'\(renglon["id"]!)',hash,is_send,'\(idReporteLocal2)',idReportServer from report_promtions_brands where id_report_promotion in (select id from report_promotions where id_report_local = '\(idReporteLocal)' and id = \(renglonPromociones["id"]!))"
-                    
-                    let resultadoPromocionMarcas = self.db.execute_query(sqlMarcas)
-                    
-                    print("resultado promocion fotos")
-                    print(resultadoPromocionMarcas)
-                    
-                    
-                    sqlMarcas = "select * from report_promtions_brands where id_report_promotion = '\(renglon["id"]!)'"
-                    
-                    let resultadoMarcas = self.db.select_query_columns(sqlMarcas)
-                    
-                    for marca in resultadoMarcas {
-                        
-                        let random = Int(arc4random_uniform(1000))
-                        
-                        let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                        
-                        let sqlUpdate = "update report_promtions_brands set hash = '\(el_hash.md5())' where id = \(marca["id"] as! Int)"
-                        
-                        print(sqlUpdate)
-                        
-                        let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                        
-                        print(resultadoUpdate)
-                        
-                        
-                    }
-                    
-                    
-                    
-                    //fotos y marcas
-                    
-                    
-                    
-                }
-                
-                
-                
-                }
-                
-                
-                //fin reporte promocion
-                
-                
-                */
-                
-                /*
-                
-                //reporte visibilidad
-                
-                let sqlVisibilidad = "select * from report_visibility where id_report_local = '\(idReporteLocal)'"
-                
-                let resultadoVisibilidades = self.db.select_query_columns(sqlVisibilidad)
-                
-                
-                for renglonVisibilidades in resultadoVisibilidades {
-                    
-                    
-                    
-                    var sqlReporteVisibilidad = "insert into report_visibility (idReportServer,id_category,id_brand,id_type,hash,is_send,id_report_local) select idReportServer,id_category,id_brand,id_type,hash,is_send,'\(idReporteLocal2)' from report_visibility where id_report_local = '\(idReporteLocal)' and id = '\(renglonVisibilidades["id"]!)'"
-                    
-                    print(sqlReporteVisibilidad)
-                    let resultadoInsertReporteVisibilidad = self.db.execute_query(sqlReporteVisibilidad)
-                    
-                    print("resultado de replicar reporte promocion")
-                    print(resultadoInsertReporteVisibilidad)
-                    
-                    
-                    sqlReporteVisibilidad = "select * from report_visibility where id_report_local = '\(idReporteLocal2)' order by id desc limit 1"
-                    
-                    print(sqlReporteVisibilidad)
-                    
-                    let restultadoVisibilidad = self.db.select_query_columns(sqlReporteVisibilidad)
-                    
-                    print(restultadoVisibilidad)
-                    
-                    for renglon in restultadoVisibilidad {
-                        
-                        
-                        let random = Int(arc4random_uniform(1000))
-                        
-                        let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                        
-                        let sqlUpdate = "update report_visibility set hash = '\(el_hash.md5())' where id = \(renglon["id"] as! Int)"
-                        
-                        print(sqlUpdate)
-                        
-                        let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                        
-                        print(resultadoUpdate)
-                        
-                        
-                        
-                        //fotos y marcas
-                        
-                        /*
-                        
-                        var sqlFotos = "insert into report_photo_visibility (id_report_local,id_report_visibility,path,hash,is_send,idReportServer) select '\(idReporteLocal2)','\(renglon["id"]!)',path,hash,is_send,idReportServer from report_photo_visibility where id_report_visibility in (select id from report_visibility where id_report_local = '\(idReporteLocal)' and id = '\(renglonVisibilidades["id"]!)')"
-                        
-                        let resultadoPromocionFotos = self.db.execute_query(sqlFotos)
-                        
-                        print("resultado visibilidad fotos")
-                        print(resultadoPromocionFotos)
-                        
-                        
-                        sqlFotos = "select * from report_photo_visibility where id_report_visibility = '\(renglon["id"]!)'"
-                        
-                        let resultadoFotos = self.db.select_query_columns(sqlFotos)
-                        
-                        for foto in resultadoFotos {
-                            
-                            let random = Int(arc4random_uniform(1000))
-                            
-                            let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                            
-                            let sqlUpdate = "update report_photo_visibility set hash = '\(el_hash.md5())' where id = \(foto["id"] as! Int)"
-                            
-                            print(sqlUpdate)
-                            
-                            let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                            
-                            print(resultadoUpdate)
-                            
-                            
-                        }
-                        
-                        */
-                        
-                        
-                        var sqlMarcas = "insert into report_visibility_brands (id_brand,id_category,id_report_visibility,hash,is_send,id_report_local,idReportServer) select id_brand,id_category,'\(renglon["id"]!)',hash,is_send,'\(idReporteLocal2)',idReportServer from report_visibility_brands where id_report_visibility in (select id from report_visibility where id_report_local = '\(idReporteLocal)' and id = \(renglonVisibilidades["id"]!))"
-                        
-                        let resultadoPromocionMarcas = self.db.execute_query(sqlMarcas)
-                        
-                        print("resultado visibilidad Marcas")
-                        print(resultadoPromocionMarcas)
-                        
-                        
-                        sqlMarcas = "select * from report_visibility_brands where id_report_visibility = '\(renglon["id"]!)'"
-                        
-                        let resultadoMarcas = self.db.select_query_columns(sqlMarcas)
-                        
-                        for marca in resultadoMarcas {
-                            
-                            let random = Int(arc4random_uniform(1000))
-                            
-                            let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                            
-                            let sqlUpdate = "update report_visibility_brands set hash = '\(el_hash.md5())' where id = \(marca["id"] as! Int)"
-                            
-                            print(sqlUpdate)
-                            
-                            let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                            
-                            print(resultadoUpdate)
-                            
-                            
-                        }
-                        
-                        
-                        
-                        //fotos y marcas
-                        
-                        
-                        
-                    }
-                    
-                    
-                    
-                }
-                
-                
-                //fin reporte visibilidad
-                
-                
-                
-                
-                */
-                /*
-                
-                
-                //reporte encuesta
-                
-                //let sqlEncuesta = "select * from EARespuesta where idReporteLocal = '\(idReporteLocal)'"
-                
-                //let resultadoEncuestas = self.db.select_query_columns(sqlEncuesta)
-                
-                
-                //for renglonEncuestas in resultadoEncuestas {
-                    
-                    
-                    
-                    var sqlReporteEncuesta = "insert into EARespuesta (idReportServer,hash,idPregunta,idReporteLocal,idEncuesta,numeroEncuesta,respuesta,campoExtra1,campoExtra2) select idReportServer,hash,idPregunta,\(idReporteLocal2),idEncuesta,numeroEncuesta,respuesta,campoExtra1,campoExtra2 from EARespuesta where idReporteLocal = '\(idReporteLocal)'"
-                    
-                    print(sqlReporteEncuesta)
-                    let resultadoInsertReporteEncuesta = self.db.execute_query(sqlReporteEncuesta)
-                    
-                    print("resultado de replicar reporte encuesta")
-                    print(resultadoInsertReporteEncuesta)
-                    
-                    
-                    sqlReporteEncuesta = "select * from EARespuesta where idReporteLocal = '\(idReporteLocal2)' order by id desc"
-                    
-                    print(sqlReporteEncuesta)
-                    
-                    let restultadoEncuesta = self.db.select_query_columns(sqlReporteEncuesta)
-                    
-                    print(restultadoEncuesta)
-                    
-                    for renglon in restultadoEncuesta {
-                        
-                        
-                        let random = Int(arc4random_uniform(1000))
-                        
-                        let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                        
-                        let sqlUpdate = "update EARespuesta set hash = '\(el_hash.md5())' where id = \(renglon["id"] as! Int)"
-                        
-                        print(sqlUpdate)
-                        
-                        let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                        
-                        print(resultadoUpdate)
-                        
-                        
-                        
-                        //fotos y marcas
-                       
-                        
-                        /*
-                        var sqlFotos = "insert into report_photo_visibility (id_report_local,id_report_visibility,path,hash,is_send,idReportServer) select '\(idReporteLocal2)','\(renglon["id"]!)',path,hash,is_send,idReportServer from report_photo_visibility where id_report_visibility in (select id from report_visibility where id_report_local = '\(idReporteLocal)' and id = '\(renglonVisibilidades["id"]!)')"
-                        
-                        let resultadoPromocionFotos = self.db.execute_query(sqlFotos)
-                        
-                        print("resultado visibilidad fotos")
-                        print(resultadoPromocionFotos)
-                        
-                        
-                        sqlFotos = "select * from report_photo_visibility where id_report_visibility = '\(renglon["id"]!)'"
-                        
-                        let resultadoFotos = self.db.select_query_columns(sqlFotos)
-                        
-                        for foto in resultadoFotos {
-                            
-                            let random = Int(arc4random_uniform(1000))
-                            
-                            let el_hash=String(tiempo_milisegundos) + String(describing: renglon["id"] as! Int) + String(random)
-                            
-                            let sqlUpdate = "update report_photo_visibility set hash = '\(el_hash.md5())' where id = \(foto["id"] as! Int)"
-                            
-                            print(sqlUpdate)
-                            
-                            let resultadoUpdate = self.db.execute_query(sqlUpdate)
-                            
-                            print(resultadoUpdate)
-                            
-                            
-                        }
-                        
-                        
-                        
-                        */
-                        
-                        //fotos y marcas
-                        
-                        
-                        
-                    }
-                    
-                    
-                    
-                //}
-                
-                
-                //fin reporte encuesta
-                
-                
-                */
                 
                 
                 
                 
             }
             
-            }
+            
             
         //})
             
@@ -2296,6 +1856,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                 
          self.defaults.removeObject(forKey: "idReporteLocal")
         
+                
         
         UIView.animate(withDuration: 0.5, delay: 0.1, options: [],animations: {
             
@@ -2325,8 +1886,15 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                         
                         for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
                             
-                            (subvistaCargador as! UIButton).setTitle("CHECKOUT LISTO, Toque para cerrar", for: .normal)
+                            if q != 0 {
+                                
+                                (subvistaCargador as! UIButton).setTitle("CHECKOUT LISTO, Replicados \((q)) Reportes Toque para cerrar", for: .normal)
+                                
+                            }
+                            else{
                             
+                            (subvistaCargador as! UIButton).setTitle("CHECKOUT LISTO, Toque para cerrar", for: .normal)
+                            }
                         }
                         
                         let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.checkOutListo(sender:)))
@@ -2340,24 +1908,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
                 }
                 
                 //fin actualizar texto cargador
-                
-        /*
-        DispatchQueue.main.async {
-        
-        SwiftSpinner.show("CHECKOUT LISTO, Toque para cerrar").addTapHandler({SwiftSpinner.hide()
-        
-        
-            self.performSegue(withIdentifier: "modulostoinicio", sender: self)
-        
-        })
-            
-          
-            
-            
-            
-        }
-        */
-            
+         
             
             
         
@@ -2369,57 +1920,7 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
         
     }
     
-    func mostrarCargador(){
-        
-        let controladorActual = UIApplication.topViewController()
-        
-        print(controladorActual as Any)
-        
-        self.vistaCargador.tag = 179
-        
-        self.vistaCargador.frame = (controladorActual?.view!.frame)!
-        
-        self.vistaCargador.backgroundColor = UIColor.white
-        
-        let auxColor:UIColor = UIColor(rgba: "#ba243d")
-        
-        let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
-        
-        vistaLoading.type = .ballScaleMultiple
-        
-        self.vistaCargador.addSubview(vistaLoading)
-        
-        controladorActual?.view!.addSubview(self.vistaCargador)
-        
-        vistaLoading.startAnimating()
-        
-        let textoCargador:UIButton = UIButton()
-        
-        textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
-        
-        textoCargador.setTitle("Sincronizando...", for: .normal)
-        textoCargador.setTitleColor(auxColor, for: .normal)
-        
-        textoCargador.setAttributedTitle(nil, for: UIControlState())
-        
-        textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
-        
-        textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
-        
-        
-        textoCargador.isSelected = false
-        
-        //textoCargador.backgroundColor = auxColor
-        
-        
-        textoCargador.titleLabel!.textColor = auxColor
-        textoCargador.titleLabel!.numberOfLines = 0
-        textoCargador.titleLabel!.textAlignment = .center
-        
-        vistaCargador.addSubview(textoCargador)
-        
-        
-    }
+    // MARK: - Funciones ir a otro modulo
     
     @objc func iradistribucion(sender:UIButton){
     
@@ -2463,18 +1964,5 @@ class ModulosController: UIViewController,CLLocationManagerDelegate,GMSMapViewDe
         
     }
     
-   /*func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        
-        if segue.identifier == "modulostomodulo" {
-            
-            let modulo = segue.destinationViewController as! ModuloController
-            
-            modulo.tipo = tipo
-            
-        }
-        
-    }
-    */
-    
+   
 }

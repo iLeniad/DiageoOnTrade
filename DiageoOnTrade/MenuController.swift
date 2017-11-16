@@ -11,7 +11,7 @@ import Crashlytics
 import NVActivityIndicatorView
 
 
-class MenuController: UIViewController {
+class MenuController: UIViewController,URLSessionDelegate,URLSessionTaskDelegate {
     
     var el_sync:Sincronizador = Sincronizador()
     
@@ -30,6 +30,8 @@ class MenuController: UIViewController {
     
     var vistaCargador:UIScrollView = UIScrollView()
     
+    // MARK: - Funciones inicio de vista
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,8 +47,415 @@ class MenuController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         crear_menu(self.view)
+        
+        checar_estatusContrasena()
     }
     
+    //checar estatus contraseña
+    
+    
+    // MARK: - Funciones de servicios
+    
+    func checar_estatusContrasena(){
+        
+        print("vamos a checar el estatus de la contraseña")
+        
+        //let dominio = "216.22.63.155"
+        
+        let dominio = defaults.object(forKey: "dominio") as! String
+        let protocolo = defaults.object(forKey: "protocolo") as! String
+        
+        
+        
+        let aux_url = "\(protocolo)://\(dominio)/rest/psspolicy/status"
+        
+        //let aux_url = "http://gshpdiageocapabilitiesclone.jelastic.servint.net/capabilities-rest/rest/psspolicy/status"
+        
+        print(aux_url)
+        
+        let todoEndpoint: String = aux_url
+        guard let url = URL(string: todoEndpoint) else {
+            print("Error: cannot create URL")
+            return
+        }
+        let urlRequest = URLRequest(url: url)
+        
+        
+        let configuracion:URLSessionConfiguration = URLSessionConfiguration.ephemeral
+        
+        
+        
+        let sesion = URLSession(configuration: configuracion, delegate: self, delegateQueue: nil)
+        
+        let tarea = sesion.dataTask(with: urlRequest) {
+            (data, response, error) in
+            // Errores
+            guard error == nil else {
+                print(" Error en la petición del servicio policy")
+                print(error!)
+                return
+            }
+            //Hay data
+            guard let responseData = data else {
+                print("Error: servicio viene vacio")
+                return
+            }
+            //checar si es diccionario o arreglo
+            print(data as Any)
+            print("la respuesta es")
+            let realResponse = response as! HTTPURLResponse
+            print(realResponse)
+            switch realResponse.statusCode {
+                
+            case 200:
+                
+                
+                
+                do {
+                    
+                    
+                    
+                    
+                    guard let datos = try JSONSerialization.jsonObject(with: responseData, options: [])
+                        as? [String: Any] else {
+                            print("No es diccionario policy")
+                            return
+                    }
+                    
+                    print(datos.description)
+                    
+                    
+                    print("el estatus es ")
+                    
+                    print(datos["status"] as Any)
+                    
+                    
+                    if datos["status"] as! NSNumber == 2 {
+                        
+                        let alertController = UIAlertController(title: "¡Atención!", message: "Su contraseña esta por caducar se recomienda actualizarla", preferredStyle: .alert)
+                        
+                        
+                        let okAction = UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.default) {
+                            UIAlertAction in
+                            
+                            print("se presiono Aceptar")
+                            
+                            //self.performSegue(withIdentifier: "iniciotocambiocontrasena", sender: self)
+                            
+                        }
+                        
+                        
+                        alertController.addAction(okAction)
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                        
+                        
+                    }
+                    
+                    if datos["status"] as! NSNumber == 1 {
+                        
+                        print("todo bien con las credenciales")
+                        
+                        
+                        
+                        
+                    }
+                    
+                    //fin checar si es diccionario o arreglo
+                    
+                    
+                    
+                } catch  {
+                    print("error al parsear el json")
+                    return
+                }
+                
+            case 401:
+                
+                print("Credenciales incorrectas")
+                
+                print("si tenemos credenciales mal")
+                
+                
+                
+                
+                
+                let alertController = UIAlertController(title: "¡Atención!", message: "Sus credenciales estan incorrectas, favor de ingresarlas nuevamente", preferredStyle: .alert)
+                
+                
+                let okAction = UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.default) {
+                    UIAlertAction in
+                    
+                    print("se presiono Aceptar")
+                    self.defaults.set(3, forKey: "sesion")
+                    self.performSegue(withIdentifier: "iniciotologin", sender: self)
+                    
+                }
+                
+                
+                alertController.addAction(okAction)
+                
+                self.present(alertController, animated: true, completion: nil)
+                
+                
+                
+                
+            case 402:
+                
+                let alertController = UIAlertController(title: "¡Atención!", message: "Su contraseña esta caduca es necesario actualizarla", preferredStyle: .alert)
+                
+                
+                let okAction = UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.default) {
+                    UIAlertAction in
+                    
+                    print("se presiono Aceptar")
+                    self.defaults.set(3, forKey: "sesion")
+                    self.performSegue(withIdentifier: "iniciotocambiocontrasena", sender: self)
+                    
+                }
+                
+                
+                alertController.addAction(okAction)
+                
+                self.present(alertController, animated: true, completion: nil)
+                
+            default:
+                print("Estatus http no manejado")
+            }
+            
+            
+        }
+        tarea.resume()
+        
+        
+    }
+    
+    
+    
+    @objc func sincronizar(sender:UIButton){
+        
+        
+        let controladorActual = UIApplication.topViewController()
+        
+        print(controladorActual as Any)
+        
+        self.vistaCargador.tag = 179
+        
+        self.vistaCargador.frame = (controladorActual?.view!.frame)!
+        
+        self.vistaCargador.backgroundColor = UIColor.white
+        
+        let auxColor:UIColor = UIColor(rgba: "#ba243d")
+        
+        let subvistas = vistaCargador.subviews
+        
+        for subvista in subvistas {
+            
+            subvista.removeFromSuperview()
+            
+        }
+        
+        let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+        
+        vistaLoading.type = .ballScaleMultiple
+        
+        self.vistaCargador.addSubview(vistaLoading)
+        
+        controladorActual?.view!.addSubview(self.vistaCargador)
+        
+        vistaLoading.startAnimating()
+        
+        let textoCargador:UIButton = UIButton()
+        
+        textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+        
+        textoCargador.setTitle("Contactando al servidor...", for: .normal)
+        textoCargador.setTitleColor(auxColor, for: .normal)
+        
+        textoCargador.setAttributedTitle(nil, for: UIControlState())
+        
+        textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+        
+        textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+        
+        
+        textoCargador.isSelected = false
+        
+        //textoCargador.backgroundColor = auxColor
+        
+        
+        textoCargador.titleLabel!.textColor = auxColor
+        textoCargador.titleLabel!.numberOfLines = 0
+        textoCargador.titleLabel!.textAlignment = .center
+        
+        vistaCargador.addSubview(textoCargador)
+        
+        sender.isUserInteractionEnabled = false
+        
+        
+        DispatchQueue.main.async {
+            
+            //_ = SwiftSpinner.show("Iniciando sincronización...")
+            
+            sender.isUserInteractionEnabled = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                
+                self.el_sync.sincronizar(controlador: self)
+                
+                
+            })
+        }
+        
+        
+    }
+    
+    
+    @objc func enviarReportes(_ sender:UIButton){
+        
+        let usuario = defaults.object(forKey: "usuario") as! String
+        let contrasena = defaults.object(forKey: "contrasena") as! String
+        
+        
+        let controladorActual = UIApplication.topViewController()
+        
+        print(controladorActual as Any)
+        
+        self.vistaCargador.tag = 179
+        
+        self.vistaCargador.frame = (controladorActual?.view!.frame)!
+        
+        self.vistaCargador.backgroundColor = UIColor.white
+        
+        let auxColor:UIColor = UIColor(rgba: "#ba243d")
+        
+        let subvistas = self.vistaCargador.subviews
+        
+        for subvista in subvistas {
+            
+            subvista.removeFromSuperview()
+            
+        }
+        
+        let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+        
+        vistaLoading.type = .ballScaleMultiple
+        
+        self.vistaCargador.addSubview(vistaLoading)
+        
+        controladorActual?.view!.addSubview(self.vistaCargador)
+        
+        vistaLoading.startAnimating()
+        
+        let textoCargador:UIButton = UIButton()
+        
+        textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+        
+        textoCargador.setTitle("...", for: .normal)
+        textoCargador.setTitleColor(auxColor, for: .normal)
+        
+        textoCargador.setAttributedTitle(nil, for: UIControlState())
+        
+        textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+        
+        textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+        
+        
+        textoCargador.isSelected = false
+        
+        //textoCargador.backgroundColor = auxColor
+        
+        
+        textoCargador.titleLabel!.textColor = auxColor
+        textoCargador.titleLabel!.numberOfLines = 0
+        textoCargador.titleLabel!.textAlignment = .center
+        
+        vistaCargador.addSubview(textoCargador)
+        
+        
+        
+        el_sync.servicio_seriado_enviar(usuario: usuario, contrasena: contrasena, indice: 0)
+        
+    }
+    
+    
+    
+    func urlSession(_ session: URLSession,
+                    task: URLSessionTask,
+                    didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void){
+        
+        print("tenemos challege task")
+        
+        
+        if challenge.previousFailureCount > 0 {
+            
+            print("Credenciales incorrectas")
+            
+            DispatchQueue.main.async {
+                
+                //_ = SwiftSpinner.show("Credenciales incorrectas").addTapHandler({SwiftSpinner.hide()})
+                
+                
+                print("Credenciales incorrectas")
+                
+                print("si tenemos credenciales mal")
+                
+                //actualizar texto cargador
+                
+                let controladorActual = UIApplication.topViewController()
+                
+                DispatchQueue.main.async {
+                    
+                    self.mostrarCargador()
+                    
+                    let subvistas = controladorActual?.view!.subviews
+                    
+                    for subvista in subvistas! where subvista.tag == 179 {
+                        
+                        let subvistasCargador = subvista.subviews
+                        
+                        for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                            
+                            (subvistaCargador as! UIButton).setTitle("Credenciales incorrectas...Toque para continuar", for: .normal)
+                            
+                        }
+                        
+                        
+                        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.irLogin(sender:)))
+                        singleTap.cancelsTouchesInView = false
+                        singleTap.numberOfTapsRequired = 1
+                        subvista.addGestureRecognizer(singleTap)
+                        
+                        
+                    }
+                    
+                }
+                
+                //fin actualizar texto cargador
+                
+                
+                
+                
+                
+            }
+            
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil)
+        } else {
+            
+            let usuario = defaults.object(forKey: "usuario") as! String
+            let contrasena = defaults.object(forKey: "contrasena") as! String
+            
+            let credential = URLCredential(user:usuario, password:contrasena, persistence: .none)
+            completionHandler(URLSession.AuthChallengeDisposition.useCredential,credential)
+        }
+        
+        
+        
+    }
+    
+    
+    // MARK: - Funciones que muestran en pantalla
     
     func crear_menu(_ vista:UIView) {
         
@@ -545,20 +954,20 @@ class MenuController: UIViewController {
         
     }
     
-    
-    
-    @objc func sincronizar(sender:UIButton){
-        /*
-         let usuario = defaults.object(forKey: "usuario") as! String
-         let contrasena = defaults.object(forKey: "contrasena") as! String
-         
-         el_sync.servicio_seriado(usuario: usuario, contrasena: contrasena, indice: 0)
-         
-         */
+   
+    func mostrarCargador(){
         
         let controladorActual = UIApplication.topViewController()
         
-        print(controladorActual as Any)
+        //print(controladorActual as Any)
+        
+        let subvistas = self.vistaCargador.subviews
+        
+        for subvista in subvistas {
+            
+            subvista.removeFromSuperview()
+            
+        }
         
         self.vistaCargador.tag = 179
         
@@ -582,7 +991,7 @@ class MenuController: UIViewController {
         
         textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
         
-        textoCargador.setTitle("Sincronizando...", for: .normal)
+        textoCargador.setTitle("Contactando al servidor...", for: .normal)
         textoCargador.setTitleColor(auxColor, for: .normal)
         
         textoCargador.setAttributedTitle(nil, for: UIControlState())
@@ -590,7 +999,7 @@ class MenuController: UIViewController {
         textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
         
         textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
-       
+        
         
         textoCargador.isSelected = false
         
@@ -603,35 +1012,23 @@ class MenuController: UIViewController {
         
         vistaCargador.addSubview(textoCargador)
         
-        sender.isUserInteractionEnabled = false
+        
+    }
+    
+    
+    // MARK: - Crashlytics
+    
+    @IBAction func probar_crash(){
         
         
-        DispatchQueue.main.async {
-            
-            //_ = SwiftSpinner.show("Iniciando sincronización...")
-            
-            sender.isUserInteractionEnabled = true
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                
-                self.el_sync.sincronizar(controlador: self)
-                
-                
-            })
-        }
+        Crashlytics.sharedInstance().crash()
+        
         
         
     }
     
     
-    @objc func enviarReportes(_ sender:UIButton){
-        
-        let usuario = defaults.object(forKey: "usuario") as! String
-        let contrasena = defaults.object(forKey: "contrasena") as! String
-        
-        el_sync.servicio_seriado_enviar(usuario: usuario, contrasena: contrasena, indice: 0)
-        
-    }
+    // MARK: - Funciones que llevan a otro modulo
     
     @objc func cerrar_sesion(_ sender:UIButton){
         
@@ -648,10 +1045,13 @@ class MenuController: UIViewController {
             
             print("vamos a cerrar sesion")
             
+            self.el_sync.limpiar_base()
+            
             self.defaults.removeObject(forKey: "usuario")
             self.defaults.removeObject(forKey: "contrasena")
             
             self.defaults.set(0, forKey: "sesion")
+            self.defaults.removeObject(forKey: "idReporteLocal")
             
             //self.borrar_todas_las_imagenes()
             
@@ -691,14 +1091,7 @@ class MenuController: UIViewController {
         
     }
     
-    @IBAction func probar_crash(){
-        
-        
-        Crashlytics.sharedInstance().crash()
-        
-        
-        
-    }
+    
     
     @IBAction func modulos(){
         
@@ -804,7 +1197,39 @@ class MenuController: UIViewController {
         
         
     }
+   
     
+    @objc func iraReportesEnviados(_ sender:UIButton){
+        
+        
+        
+        self.performSegue(withIdentifier: "menutoreportesenviados", sender: self)
+        
+        
+        
+        
+    }
+    
+    @objc func iraReportesNoEnviados(_ sender:UIButton){
+        
+        
+        
+        self.performSegue(withIdentifier: "menutoreportesnoenviados", sender: self)
+        
+        
+        
+        
+    }
+    
+    @objc func irLogin(sender:UITapGestureRecognizer){
+        
+        self.defaults.set(3, forKey: "sesion")
+        self.performSegue(withIdentifier: "iniciotologin", sender: self)
+        
+    }
+    
+    
+    // MARK: - Funciones para actualizar archivos
     
     func borrar_todas_las_imagenes(){
         
@@ -871,77 +1296,7 @@ class MenuController: UIViewController {
     }
     
     
-    @objc func iraReportesEnviados(_ sender:UIButton){
-        
-        
-        
-        self.performSegue(withIdentifier: "menutoreportesenviados", sender: self)
-        
-        
-        
-        
-    }
     
-    @objc func iraReportesNoEnviados(_ sender:UIButton){
-        
-        
-        
-        self.performSegue(withIdentifier: "menutoreportesnoenviados", sender: self)
-        
-        
-        
-        
-    }
-    
-    
-    func iraScoreCard(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutoscorecard", sender: self)
-        
-    }
-    
-    func iraEvaluacion(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutoevaluacion", sender: self)
-        
-    }
-    
-    func iraReplicas(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutoreplicas", sender: self)
-        
-    }
-    
-    
-    func iraScanalert(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutoscanalert", sender: self)
-        
-    }
-    
-    func iraDisponibilidad(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutodisponibilidad", sender: self)
-        
-    }
-    
-    func iraDisponibilidadFiltros(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutodisponibilidadfiltros", sender: self)
-        
-    }
-    
-    func iraEjecutables(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutoejecutables", sender: self)
-        
-    }
-    
-    func iraExhibiciones(_ sender:UIButton){
-        
-        self.performSegue(withIdentifier: "menutoexhibiciones", sender: self)
-        
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

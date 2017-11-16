@@ -390,19 +390,6 @@ func obtener_ubicacion()->CLLocation{
 
 //fin obtener ubicacion
 
-/*
- extension String {
- 
- var attributedStringFromHtml: NSAttributedString? {
- do {
- return try NSAttributedString(data: self.data(using: String.Encoding.utf8)!, options: [NSAttributedString.DocumentAttributeKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
- } catch _ {
- print("Cannot create attributed String")
- }
- return nil
- }
- }
- */
 
 func devicePasscodeSet() -> Bool {
     //checks to see if devices (not apps) passcode has been set

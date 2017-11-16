@@ -11,6 +11,7 @@ import GoogleMaps
 import MapKit
 import Alamofire
 import Crashlytics
+import NVActivityIndicatorView
 
 
 class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelegate,URLSessionDelegate,URLSessionTaskDelegate {
@@ -69,8 +70,12 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
     
     var arregloImagenesReenviar:[[String:AnyObject]] = [[:]]
     
+    var vistaCargador:UIScrollView = UIScrollView()
+    
     //fin variables
     
+    
+    // MARK: - inicio de la vista
     
     //view didload
     
@@ -117,6 +122,53 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
             
             if dias > 0 {
                 
+                let controladorActual = UIApplication.topViewController()
+                
+                print(controladorActual as Any)
+                
+                self.vistaCargador.tag = 179
+                
+                self.vistaCargador.frame = (controladorActual?.view!.frame)!
+                
+                self.vistaCargador.backgroundColor = UIColor.white
+                
+                let auxColor:UIColor = UIColor(rgba: "#ba243d")
+                
+                let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+                
+                vistaLoading.type = .ballScaleMultiple
+                
+                self.vistaCargador.addSubview(vistaLoading)
+                
+                controladorActual?.view!.addSubview(self.vistaCargador)
+                
+                vistaLoading.startAnimating()
+                
+                let textoCargador:UIButton = UIButton()
+                
+                textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+                
+                textoCargador.setTitle("Contactando al servidor...", for: .normal)
+                textoCargador.setTitleColor(auxColor, for: .normal)
+                
+                textoCargador.setAttributedTitle(nil, for: UIControlState())
+                
+                textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+                
+                textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+                
+                
+                textoCargador.isSelected = false
+                
+                //textoCargador.backgroundColor = auxColor
+                
+                
+                textoCargador.titleLabel!.textColor = auxColor
+                textoCargador.titleLabel!.numberOfLines = 0
+                textoCargador.titleLabel!.textAlignment = .center
+                
+                vistaCargador.addSubview(textoCargador)
+                
                 
                 el_sync.sincronizar(controlador: self)
                 
@@ -148,6 +200,55 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
             
             //el_sync.servicio_seriado(usuario: usuario, contrasena: contrasena, indice: 0, controlador: self, funcion: "version")
             
+            
+            let controladorActual = UIApplication.topViewController()
+            
+            print(controladorActual as Any)
+            
+            self.vistaCargador.tag = 179
+            
+            self.vistaCargador.frame = (controladorActual?.view!.frame)!
+            
+            self.vistaCargador.backgroundColor = UIColor.white
+            
+            let auxColor:UIColor = UIColor(rgba: "#ba243d")
+            
+            let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+            
+            vistaLoading.type = .ballScaleMultiple
+            
+            self.vistaCargador.addSubview(vistaLoading)
+            
+            controladorActual?.view!.addSubview(self.vistaCargador)
+            
+            vistaLoading.startAnimating()
+            
+            let textoCargador:UIButton = UIButton()
+            
+            textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+            
+            textoCargador.setTitle("Contactando al servidor...", for: .normal)
+            textoCargador.setTitleColor(auxColor, for: .normal)
+            
+            textoCargador.setAttributedTitle(nil, for: UIControlState())
+            
+            textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+            
+            textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+            
+            
+            textoCargador.isSelected = false
+            
+            //textoCargador.backgroundColor = auxColor
+            
+            
+            textoCargador.titleLabel!.textColor = auxColor
+            textoCargador.titleLabel!.numberOfLines = 0
+            textoCargador.titleLabel!.textAlignment = .center
+            
+            vistaCargador.addSubview(textoCargador)
+            
+            
             el_sync.sincronizar(controlador: self)
             
         }
@@ -156,33 +257,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
             
             checar_version()
             
-            /*
-             
-             
-             let base = defaults.object(forKey: "base") as! String
-             
-             db.open_database(base)
-             
-             let sqlVersion = "select * from 'ios-app'"
-             
-             let resultadoVersion = db.select_query_columns(sqlVersion)
-             
-             for renglonVersion in resultadoVersion {
-             
-             let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-             
-             let auxVersion = (renglonVersion["version"] as? String)?.replacingOccurrences(of: "ON_TRADE_IOS_", with: "")
-             
-             if version != auxVersion {
-             
-             self.performSegue(withIdentifier: "iniciotoactualizarapp", sender: self)
-             
-             
-             }
-             
-             }
-             
-             */
+            
             
         }
         
@@ -660,23 +735,6 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
         
         
         
-        /*let locationManager: CLLocationManager! = {
-         let manager = CLLocationManager()
-         manager.desiredAccuracy = kCLLocationAccuracyBest
-         manager.delegate = self
-         manager.requestAlwaysAuthorization()
-         return manager
-         }()
-         
-         
-         //locationManager.delegate = self
-         locationManager.requestAlwaysAuthorization()
-         locationManager.startUpdatingLocation()
-         
-         locationManager.desiredAccuracy = kCLLocationAccuracyBest        //self.locationManager.distanceFilter = 500.0;
-         */
-        
-        //el_mapa.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
         
         
         el_mapa.isMyLocationEnabled = true
@@ -684,25 +742,9 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
         //fin iniciacion mapa
         
         
-        //iniciacion backgroud
-        
-        //NotificationCenter.defaultCenter.addObserver(self, selector: #selector(InicioController.checarBackgroud(_:)), name:UIApplicationDidEnterBackgroundNotification, object: nil)
-        
-        //fin iniciacion backgroud
-        
-        //timer = Timer.scheduledTimer(timeInterval: 1800, target: self, selector: #selector(InicioController.guadar_ubicacion), userInfo: nil, repeats: true)
-        
-        //
-        
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         
-        /*let miUbicacion = obtener_ubicacion(controlador: self)
-         
-         let camera = GMSCameraPosition.camera(withLatitude: miUbicacion.coordinate.latitude, longitude: miUbicacion.coordinate.longitude, zoom: 12)
-         
-         el_mapa.camera = camera
-         */
         
         
         let miUbicacion = obtener_ubicacion()
@@ -732,6 +774,9 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
     }
     
     //view will disappear
+    
+    
+    // MARK: Funciones servicios
     
     //checar estatus contraseña
     
@@ -812,22 +857,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                     
                     if datos["status"] as! NSNumber == 2 {
                         
-                        //SwiftSpinner.show("Su contraseña esta caduca es necesario actualizarla. Toque para continuar").addTapHandler({
-                        
-                        //SwiftSpinner.hide()
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        //})
-                        
-                        
-                        
-                        
-                        let alertController = UIAlertController(title: "¡Atención!", message: "Su contraseña esta caduca es necesario actualizarla", preferredStyle: .alert)
+                        let alertController = UIAlertController(title: "¡Atención!", message: "Su contraseña esta por caducar se recomienda actualizarla", preferredStyle: .alert)
                         
                         
                         let okAction = UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.default) {
@@ -835,7 +865,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                             
                             print("se presiono Aceptar")
                             
-                            self.performSegue(withIdentifier: "iniciotocambiocontrasena", sender: self)
+                            //self.performSegue(withIdentifier: "iniciotocambiocontrasena", sender: self)
                             
                         }
                         
@@ -843,14 +873,6 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                         alertController.addAction(okAction)
                         
                         self.present(alertController, animated: true, completion: nil)
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
                         
                         
                     }
@@ -903,7 +925,24 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                 
                 
                 
+            case 402:
                 
+                let alertController = UIAlertController(title: "¡Atención!", message: "Su contraseña esta caduca es necesario actualizarla", preferredStyle: .alert)
+                
+                
+                let okAction = UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.default) {
+                    UIAlertAction in
+                    
+                    print("se presiono Aceptar")
+                    self.defaults.set(3, forKey: "sesion")
+                    self.performSegue(withIdentifier: "iniciotocambiocontrasena", sender: self)
+                    
+                }
+                
+                
+                alertController.addAction(okAction)
+                
+                self.present(alertController, animated: true, completion: nil)
                 
             default:
                 print("Estatus http no manejado")
@@ -1000,7 +1039,11 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                         
                         print("la versión es diferente")
                         
-                        //self.performSegue(withIdentifier: "iniciotoactualizarapp", sender: self)
+                        DispatchQueue.main.async {
+                        
+                        self.performSegue(withIdentifier: "iniciotoactualizarapp", sender: self)
+                            
+                        }
                         
                         
                     }
@@ -1077,8 +1120,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
         let proposedCredential = URLCredential(user: usuario, password: contrasena, persistence: .none)
         completionHandler(.useCredential, proposedCredential)
     }
-    
-    
+
     
     func urlSession(_ session: URLSession,
                     task: URLSessionTask,
@@ -1101,15 +1143,40 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                 
                 print("si tenemos credenciales mal")
                 
-                /*
-                _ =  SwiftSpinner.show("Sus credenciales estan incorrectas, favor de ingresarlas nuevamente").addTapHandler({
+                //actualizar texto cargador
+                
+                let controladorActual = UIApplication.topViewController()
+                
+                DispatchQueue.main.async {
                     
-                    self.defaults.set(3, forKey: "sesion")
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "iniciotologin", sender: self)
+                    self.mostrarCargador()
+                    
+                    let subvistas = controladorActual?.view!.subviews
+                    
+                    for subvista in subvistas! where subvista.tag == 179 {
+                        
+                        let subvistasCargador = subvista.subviews
+                        
+                        for subvistaCargador in subvistasCargador where subvistaCargador is UIButton {
+                            
+                            (subvistaCargador as! UIButton).setTitle("Credenciales incorrectas...Toque para continuar", for: .normal)
+                            
+                        }
+                        
+                        
+                        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.irLogin(sender:)))
+                        singleTap.cancelsTouchesInView = false
+                        singleTap.numberOfTapsRequired = 1
+                        subvista.addGestureRecognizer(singleTap)
+                        
+                        
                     }
-                })
-                */
+                    
+                }
+                
+                //fin actualizar texto cargador
+                
+                
                 
                 
             }
@@ -1129,31 +1196,90 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
     }
     
     
-    @objc func guadar_ubicacion(){
+    // MARK: - Funciones que muestran en pantallas
+    
+    @objc func ocultarCargador(sender:UITapGestureRecognizer){
         
-        print("timer empezo")
-        
-        db.open_database("Loreal.db")
-        
-        var sql = "insert into locations (lon,lat,fecha) values ('1','2','1')"
-        
-        _ = db.execute_query(sql)
-        
-        sql = "select * from locations"
-        
-        let resultado_locations = db.select_query(sql)
-        
-        print(resultado_locations)
-        
-        ultima_fecha_locacion = NSDate().timeIntervalSince1970
-        
+        DispatchQueue.main.async {
+            
+            sender.view!.removeFromSuperview()
+            
+        }
         
     }
     
-    func enviar_ubicacion(){}
+    func mostrarCargador(){
+        
+        let controladorActual = UIApplication.topViewController()
+        
+        //print(controladorActual as Any)
+        
+        let subvistas = self.vistaCargador.subviews
+        
+        for subvista in subvistas {
+            
+            subvista.removeFromSuperview()
+            
+        }
+        
+        self.vistaCargador.tag = 179
+        
+        self.vistaCargador.frame = (controladorActual?.view!.frame)!
+        
+        self.vistaCargador.backgroundColor = UIColor.white
+        
+        let auxColor:UIColor = UIColor(rgba: "#ba243d")
+        
+        let vistaLoading = NVActivityIndicatorView(frame: CGRect(x: self.vistaCargador.frame.width/4, y: self.vistaCargador.frame.height/4, width: self.vistaCargador.frame.width/2, height: self.vistaCargador.frame.height/2),color:auxColor)
+        
+        vistaLoading.type = .ballScaleMultiple
+        
+        self.vistaCargador.addSubview(vistaLoading)
+        
+        controladorActual?.view!.addSubview(self.vistaCargador)
+        
+        vistaLoading.startAnimating()
+        
+        let textoCargador:UIButton = UIButton()
+        
+        textoCargador.frame = CGRect(x: 0, y: vistaCargador.frame.height*0.70, width: vistaCargador.frame.width, height: vistaCargador.frame.height*0.1)
+        
+        textoCargador.setTitle("Contactando al servidor...", for: .normal)
+        textoCargador.setTitleColor(auxColor, for: .normal)
+        
+        textoCargador.setAttributedTitle(nil, for: UIControlState())
+        
+        textoCargador.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+        
+        textoCargador.titleLabel!.font = textoCargador.titleLabel!.font.withSize(CGFloat(20))
+        
+        
+        textoCargador.isSelected = false
+        
+        //textoCargador.backgroundColor = auxColor
+        
+        
+        textoCargador.titleLabel!.textColor = auxColor
+        textoCargador.titleLabel!.numberOfLines = 0
+        textoCargador.titleLabel!.textAlignment = .center
+        
+        vistaCargador.addSubview(textoCargador)
+        
+        
+    }
+   
     
-    //fin funciones backgroud
+    // MARK: - funciones que llevan a otro modulo
     
+    @objc func irLogin(sender:UITapGestureRecognizer){
+        
+        self.defaults.set(3, forKey: "sesion")
+        self.performSegue(withIdentifier: "iniciotologin", sender: self)
+        
+    }
+    
+   
+    // MARK: - Funciones de Localización
     
     //funciones de localizacion
     
@@ -1200,15 +1326,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
         if UIApplication.shared.applicationState == .active {
             //el_mapa.showAnnotations(locations, animated: true)
             
-            if defaults.object(forKey: "enBackground") != nil {
-                
-                timer.invalidate()
-                
-                timer = Timer.scheduledTimer(timeInterval: 1800, target: self, selector: #selector(InicioController.guadar_ubicacion), userInfo: nil, repeats: true)
-                
-                defaults.removeObject(forKey: "enBackground")
-                
-            }
+            
             
             //print("App is fortground. New location is %@", newLocation)
             
@@ -1223,13 +1341,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
             
             print(aux)
             
-            if aux >= 1800000
-                //if aux >= 60000
-            {
-                
-                guadar_ubicacion()
-                
-            }
+            
         }
     }
     
@@ -1308,6 +1420,9 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
         
     }
     
+    
+    // MARK: - Crashlyctics
+    
     func crashlytics_user() {
         // TODO: Use the current user's information
         // You can call any combination of these three methods
@@ -1325,7 +1440,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
     
     //fin funcion checar servicio locacion
     
-    
+    // MARK: - Funciones para manejar archivos
     
     func borrar_imagenes(){
         
@@ -1375,12 +1490,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
                     
                     let fechaActual = NSDate().timeIntervalSince1970
                     
-                    /*
-                     let dateString = "2017-03-22"
-                     let dateFormatter = DateFormatter()
-                     dateFormatter.dateFormat = "yyyy-MM-dd"
-                     fechaActual = (dateFormatter.date(from: dateString)?.timeIntervalSince1970)!
-                     */
+                    
                     print(auxFecha)
                     print(fechaActual)
                     
@@ -1474,218 +1584,7 @@ class InicioController: UIViewController,GMSMapViewDelegate,CLLocationManagerDel
     }
     
     
-    func ReenviarImagenes(){
-        
-        
-        
-        print("vamos a reenviar las imagenes")
-        
-        arregloImagenesReenviar.removeAll()
-        
-        
-        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        
-        do {
-            
-            let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
-            //print(directoryContents)
-            
-            // if you want to filter the directory contents you can do like this:
-            let imagenes = directoryContents.filter{ $0.pathExtension == "jpg" }
-            //print("jpg urls:",imagenes)
-            //let mp3FileNames = mp3Files.map{ $0.deletingPathExtension().lastPathComponent }
-            //print("jpg list:", mp3FileNames)
-            
-            
-            for imagen in imagenes {
-                
-                
-                print("la url de imagen es")
-                print(imagen)
-                
-                // Create a FileManager instance
-                
-                let fileManager = FileManager.default
-                
-                // Get attributes of 'myfile.txt' file
-                
-                do {
-                    
-                    print("la imagen a buscar es")
-                    print(imagen.path)
-                    
-                    let attributes = try fileManager.attributesOfItem(atPath: imagen.path)
-                    print(attributes[FileAttributeKey.creationDate] as! Date)
-                    
-                    let fecha = attributes[FileAttributeKey.creationDate] as! Date
-                    
-                    print(fecha.timeIntervalSince1970)
-                    
-                    let auxFecha = fecha.timeIntervalSince1970 //+ (2*30*24*60*60)
-                    
-                    let fechaActual = NSDate().timeIntervalSince1970
-                    
-                    /*
-                     let dateString = "2017-03-22"
-                     let dateFormatter = DateFormatter()
-                     dateFormatter.dateFormat = "yyyy-MM-dd"
-                     fechaActual = (dateFormatter.date(from: dateString)?.timeIntervalSince1970)!
-                     */
-                    print(auxFecha)
-                    print(fechaActual)
-                    
-                    var k = 0
-                    
-                    let aux_nombre_imagen = imagen.path.components(separatedBy: "/")
-                    
-                    let auxNombreImagen = aux_nombre_imagen[aux_nombre_imagen.count - 1]
-                    
-                    let sqlImagenDistribution = "select * from report_photo_distribution where path = '\(auxNombreImagen)'"
-                    
-                    print(sqlImagenDistribution)
-                    
-                    
-                    let resultadoImagenDistribution = db.select_query_columns(sqlImagenDistribution)
-                    
-                    if resultadoImagenDistribution.count > 0 {
-                        
-                        k = 1
-                        
-                    }
-                    
-                    let sqlImagenPromotions = "select * from report_photo_promotions where path = '\(auxNombreImagen)'"
-                    
-                    
-                    let resultadoImagenPromotions = db.select_query_columns(sqlImagenPromotions)
-                    
-                    if resultadoImagenPromotions.count > 0 {
-                        
-                        k = 1
-                        
-                    }
-                    
-                    
-                    
-                    let sqlImagenVisibility = "select * from report_photo_visibility where path = '\(auxNombreImagen)'"
-                    
-                    
-                    let resultadoImagenVisibility = db.select_query_columns(sqlImagenVisibility)
-                    
-                    if resultadoImagenVisibility.count > 0 {
-                        
-                        k = 1
-                        
-                    }
-                    
-                    let baseR = defaults.object(forKey: "baseR") as! String
-                    
-                    self.db.open_database(baseR)
-                    
-                    let sqlImagen = "select * from imagenesReenviar where imagen = '\(auxNombreImagen)'"
-                    
-                    print(sqlImagen)
-                    
-                    let resultadoImagen = db.select_query_columns(sqlImagen)
-                    
-                    if resultadoImagen.count > 0 {
-                        
-                        k = 1
-                        
-                    }
-                    
-                    if k == 0 {
-                        
-                        
-                        let date = NSDate(timeIntervalSince1970: TimeInterval(auxFecha))
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
-                        //formatter.locale = NSLocale(localeIdentifier: "en_US") as Locale!
-                        print(formatter.string(from: date as Date))
-                        
-                        
-                        let auxImagen = ["imagen":imagen.path,"fecha":formatter.string(from: date as Date)] as [String : AnyObject]
-                        
-                        arregloImagenesReenviar.append(auxImagen)
-                        
-                    }
-                    
-                    
-                    
-                    let base = defaults.object(forKey: "base") as! String
-                    
-                    self.db.open_database(base)
-                    
-                    
-                    
-                }
-                catch let error as NSError {
-                    print("Ooops! Something went wrong: \(error)")
-                }
-                
-                
-                
-                
-            }
-            
-            
-            
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-        
-        var fotos:[[String:AnyObject]] = [[:]]
-        
-        fotos.removeAll()
-        
-        let protocolo = defaults.object(forKey: "protocolo") as! String
-        
-        let dominio = defaults.object(forKey: "dominio") as! String
-        
-        print("las imagenes a reenviar son\(arregloImagenesReenviar) ")
-        
-        for imagen in arregloImagenesReenviar{
-            
-            
-            fotos.append([String:AnyObject]())
-            
-            
-            
-            let auxPath = imagen["imagen"] as! String
-            
-            let aux_nombre_imagen = auxPath.components(separatedBy: "/")
-            
-            let imagen_ruta = fileInDocumentsDirectory(filename: aux_nombre_imagen[aux_nombre_imagen.count - 1])
-            
-            let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
-            
-            let random = Int(arc4random_uniform(1000))
-            
-            let el_hash=tiempo_milisegundos + String(random)
-            
-            let hash = el_hash.md5()
-            
-            
-            fotos[fotos.count - 1]["imagen"] = aux_nombre_imagen[aux_nombre_imagen.count - 1] as AnyObject
-            fotos[fotos.count - 1]["ruta"] = imagen_ruta as AnyObject?
-            fotos[fotos.count - 1]["hash"] = hash as AnyObject
-            fotos[fotos.count - 1]["pdv"] = "1" as AnyObject
-            fotos[fotos.count - 1]["descripcion"] = "recuperada fecha \(imagen["fecha"]!)" as AnyObject
-            fotos[fotos.count - 1]["tabla"] = "recuperada" as AnyObject
-            fotos[fotos.count - 1]["id"] = "1" as AnyObject
-            fotos[fotos.count - 1]["servicio"] = "\(protocolo)://\(dominio)/rest/multireport/image/recuperada/" as AnyObject?
-            
-            
-            
-        }
-        
-        if fotos.count > 0 {
-            
-            el_sync.mandarFotosrReenviar(indice: 0, fotos: fotos)
-        }
-        
-        
-        
-    }
+    
     
     
     

@@ -18,5 +18,7 @@ pod 'NVActivityIndicatorView'
 
 pod 'Alamofire'
 
+pod 'Zip', '~> 1.0'
+
 
 end

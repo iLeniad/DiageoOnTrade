@@ -21,7 +21,6 @@
 		BDFEAF7C1F8B5057008EF209 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BDFEAF7A1F8B5057008EF209 /* libsqlite3.0.tbd */; };
 		BDFEAF811F8B5158008EF209 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF7F1F8B5157008EF209 /* SWRevealViewController.m */; };
 		BDFEAF831F8B545F008EF209 /* InicioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAF821F8B545F008EF209 /* InicioController.swift */; };
-		BDFEAF871F8B5A84008EF209 /* OnTrade2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = BDFEAF861F8B5A84008EF209 /* OnTrade2.sqlite */; };
 		BDFEAF901F8B5AAF008EF209 /* Dosis-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDFEAF891F8B5AAD008EF209 /* Dosis-ExtraBold.ttf */; };
 		BDFEAF911F8B5AAF008EF209 /* Dosis-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDFEAF8A1F8B5AAE008EF209 /* Dosis-Medium.ttf */; };
 		BDFEAF921F8B5AAF008EF209 /* Dosis-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDFEAF8B1F8B5AAE008EF209 /* Dosis-SemiBold.ttf */; };
@@ -45,6 +44,7 @@
 		BDFEAFB31F8BFB59008EF209 /* ListaEncuestas.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAFA61F8BFB59008EF209 /* ListaEncuestas.swift */; };
 		BDFEAFB41F8BFB59008EF209 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAFA71F8BFB59008EF209 /* Constructor.swift */; };
 		BDFEAFB61F8C0042008EF209 /* ModuloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFEAFB51F8C0041008EF209 /* ModuloController.swift */; };
+		BDFEBC501FA2778B009F371A /* OnTradeB.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = BDFEBC4F1FA2778B009F371A /* OnTradeB.sqlite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,7 +66,6 @@
 		BDFEAF7F1F8B5157008EF209 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		BDFEAF801F8B5157008EF209 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		BDFEAF821F8B545F008EF209 /* InicioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InicioController.swift; sourceTree = "<group>"; };
-		BDFEAF861F8B5A84008EF209 /* OnTrade2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OnTrade2.sqlite; sourceTree = "<group>"; };
 		BDFEAF891F8B5AAD008EF209 /* Dosis-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Dosis-ExtraBold.ttf"; sourceTree = "<group>"; };
 		BDFEAF8A1F8B5AAE008EF209 /* Dosis-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Dosis-Medium.ttf"; sourceTree = "<group>"; };
 		BDFEAF8B1F8B5AAE008EF209 /* Dosis-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Dosis-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -90,6 +89,7 @@
 		BDFEAFA61F8BFB59008EF209 /* ListaEncuestas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListaEncuestas.swift; sourceTree = "<group>"; };
 		BDFEAFA71F8BFB59008EF209 /* Constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		BDFEAFB51F8C0041008EF209 /* ModuloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuloController.swift; sourceTree = "<group>"; };
+		BDFEBC4F1FA2778B009F371A /* OnTradeB.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OnTradeB.sqlite; sourceTree = "<group>"; };
 		E7FA0889BD9D8806273829CC /* Pods_DiageoOnTrade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DiageoOnTrade.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB8DD93314C86A72A512F850 /* Pods-DiageoOnTrade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiageoOnTrade.release.xcconfig"; path = "Pods/Target Support Files/Pods-DiageoOnTrade/Pods-DiageoOnTrade.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,7 +193,7 @@
 		BDFEAF851F8B5A65008EF209 /* BD */ = {
 			isa = PBXGroup;
 			children = (
-				BDFEAF861F8B5A84008EF209 /* OnTrade2.sqlite */,
+				BDFEBC4F1FA2778B009F371A /* OnTradeB.sqlite */,
 			);
 			path = BD;
 			sourceTree = "<group>";
@@ -296,10 +296,10 @@
 			files = (
 				BDFEAF6B1F8B4008008EF209 /* LaunchScreen.storyboard in Resources */,
 				BDFEAF941F8B5AAF008EF209 /* Dosis-Light.ttf in Resources */,
+				BDFEBC501FA2778B009F371A /* OnTradeB.sqlite in Resources */,
 				BDFEAF681F8B4008008EF209 /* Assets.xcassets in Resources */,
 				BDFEAF961F8B5AAF008EF209 /* Dosis-Bold.ttf in Resources */,
 				BDFEAF911F8B5AAF008EF209 /* Dosis-Medium.ttf in Resources */,
-				BDFEAF871F8B5A84008EF209 /* OnTrade2.sqlite in Resources */,
 				BDFEAF951F8B5AAF008EF209 /* Dosis-ExtraLight.ttf in Resources */,
 				BDFEAF901F8B5AAF008EF209 /* Dosis-ExtraBold.ttf in Resources */,
 				BDFEAF921F8B5AAF008EF209 /* Dosis-SemiBold.ttf in Resources */,
@@ -321,12 +321,14 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
+				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

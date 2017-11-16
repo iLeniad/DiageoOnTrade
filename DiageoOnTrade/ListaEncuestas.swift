@@ -61,6 +61,7 @@ class EncuestasController: UIViewController,UIScrollViewDelegate,CLLocationManag
     var textoSubTitulo:UIButton = UIButton()
     
 
+    // MARK: - Funciones de inicio de vista
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -356,10 +357,7 @@ class EncuestasController: UIViewController,UIScrollViewDelegate,CLLocationManag
         
         botonUsuario.titleLabel!.font = botonUsuario.titleLabel!.font.withSize(12)
         
-        /*
-         botonUsuario.setAttributedTitle(nil, for: UIControlState())
-         botonUsuario.setTitle("Finalizar Encuesta", for: UIControlState())
-         */
+        
         botonUsuario.tag = 1
         
         botonUsuario.isSelected = false
@@ -557,11 +555,53 @@ class EncuestasController: UIViewController,UIScrollViewDelegate,CLLocationManag
     //fin mostrar encuestas
     
     
+    // MARK: - Funciones que llevan a otro modulo
+    
     @objc func regresar(sender:UIButton){
         
         self.performSegue(withIdentifier: "encuestastomodulos", sender: self)
         
     }
+    
+    
+    @objc func iraEncuestaNueva(sender:UIButton){
+        
+        let subviews = laVista.subviews
+        
+        for subvista in subviews {
+            
+            subvista.removeFromSuperview()
+            
+        }
+        
+        mostrar_encuestas()
+    }
+  
+    @objc func iraEncuestasRepeticiones(sender:UIButton) {
+        
+        defaults.set(sender.tag, forKey: "idPoll")
+        
+        defaults.set(sender.titleLabel?.text!, forKey: "nombreEncuesta")
+        
+        self.performSegue(withIdentifier: "encuestastoencuestasrepeticiones", sender: self)
+        
+        
+    }
+    
+    @objc func iraEncuesta(sender:UIButton) {
+        
+        defaults.set(sender.tag, forKey: "idPoll")
+        
+        defaults.set(sender.titleLabel?.text!, forKey: "nombreEncuesta")
+        
+        defaults.set(1, forKey: "numeroEncuesta")
+        
+        self.performSegue(withIdentifier: "encuestastoencuesta", sender: self)
+        
+    }
+    
+    
+    // MARK: - Funciones que muestran en pantalla
     
     @objc func mostrarUsuario(sender:UIButton){
         
@@ -736,312 +776,6 @@ class EncuestasController: UIViewController,UIScrollViewDelegate,CLLocationManag
         
     }
     
-    //servicio prellenado
-    
-    func servicio_prellenado (usuario:String,contrasena:String,controlador:AnyObject?=nil,funcion:String?=nil){
-        
-        //print("mi controlador es \(controlador) y la funcion es \(funcion)")
-        
-        //_ = SwiftSpinner.show("Buscando Encuestas anteriores")
-        
-        db.open_database(base)
-        /*
-         let sqlInfoUser = "select * from user_info"
-         
-         let resultadoInfoUser = db.select_query_columns(sqlInfoUser)
-         
-         var miIdUser:NSNumber = 0
-         
-         for rengloInfoUser in resultadoInfoUser {
-         
-         miIdUser = rengloInfoUser["id"] as! NSNumber
-         
-         }
-         
-         */
-        
-        let idUser = defaults.object(forKey: "idUser") as! Int
-        
-        let idRole = defaults.object(forKey: "idRole") as! Int
-        
-        
-        let dominio = defaults.object(forKey: "dominio") as! String
-        
-        let aux_url = "http://\(dominio)/capabilities-rest/rest/multireport/catalog/ea_prellenado"
-        
-        print(aux_url)
-        
-        
-        
-        let auxJsonstring = "[{\"name\":\"idRol\",\"value\":\"\(idRole)\"},{\"name\":\"usuario\",\"value\":\"\(idUser)\"},{\"name\":\"tipo\",\"value\":\"1\"}]"
-        
-        
-        
-        
-        let parameters: Parameters = ["json": auxJsonstring]
-        
-        print(parameters)
-        
-        let credenciales = URLCredential(user: usuario, password: contrasena, persistence: .none)
-        
-        Alamofire.request(aux_url, method: .post, parameters: parameters)
-            //Alamofire.request(.GET, "\(protocolo)://\(dominio)\(servicios_json.arreglo[indice]["servicio"])",headers:headers)
-            .authenticate(usingCredential: credenciales)
-            .responseJSON { response in
-                //print(response.request)  // original URL request
-                //print(response.response) // URL response
-                //print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                
-                if response.result.isFailure {
-                    
-                    print(response.request as Any)
-                    //SwiftSpinner.show("Error al contactar el servidor").addTapHandler({SwiftSpinner.hide()})
-                    
-                    
-                    
-                }
-                
-                
-                
-                if  let data = response.result.value as? NSArray {
-                    
-                    //self.arregloServiciosListos.append(1)
-                    
-                    //print(data)
-                    
-                    //print(data["attempts"]!)
-                    
-                    //let respuesta = JSON(cadena: data as! String)
-                    
-                    
-                    
-                    let aux_elementos = data as! [[String:AnyObject]]
-                    
-                    print(aux_elementos)
-                    print("tenemos una cuenta de encuestas de \(aux_elementos.count)")
-                    
-                    if aux_elementos.count == 0 {
-                        
-                       // SwiftSpinner.hide()
-                        self.mostrar_encuestas()
-                    }
-                    else{
-                        
-                        var auxReport:String = "0"
-                        var cuenta = 0
-                        
-                        let tamano_letra_menu = 20
-                        
-                        var offsetScroll:CGFloat = self.laVista.frame.height/24
-                        
-                        let offsetx:CGFloat = 5
-                        
-                        let alto_menu:CGFloat = self.laVista.frame.height/12
-                        
-                        let botonEncuesta:UIButton = UIButton()
-                        
-                        botonEncuesta.titleLabel!.font = UIFont(name: self.fontFamilia, size: CGFloat(3))
-                        
-                        botonEncuesta.titleLabel!.font = botonEncuesta.titleLabel!.font.withSize(CGFloat(tamano_letra_menu))
-                        
-                        
-                        botonEncuesta.setAttributedTitle(nil, for: UIControlState())
-                        botonEncuesta.setTitle("Nueva Encuesta", for: UIControlState())
-                        botonEncuesta.tag = 0
-                        
-                        botonEncuesta.isSelected = false
-                        botonEncuesta.setTitleColor(UIColor(rgba: "#\(self.color_letra)"), for: UIControlState())
-                        
-                        
-                        
-                        botonEncuesta.titleLabel!.textColor = UIColor(rgba: "#\(self.color_letra)")
-                        botonEncuesta.titleLabel!.numberOfLines = 0
-                        botonEncuesta.titleLabel!.textAlignment = .left
-                        
-                        
-                        botonEncuesta.sizeToFit()
-                        
-                        botonEncuesta.frame = CGRect(x: offsetx, y: offsetScroll, width: self.laVista.frame.width - offsetx, height: alto_menu)
-                        
-                        
-                        
-                        botonEncuesta.contentHorizontalAlignment = .left
-                        botonEncuesta.contentVerticalAlignment = .center
-                        
-                        
-                        
-                        botonEncuesta.addTarget(self, action:#selector(EncuestasController.iraEncuestaNueva(sender:)), for:.touchDown)
-                        
-                        self.laVista.addSubview(botonEncuesta)
-                        
-                        offsetScroll += alto_menu + 30
-                        
-                        let barraEncuestasRealizadas:UIScrollView = UIScrollView()
-                        
-                        barraEncuestasRealizadas.frame = CGRect(x: 0, y: offsetScroll, width: self.barraTitulo.frame.width, height: self.barraTitulo.frame.height/2)
-                        
-                        let fondoBarraSubTitulo = UIImage(named: "LineaGris")
-                        
-                        let vistaFondoBarraSubtitulo:UIImageView = UIImageView()
-                        
-                        vistaFondoBarraSubtitulo.image = fondoBarraSubTitulo
-                        
-                        vistaFondoBarraSubtitulo.frame = CGRect(x: 0, y: 0, width: barraEncuestasRealizadas.frame.width, height: barraEncuestasRealizadas.frame.height)
-                        
-                        vistaFondoBarraSubtitulo.contentMode = .scaleAspectFit
-                        
-                        let textoSubTitulo:UIButton = UIButton()
-                        
-                        textoSubTitulo.titleLabel!.font = UIFont(name: self.fontFamilia, size: CGFloat(3))
-                        
-                        textoSubTitulo.titleLabel!.font = textoSubTitulo.titleLabel!.font.withSize(CGFloat(12))
-                        
-                        
-                        
-                        textoSubTitulo.setAttributedTitle(nil, for: UIControlState())
-                        textoSubTitulo.setTitle("ENCUESTAS REALIZADAS", for: UIControlState())
-                        textoSubTitulo.tag = 0
-                        
-                        textoSubTitulo.isSelected = false
-                        textoSubTitulo.setTitleColor(UIColor(rgba: "#c70752"), for: UIControlState())
-                        
-                        
-                        
-                        textoSubTitulo.titleLabel!.textColor = UIColor(rgba: "#c70752")
-                        textoSubTitulo.titleLabel!.numberOfLines = 0
-                        textoSubTitulo.titleLabel!.textAlignment = .left
-                        
-                        
-                        textoSubTitulo.sizeToFit()
-                        
-                        textoSubTitulo.frame = CGRect(x: 5, y: 0, width: barraEncuestasRealizadas.frame.width - barraEncuestasRealizadas.frame.width/20, height: barraEncuestasRealizadas.frame.height)
-                        
-                        
-                        
-                        textoSubTitulo.contentHorizontalAlignment = .left
-                        textoSubTitulo.contentVerticalAlignment = .center
-                        
-                        
-                        
-                        barraEncuestasRealizadas.addSubview(vistaFondoBarraSubtitulo)
-                        
-                        barraEncuestasRealizadas.addSubview(textoSubTitulo)
-                        
-                        self.laVista.addSubview(barraEncuestasRealizadas)
-                        
-                        offsetScroll += barraEncuestasRealizadas.frame.height + 20
-                        
-                        //print("El prellenado trae \(aux_elementos)")
-                        
-                        _ = self.db.execute_query("delete from ea_prellenado")
-                        
-                        let resultado_insert = self.db.insert_bulk("ea_prellenado", datos: aux_elementos)
-                        
-                        print(resultado_insert)
-                        
-                        for renglonEncuestas in aux_elementos {
-                            
-                            if auxReport != renglonEncuestas["report"] as! String {
-                                
-                                cuenta += 1
-                                auxReport = renglonEncuestas["report"] as! String
-                                
-                                
-                                let botonEncuesta:UIButton = UIButton()
-                                
-                                botonEncuesta.titleLabel!.font = UIFont(name: self.fontFamilia, size: CGFloat(3))
-                                
-                                botonEncuesta.titleLabel!.font = botonEncuesta.titleLabel!.font.withSize(CGFloat(tamano_letra_menu))
-                                
-                                self.db.open_database(self.base)
-                                
-                                let idPoll = renglonEncuestas["poll"] as! String
-                                
-                                let sqlEncuesta = "select * from c_roles where id in (select idRole from ea_poll where id = '\(idPoll)')"
-                                
-                                var descripcionEncuesta = ""
-                                
-                                let resultadoDescripcion = self.db.select_query_columns(sqlEncuesta)
-                                
-                                for renglonDescripcion in resultadoDescripcion {
-                                    
-                                    
-                                    descripcionEncuesta = renglonDescripcion["value"] as! String
-                                }
-                                
-                                let fechaEncuesta = renglonEncuestas["check_in_date"] as! String
-                                
-                                print(fechaEncuesta)
-                                
-                                let auxFecha = NSDate(timeIntervalSince1970: Double(fechaEncuesta)!/1000)
-                                
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.dateFormat = "dd-MMM-yyyy"
-                                dateFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone!
-                                
-                                let auxFechaFormateada = dateFormatter.string(from: auxFecha as Date)
-                                
-                                botonEncuesta.setAttributedTitle(nil, for: UIControlState())
-                                botonEncuesta.setTitle("\(descripcionEncuesta) \(auxFechaFormateada.uppercased())", for: UIControlState())
-                                botonEncuesta.tag = Int(auxReport)!
-                                
-                                botonEncuesta.isSelected = false
-                                botonEncuesta.setTitleColor(UIColor(rgba: "#\(self.color_letra)"), for: UIControlState())
-                                
-                                
-                                
-                                botonEncuesta.titleLabel!.textColor = UIColor(rgba: "#\(self.color_letra)")
-                                botonEncuesta.titleLabel!.numberOfLines = 0
-                                botonEncuesta.titleLabel!.textAlignment = .left
-                                
-                                
-                                botonEncuesta.sizeToFit()
-                                
-                                botonEncuesta.frame = CGRect(x: offsetx, y: offsetScroll, width: self.laVista.frame.width - offsetx, height: alto_menu)
-                                
-                                botonEncuesta.addTarget(self, action: #selector(EncuestasController.mostrar_respuestas_anteriores(sender:)), for: .touchDown)
-                                
-                                botonEncuesta.contentHorizontalAlignment = .left
-                                botonEncuesta.contentVerticalAlignment = .center
-                                
-                                self.laVista.addSubview(botonEncuesta)
-                                
-                                offsetScroll += 70
-                                
-                                
-                            }
-                            
-                            
-                        }
-                        
-                        print("tenemos \(cuenta) encuestas anteriores")
-                        
-                        //SwiftSpinner.hide()
-                        
-                    }
-                    
-                    
-                }
-                
-                
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    }
-    
-    
-    //fin servicio prellenado
-    
     
     @objc func mostrar_respuestas_anteriores(sender:UIButton){
         
@@ -1054,28 +788,6 @@ class EncuestasController: UIViewController,UIScrollViewDelegate,CLLocationManag
         
     }
     
-    // view will disappear
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        
-        
-    }
-    
-    //view will disappear
-    
-    @objc func iraEncuestaNueva(sender:UIButton){
-        
-        let subviews = laVista.subviews
-        
-        for subvista in subviews {
-            
-            subvista.removeFromSuperview()
-            
-        }
-        
-        mostrar_encuestas()
-    }
     
     @objc func finalizarEncuesta (sender:UIButton){
         
@@ -1171,29 +883,17 @@ class EncuestasController: UIViewController,UIScrollViewDelegate,CLLocationManag
         
     }
     
+    // MARK: - Funciones de fin de vista
     
-    @objc func iraEncuestasRepeticiones(sender:UIButton) {
+    // view will disappear
+    
+    override func viewWillDisappear(_ animated: Bool) {
         
-        defaults.set(sender.tag, forKey: "idPoll")
-        
-        defaults.set(sender.titleLabel?.text!, forKey: "nombreEncuesta")
-        
-        self.performSegue(withIdentifier: "encuestastoencuestasrepeticiones", sender: self)
         
         
     }
     
-    @objc func iraEncuesta(sender:UIButton) {
-        
-        defaults.set(sender.tag, forKey: "idPoll")
-        
-        defaults.set(sender.titleLabel?.text!, forKey: "nombreEncuesta")
-        
-        defaults.set(1, forKey: "numeroEncuesta")
-        
-        self.performSegue(withIdentifier: "encuestastoencuesta", sender: self)
-        
-    }
+    //view will disappear
     
     
     override func didReceiveMemoryWarning() {

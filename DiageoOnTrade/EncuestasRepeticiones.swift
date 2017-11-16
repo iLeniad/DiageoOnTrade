@@ -52,6 +52,8 @@ class EncuestasRepeticiones: UIViewController,UIScrollViewDelegate,CLLocationMan
     
     var textoSubTitulo:UIButton = UIButton()
     
+    // MARK: - Funciones de inicio de vista
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -345,6 +347,8 @@ class EncuestasRepeticiones: UIViewController,UIScrollViewDelegate,CLLocationMan
     //fin viewdidappear
     
     
+    // MARK: - Funciones de fin de vista
+    
     // view will disappear
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -353,6 +357,8 @@ class EncuestasRepeticiones: UIViewController,UIScrollViewDelegate,CLLocationMan
         
     }
     
+    // MARK: - Funciones que llevan a otro modulo
+    
     @objc func regresar(sender:UIButton){
     
         self.performSegue(withIdentifier: "encuestastolistaencuestas", sender: self)
@@ -360,7 +366,7 @@ class EncuestasRepeticiones: UIViewController,UIScrollViewDelegate,CLLocationMan
     }
     
     
-    //view will disappear
+   
     
     @objc func agregar_encuesta(sender:UIButton) {
         

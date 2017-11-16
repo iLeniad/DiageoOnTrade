@@ -56,6 +56,8 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
     
     var imagePicker: UIImagePickerController!
     
+    // MARK: - Funciones de inicio de vista
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -307,48 +309,6 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
             
             
             
-            /*let botonSeccion:UIButton = UIButton()
-             
-             botonSeccion.titleLabel!.font = UIFont(name: "TitilliumWeb-Regular", size: CGFloat(3))
-             
-             botonSeccion.titleLabel!.font = botonSeccion.titleLabel!.font.withSize(CGFloat(tamano_letra_menu))
-             
-             
-             botonSeccion.setAttributedTitle(nil, for: UIControlState())
-             botonSeccion.setTitle(renglonSeccion["name"] as? String, for: UIControlState())
-             botonSeccion.tag = renglonSeccion["id"] as! Int
-             
-             botonSeccion.isSelected = false
-             botonSeccion.setTitleColor(UIColor(rgba: "#000000"), for: UIControlState())
-             
-             
-             
-             botonSeccion.titleLabel!.textColor = UIColor(rgba: "#000000")
-             botonSeccion.titleLabel!.numberOfLines = 0
-             botonSeccion.titleLabel!.textAlignment = .center
-             
-             
-             botonSeccion.sizeToFit()
-             
-             botonSeccion.frame = CGRect(x: offsetx, y: offsetScroll, width: laVista.frame.width - offsetx, height: alto_menu)
-             
-             
-             
-             botonSeccion.contentHorizontalAlignment = .center
-             botonSeccion.contentVerticalAlignment = .center
-             
-             
-             //botonListaEncuestas(UIImage(named: "MenuHome"), forState: .Normal)
-             
-             //botonEncuesta.addTarget(self, action:#selector(ListaEncuestasController.iraListaUsuarios(sender:)), for:.touchDown)
-             
-             laVista.addSubview(botonSeccion)
-             
-             offsetScroll += botonSeccion.frame.height + 40
-             */
-            
-            
-            
             var sqlPreguntas = ""
             
             
@@ -526,15 +486,6 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
                     
                     let botonResponder:UIButton = UIButton()
                     
-                    /*
-                     botonResponder.titleLabel!.font = UIFont(name: "TitilliumWeb-Regular", size: CGFloat(3))
-                     
-                     botonResponder.titleLabel!.font = botonResponder.titleLabel!.font.withSize(CGFloat(tamano_letra_menu))
-                     
-                     
-                     botonResponder.setAttributedTitle(nil, for: UIControlState())
-                     botonResponder.setTitle("Responder", for: UIControlState())
-                     */
                     
                     botonResponder.tag = preguntas.count - 1
                     
@@ -1011,10 +962,13 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
     
     //fin viewdidappear
     
+    
+    // MARK: - Funciones de botones
+    
     @objc func switch_cambio(sender:UISwitch){
     
         let idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
-        
+
         let random = Int(arc4random_uniform(1000))
         
         let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
@@ -1261,6 +1215,126 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
         
     }
     
+    
+    @objc func seleccionar_opcion(sender:UIButton) {
+        
+        var idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
+        
+        print(idReporteLocal as Any)
+        
+        if idReporteLocal == nil {
+            
+            print("vamos por uno nuevo")
+            
+            
+            
+            idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
+            
+        }
+        
+        
+        let idUser = defaults.object(forKey: "idUser") as! Int
+        
+        
+        
+        
+        
+        let random = Int(arc4random_uniform(1000))
+        
+        let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
+        
+        let el_hash=String(tiempo_milisegundos) + String(describing: defaults.object(forKey: "idReporteLocal")!) + String(random)
+        
+        let hash = el_hash.md5()
+        
+        let indicePregunta = defaults.object(forKey: "indicePregunta") as! Int
+        
+        let pregunta = preguntas[indicePregunta]
+        
+        
+        
+        
+        let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
+        
+        let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
+        
+        let respuesta = pregunta["opciones"] as! [[String:AnyObject]]
+        
+        preguntas[indicePregunta]["respuesta"] = respuesta[sender.tag-1]["valor"]
+        
+        let checarRespuesta = "select * from EARespuesta where idPregunta = '\(pregunta["id"]!)' and idReporteLocal = '\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
+        
+        print(checarRespuesta)
+        
+        let resultadoChecarRespuesta = db.select_query_columns(checarRespuesta)
+        
+        if resultadoChecarRespuesta.count < 1 {
+            
+            let sqlRespuesta = "insert into EARespuesta (hash,idPregunta,idReporteLocal,idEncuesta,numeroEncuesta,respuesta,campoExtra1,campoExtra2) values ('\(hash)','\(pregunta["id"]!)','\(idReporteLocal!)','\(idPoll)','\(numeroEncuesta)','\(respuesta[sender.tag-1]["valor"]!.replacingOccurrences(of: "'", with: "''"))','','\(idUser)')"
+            
+            print(sqlRespuesta)
+            
+            let resultadoRespuesta = db.execute_query(sqlRespuesta)
+            
+            print(resultadoRespuesta)
+            
+        }
+        else{
+            
+            let sqlRespuesta = "update EARespuesta set respuesta = '\(respuesta[sender.tag-1]["valor"]!.replacingOccurrences(of: "'", with: "''"))' where idPregunta = '\(pregunta["id"]!)' and idReporteLocal = '\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
+            
+            print(sqlRespuesta)
+            
+            let resultadoRespuesta = db.execute_query(sqlRespuesta)
+            
+            print(resultadoRespuesta)
+            
+        }
+        
+        UIView.animate(withDuration: 0.5, delay: 0.1, options: [],animations: {
+            
+            sender.superview!.frame.origin.y = self.view.frame.height
+            // self.username.center.x += self.view.bounds.width
+        }, completion: {finished in
+            
+            self.laVista.isUserInteractionEnabled = true
+            sender.superview?.removeFromSuperview()
+            // the code you put here will be executed when your animation finishes, therefore
+            // call your function here
+        } )
+        
+        
+        
+    }
+    
+    //tomar foto
+    
+    @objc func tomar_foto(sender:UIButton){
+        
+        foto_tag = sender.tag
+        
+        
+        
+        
+        
+        self.imagePicker =  UIImagePickerController()
+        self.imagePicker.delegate = self
+        self.imagePicker.sourceType = .camera
+        
+        //self.presentViewController(self.imagePicker, animated: true, completion: nil)
+        
+        self.addChildViewController(imagePicker)
+        imagePicker.didMove(toParentViewController: self)
+        self.view.addSubview(imagePicker.view)
+        
+        
+        
+    }
+    
+    
+    
+    // MARK: - Funciones de fin de vista
+    
     // view will disappear
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -1270,6 +1344,8 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
     }
     
     //view will disappear
+    
+    // MARK: - Funciones que muestra en pantalla
     
     @objc func mostrar_campodetexto(sender:UIButton){
         
@@ -1440,16 +1516,7 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
         comentarioVista.addSubview(comentario)
         
         let botonGuardar:UIButton = UIButton()
-        /*
-         botonGuardar.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
-         
-         botonGuardar.titleLabel!.font = botonGuardar.titleLabel!.font.withSize(CGFloat(12))
-         
-         
-         
-         botonGuardar.setAttributedTitle(nil, for: UIControlState())
-         botonGuardar.setTitle("SELECCIONA UNA RESPUESTA", for: UIControlState())
-         */
+        
         botonGuardar.tag = sender.tag
         
         botonGuardar.isSelected = false
@@ -1485,11 +1552,531 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
         
     }
     
-    @objc func guardar_comentario(sender:UIButton){
+    
+    func acomodar_preguntas(){
         
+        print("vamos acomodar las preguntas")
+        
+        let subvistas = laVista.subviews
+        
+        for subvista in subvistas {
+            
+            subvista.removeFromSuperview()
+            
+        }
+        
+        var offsetScrollNuevo:CGFloat = 0
+        
+        for seccion in secciones {
+            
+            print(seccion)
+            
+            let auxBarra = seccion["barra"] as! UIScrollView
+            
+            auxBarra.frame.origin.y = offsetScrollNuevo
+            
+            var barraEstatus = true
+            
+            for (auxIndicePregunta,pregunta) in preguntas.enumerated() where pregunta["seccion"] as! String == seccion["seccion"] as! String {
+                
+                let auxPregunta = pregunta["boton"] as! UIButton
+                
+                auxPregunta.isHidden = true
+                
+                if let _ = pregunta["parent"] as? Int  {
+                    
+                    
+                    
+                    for preguntaParent in preguntas where preguntaParent["id"] as! Int == pregunta["parent"] as! Int {
+                        
+                        print("la pregunta papa trae")
+                        print(preguntaParent)
+                        
+                        if let respuestaActual = preguntaParent["respuesta"] as? String {
+                            
+                            switch pregunta["operator_dependency"] as! String {
+                                
+                            case "=":
+                                
+                                if respuestaActual.lowercased() == (pregunta["value_dependency"] as! String).lowercased() {
+                                    
+                                    auxPregunta.isHidden = false
+                                }
+                                
+                            case "CONTAINS":
+                                
+                                let valoresDependencia = (pregunta["value_dependency"] as! String).lowercased()
+                                
+                                print("valor de dependencia \(valoresDependencia)")
+                                print("respuesta actual \(respuestaActual.lowercased())")
+                                
+                                if valoresDependencia.contains("@") {
+                                    
+                                    let arregloValoresDependencia = valoresDependencia.components(separatedBy: "@@")
+                                    
+                                    for auxValor in arregloValoresDependencia {
+                                        
+                                        let auxValorL = auxValor.replacingOccurrences(of: "@", with: "")
+                                        
+                                        let auxRespuestaActual = respuestaActual.lowercased()
+                                        
+                                        if auxRespuestaActual.contains(auxValorL.lowercased()) {
+                                            
+                                            auxPregunta.isHidden = false
+                                            
+                                            break
+                                            
+                                        }
+                                        
+                                        
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    
+                                    let auxRespuestaActual = respuestaActual.lowercased()
+                                    
+                                    if auxRespuestaActual.contains(valoresDependencia) {
+                                        
+                                        auxPregunta.isHidden = false
+                                        
+                                    }
+                                    
+                                }
+                                
+                                
+                                
+                            default:
+                                break
+                            }
+                            
+                        }
+                        
+                    }
+                    // fin for de preguntaParent
+                    
+                    
+                }
+                else{
+                    
+                    auxPregunta.isHidden = false
+                    
+                    
+                    
+                    
+                }
+                
+                
+                if auxPregunta.isHidden {
+                    
+                    preguntas[auxIndicePregunta]["respuesta"] = "" as AnyObject?
+                    
+                    let idReporteLocal = defaults.object(forKey: "idReporteLocal") as! NSNumber
+                    
+                    let sqlPreguntaBorrar = "delete from EARespuesta where idPregunta = \(pregunta["id"] as! Int) and idReporteLocal = '\(idReporteLocal)'"
+                    
+                    let resultadoBorrar = db.execute_query(sqlPreguntaBorrar)
+                    
+                    print(sqlPreguntaBorrar)
+                    print("resultado borrar pregunta")
+                    print(resultadoBorrar)
+                    
+                    switch pregunta["type_question"] as! NSNumber {
+                    case 5,8,7:
+                        
+                        
+                        let auxTextoCampo = pregunta["textoCampo"] as! UIButton
+                        
+                        auxTextoCampo.setTitle("Agrega tu Respuesta", for: .normal)
+                        
+                    case 15:
+                        
+                        let aux_b_foto = pregunta["aux_b_foto"] as! UIButton
+                        
+                        aux_b_foto.removeFromSuperview()
+                        
+                    case 17:
+                        
+                        
+                        
+                        let auxBotonSwitch = pregunta["botonSwitch"] as! UISwitch
+                        
+                        auxBotonSwitch.isOn = false
+                        
+                    case 1:
+                        
+                        
+                        let auxOpciones = pregunta["opciones"] as! [[String:AnyObject]]
+                        
+                        for var opcion in auxOpciones {
+                            
+                            let auxBoton = opcion["boton"] as! UIButton
+                            
+                            auxBoton.setImage(UIImage(named: "RadioButton"), for: .normal)
+                            
+                            opcion["seleccionado"] = false as AnyObject
+                            
+                        }
+                        
+                    case 3:
+                        
+                        
+                        let auxOpciones = pregunta["opciones"] as! [[String:AnyObject]]
+                        
+                        for var opcion in auxOpciones {
+                            
+                            let auxBoton = opcion["boton"] as! UIButton
+                            
+                            auxBoton.setImage(UIImage(named: "checkButton"), for: .normal)
+                            
+                            opcion["seleccionado"] = false as AnyObject?
+                            
+                        }
+                        
+                    default:
+                        break
+                    }
+                    
+                    
+                    
+                }
+                
+                
+                
+                if auxPregunta.isHidden == false {
+                    
+                    if barraEstatus {
+                        
+                        laVista.addSubview(auxBarra)
+                        
+                        offsetScrollNuevo += auxBarra.frame.height + 40
+                        
+                        barraEstatus = false
+                        
+                    }
+                    
+                    
+                    auxPregunta.frame.origin.y = offsetScrollNuevo
+                    
+                    
+                    
+                    switch pregunta["type_question"] as! NSNumber {
+                    case 5,8,7:
+                        
+                        laVista.addSubview(auxPregunta)
+                        
+                        offsetScrollNuevo += auxPregunta.frame.height + 40
+                        
+                        let auxTextoCampo = pregunta["textoCampo"] as! UIButton
+                        
+                        auxTextoCampo.frame.origin.y = offsetScrollNuevo
+                        
+                        laVista.addSubview(auxTextoCampo)
+                        
+                        offsetScrollNuevo += auxTextoCampo.frame.height + 60
+                    case 15:
+                        
+                        laVista.addSubview(auxPregunta)
+                        
+                        offsetScrollNuevo += auxPregunta.frame.height + 40
+                        
+                        let aux_b_foto = pregunta["aux_b_foto"] as! UIButton
+                        
+                        aux_b_foto.frame.origin.y = offsetScrollNuevo
+                        
+                        laVista.addSubview(aux_b_foto)
+                        
+                        offsetScrollNuevo += aux_b_foto.frame.height + 40
+                        
+                        let idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
+                        
+                        
+                        if idReporteLocal != nil {
+                            
+                            
+                            let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
+                            
+                            let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
+                            
+                            let sqlRespuesta = "select * from EARespuesta where idPregunta= '\(pregunta["id"]!)' and idReporteLocal='\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
+                            
+                            let resultadoChecarRespuesta = db.select_query_columns(sqlRespuesta)
+                            
+                            if resultadoChecarRespuesta.count > 0 {
+                                
+                                aux_b_foto.setImage(UIImage(named: "CamaraActiva"), for: .normal)
+                                
+                            }
+                            
+                            
+                        }
+                        
+                        
+                        
+                    case 17:
+                        
+                        laVista.addSubview(auxPregunta)
+                        
+                        let auxBotonSwitch = pregunta["botonSwitch"] as! UISwitch
+                        
+                        auxBotonSwitch.frame.origin.y = offsetScrollNuevo + 10
+                        
+                        laVista.addSubview(auxBotonSwitch)
+                        
+                        offsetScrollNuevo += auxBotonSwitch.frame.height + 60
+                        
+                        
+                        
+                        
+                        var respuesta = "no"
+                        
+                        if auxBotonSwitch.isOn {
+                            
+                            respuesta = "si"
+                            
+                        }
+                        
+                        let idReporteLocal = defaults.object(forKey: "idReporteLocal") as! NSNumber
+                        
+                        let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
+                        
+                        let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
+                        
+                        
+                        
+                        let random = Int(arc4random_uniform(1000))
+                        
+                        let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
+                        
+                        let el_hash=String(tiempo_milisegundos) + String(describing: defaults.object(forKey: "idReporteLocal")!) + String(random)
+                        
+                        let hash = el_hash.md5()
+                        
+                        
+                        let sqlRespuesta = "select * from EARespuesta where idPregunta= '\(pregunta["id"]!)' and idReporteLocal='\(idReporteLocal)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
+                        
+                        let resultadoRespuesta = db.select_query_columns(sqlRespuesta)
+                        
+                        var sqlSwitch = ""
+                        
+                        if resultadoRespuesta.count < 1 {
+                            
+                            sqlSwitch = "insert into EARespuesta (hash,idPregunta,idReporteLocal,idEncuesta,numeroEncuesta,respuesta,campoExtra1,campoExtra2) values ('\(hash)','\(pregunta["id"]!)','\(idReporteLocal)','\(idPoll)','\(numeroEncuesta)','\(respuesta.replacingOccurrences(of: "'", with: "''"))','','')"
+                            
+                        }
+                        else{
+                            
+                            sqlSwitch = "update EARespuesta set respuesta = '\(respuesta.replacingOccurrences(of: "'", with: "''"))' where idPregunta= '\(pregunta["id"]!)' and idReporteLocal='\(idReporteLocal)'"
+                            
+                        }
+                        
+                        _ = db.execute_query(sqlSwitch)
+                        
+                        
+                        
+                    case 1,3:
+                        
+                        laVista.addSubview(auxPregunta)
+                        
+                        offsetScrollNuevo += auxPregunta.frame.height + 40
+                        
+                        let auxOpciones = pregunta["opciones"] as! [[String:AnyObject]]
+                        
+                        for opcion in auxOpciones {
+                            
+                            let auxBoton = opcion["boton"] as! UIButton
+                            
+                            auxBoton.frame.origin.y = offsetScrollNuevo + 40
+                            
+                            laVista.addSubview(auxBoton)
+                            
+                            offsetScrollNuevo += auxBoton.frame.height + 60
+                            
+                        }
+                        
+                    default:
+                        break
+                    }
+                    
+                }
+                
+                
+            }
+            
+            
+        }
+        
+        
+        laVista.contentSize = CGSize(width: laVista.contentSize.width, height: offsetScrollNuevo)
         
         
     }
+    
+    
+    
+    @objc func mostrarOpciones(sender:UIButton) {
+        
+        defaults.set(sender.tag, forKey: "indicePregunta")
+        
+        let pregunta = preguntas[sender.tag]
+        
+        let opcionesVista:UIScrollView = UIScrollView()
+        
+        
+        opcionesVista.backgroundColor = UIColor(rgba: "#c70752")
+        
+        opcionesVista.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height/2)
+        
+        let textoSubTituloOpciones:UIButton = UIButton()
+        
+        textoSubTituloOpciones.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+        
+        textoSubTituloOpciones.titleLabel!.font = textoSubTituloOpciones.titleLabel!.font.withSize(CGFloat(12))
+        
+        
+        
+        textoSubTituloOpciones.setAttributedTitle(nil, for: UIControlState())
+        textoSubTituloOpciones.setTitle("SELECCIONA UNA RESPUESTA", for: UIControlState())
+        textoSubTituloOpciones.tag = 0
+        
+        textoSubTituloOpciones.isSelected = false
+        textoSubTituloOpciones.setTitleColor(UIColor(rgba: "#ffffff"), for: UIControlState())
+        
+        
+        
+        textoSubTituloOpciones.titleLabel!.textColor = UIColor(rgba: "#ffffff")
+        textoSubTituloOpciones.titleLabel!.numberOfLines = 0
+        textoSubTituloOpciones.titleLabel!.textAlignment = .right
+        
+        
+        textoSubTituloOpciones.sizeToFit()
+        
+        textoSubTituloOpciones.frame = CGRect(x: 0, y: 0, width: opcionesVista.frame.width - opcionesVista.frame.width/20, height: 30)
+        
+        
+        
+        textoSubTituloOpciones.contentHorizontalAlignment = .right
+        textoSubTituloOpciones.contentVerticalAlignment = .center
+        
+        
+        
+        
+        
+        var offsetScroll:CGFloat = textoSubTituloOpciones.frame.height + 20
+        
+        let tamano_letra_menu:CGFloat = 20
+        
+        let alto_menu:CGFloat = self.view.frame.height/8
+        
+        
+        let offsetx:CGFloat = 5
+        
+        //print(pregunta["opciones"])
+        
+        for opcion in pregunta["opciones"] as! [[String:AnyObject]] {
+            
+            print(opcion)
+            
+            let botonOpcion:UIButton = UIButton()
+            
+            botonOpcion.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
+            
+            botonOpcion.titleLabel!.font = botonOpcion.titleLabel!.font.withSize(CGFloat(tamano_letra_menu))
+            
+            
+            
+            
+            botonOpcion.setAttributedTitle(nil, for: UIControlState())
+            botonOpcion.setTitle(opcion["opcion"] as? String, for: UIControlState())
+            botonOpcion.tag = Int(opcion["valor"] as! String)!
+            
+            botonOpcion.isSelected = false
+            botonOpcion.setTitleColor(UIColor(rgba: "#FFFFFF"), for: UIControlState())
+            
+            
+            
+            botonOpcion.titleLabel!.textColor = UIColor(rgba: "#FFFFFF")
+            botonOpcion.titleLabel!.numberOfLines = 0
+            botonOpcion.titleLabel!.textAlignment = .left
+            
+            let idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
+            
+            print(idReporteLocal as Any)
+            
+            if idReporteLocal != nil {
+                
+                let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
+                
+                let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
+                
+                let checarRespuesta = "select * from EARespuesta where idPregunta = '\(pregunta["id"]!)' and idReporteLocal = '\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)' and respuesta = '\(botonOpcion.tag)'"
+                
+                print(checarRespuesta)
+                
+                let resultadoChecarRespuesta = db.select_query_columns(checarRespuesta)
+                
+                if resultadoChecarRespuesta.count > 0 {
+                    
+                    botonOpcion.backgroundColor = UIColor(rgba: "#94003a")
+                    
+                }
+                
+            }
+            
+            
+            botonOpcion.sizeToFit()
+            
+            
+            
+            print(botonOpcion.titleLabel!.text!.characters.count)
+            
+            var lineas = Int(botonOpcion.titleLabel!.text!.characters.count/43)
+            
+            if lineas == 0 {
+                
+                lineas += 1
+                
+            }
+            
+            botonOpcion.frame = CGRect(x: offsetx, y: offsetScroll, width: self.view.frame.width - offsetx, height: alto_menu * CGFloat(lineas))
+            
+            botonOpcion.titleLabel!.adjustFontSizeToFitRect(rect: botonOpcion.frame, maximo: tamano_letra_menu)
+            
+            botonOpcion.contentHorizontalAlignment = .left
+            botonOpcion.contentVerticalAlignment = .center
+            
+            
+            //botonListaEncuestas(UIImage(named: "MenuHome"), forState: .Normal)
+            
+            botonOpcion.addTarget(self, action:#selector(EncuestaController.seleccionar_opcion(sender:)), for:.touchDown)
+            
+            opcionesVista.addSubview(botonOpcion)
+            
+            offsetScroll += botonOpcion.frame.height + 10
+            
+        }
+        
+        opcionesVista.contentSize = CGSize(width: opcionesVista.contentSize.width, height: offsetScroll)
+        
+        
+        self.view.addSubview(opcionesVista)
+        
+        sender.setImage(UIImage(named:"BotonResponderRojo"), for: .normal)
+        
+        laVista.isUserInteractionEnabled = false
+        
+        UIView.animate(withDuration: 0.5, delay: 0.1, options: [],animations: {
+            
+            opcionesVista.frame.origin.y = self.view.frame.height/2
+            // self.username.center.x += self.view.bounds.width
+        }, completion: nil)
+        
+        
+    }
+    
+    
+    // MARK: - Delegados
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
@@ -1712,646 +2299,7 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
         return true
     }
     
-    
-    func acomodar_preguntas(){
-    
-        print("vamos acomodar las preguntas")
-        
-        let subvistas = laVista.subviews
-        
-        for subvista in subvistas {
-        
-            subvista.removeFromSuperview()
-        
-        }
-        
-        var offsetScrollNuevo:CGFloat = 0
-    
-        for seccion in secciones {
-        
-        print(seccion)
-            
-        let auxBarra = seccion["barra"] as! UIScrollView
-            
-        auxBarra.frame.origin.y = offsetScrollNuevo
-            
-        var barraEstatus = true
-            
-            for (auxIndicePregunta,pregunta) in preguntas.enumerated() where pregunta["seccion"] as! String == seccion["seccion"] as! String {
-                
-                let auxPregunta = pregunta["boton"] as! UIButton
-                
-                auxPregunta.isHidden = true
-            
-                if let _ = pregunta["parent"] as? Int  {
-                
-                    
-                    
-                    for preguntaParent in preguntas where preguntaParent["id"] as! Int == pregunta["parent"] as! Int {
-                    
-                        print("la pregunta papa trae")
-                        print(preguntaParent)
-                        
-                        if let respuestaActual = preguntaParent["respuesta"] as? String {
-                        
-                            switch pregunta["operator_dependency"] as! String {
-                            
-                            case "=":
-                                
-                                if respuestaActual.lowercased() == (pregunta["value_dependency"] as! String).lowercased() {
-                                
-                                    auxPregunta.isHidden = false
-                                }
-                                
-                            case "CONTAINS":
-                            
-                                let valoresDependencia = (pregunta["value_dependency"] as! String).lowercased()
-                                
-                                print("valor de dependencia \(valoresDependencia)")
-                                print("respuesta actual \(respuestaActual.lowercased())")
-                                
-                                if valoresDependencia.contains("@") {
-                                
-                                    let arregloValoresDependencia = valoresDependencia.components(separatedBy: "@@")
-                                    
-                                    for auxValor in arregloValoresDependencia {
-                                    
-                                        let auxValorL = auxValor.replacingOccurrences(of: "@", with: "")
-                                        
-                                        let auxRespuestaActual = respuestaActual.lowercased()
-                                        
-                                        if auxRespuestaActual.contains(auxValorL.lowercased()) {
-                                            
-                                            auxPregunta.isHidden = false
-                                            
-                                            break
-                                            
-                                        }
-                                        
-                                        
-                                    }
-                                    
-                                }
-                                else
-                                {
-                                    
-                                    let auxRespuestaActual = respuestaActual.lowercased()
-                                    
-                                if auxRespuestaActual.contains(valoresDependencia) {
-                                
-                                    auxPregunta.isHidden = false
-                                    
-                                }
-                                
-                                }
-                                
-                                
-                                
-                            default:
-                                break
-                            }
-                        
-                        }
-                        
-                    }
-                    // fin for de preguntaParent
-                    
-                    
-                }
-                else{
-                
-                    auxPregunta.isHidden = false
-                    
-                    
-                    
-                
-                }
-                
-                
-                if auxPregunta.isHidden {
-                
-                    preguntas[auxIndicePregunta]["respuesta"] = "" as AnyObject?
-                    
-                    let idReporteLocal = defaults.object(forKey: "idReporteLocal") as! NSNumber
-                    
-                    let sqlPreguntaBorrar = "delete from EARespuesta where idPregunta = \(pregunta["id"] as! Int) and idReporteLocal = '\(idReporteLocal)'"
-                    
-                    let resultadoBorrar = db.execute_query(sqlPreguntaBorrar)
-                    
-                    print(sqlPreguntaBorrar)
-                    print("resultado borrar pregunta")
-                    print(resultadoBorrar)
-                    
-                    switch pregunta["type_question"] as! NSNumber {
-                    case 5,8,7:
-                        
-                        
-                        let auxTextoCampo = pregunta["textoCampo"] as! UIButton
-                        
-                        auxTextoCampo.setTitle("Agrega tu Respuesta", for: .normal)
-                        
-                    case 15:
-                        
-                        let aux_b_foto = pregunta["aux_b_foto"] as! UIButton
-                        
-                        aux_b_foto.removeFromSuperview()
-                        
-                    case 17:
-                        
-                        
-                        
-                        let auxBotonSwitch = pregunta["botonSwitch"] as! UISwitch
-                        
-                        auxBotonSwitch.isOn = false
-                        
-                    case 1:
-                        
-                        
-                        let auxOpciones = pregunta["opciones"] as! [[String:AnyObject]]
-                        
-                        for var opcion in auxOpciones {
-                            
-                            let auxBoton = opcion["boton"] as! UIButton
-                            
-                            auxBoton.setImage(UIImage(named: "RadioButton"), for: .normal)
-                            
-                            opcion["seleccionado"] = false as AnyObject
-                            
-                        }
-                        
-                    case 3:
-                        
-                        
-                        let auxOpciones = pregunta["opciones"] as! [[String:AnyObject]]
-                        
-                        for var opcion in auxOpciones {
-                            
-                            let auxBoton = opcion["boton"] as! UIButton
-                            
-                            auxBoton.setImage(UIImage(named: "checkButton"), for: .normal)
-                            
-                            opcion["seleccionado"] = false as AnyObject?
-                            
-                        }
-                        
-                    default:
-                        break
-                    }
-                    
-                    
-                    
-                }
-                
-                
-                
-                if auxPregunta.isHidden == false {
-                    
-                    if barraEstatus {
-                    
-                        laVista.addSubview(auxBarra)
-                        
-                        offsetScrollNuevo += auxBarra.frame.height + 40
-                        
-                        barraEstatus = false
-                    
-                    }
-                    
-                    
-                    auxPregunta.frame.origin.y = offsetScrollNuevo
-                    
-                    
-                    
-                    switch pregunta["type_question"] as! NSNumber {
-                    case 5,8,7:
-                        
-                        laVista.addSubview(auxPregunta)
-                        
-                        offsetScrollNuevo += auxPregunta.frame.height + 40
-                        
-                        let auxTextoCampo = pregunta["textoCampo"] as! UIButton
-                        
-                        auxTextoCampo.frame.origin.y = offsetScrollNuevo
-                        
-                        laVista.addSubview(auxTextoCampo)
-                        
-                        offsetScrollNuevo += auxTextoCampo.frame.height + 60
-                    case 15:
-                        
-                        laVista.addSubview(auxPregunta)
-                        
-                        offsetScrollNuevo += auxPregunta.frame.height + 40
-                        
-                        let aux_b_foto = pregunta["aux_b_foto"] as! UIButton
-                        
-                        aux_b_foto.frame.origin.y = offsetScrollNuevo
-                        
-                        laVista.addSubview(aux_b_foto)
-                        
-                        offsetScrollNuevo += aux_b_foto.frame.height + 40
-                        
-                        let idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
-                        
-                        
-                        if idReporteLocal != nil {
-                            
-                            
-                            let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
-                            
-                            let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
-                            
-                            let sqlRespuesta = "select * from EARespuesta where idPregunta= '\(pregunta["id"]!)' and idReporteLocal='\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
-                            
-                            let resultadoChecarRespuesta = db.select_query_columns(sqlRespuesta)
-                            
-                            if resultadoChecarRespuesta.count > 0 {
-                                
-                                aux_b_foto.setImage(UIImage(named: "CamaraActiva"), for: .normal)
-                                
-                            }
-                            
-                            
-                        }
-                        
-                        
-                    
-                    case 17:
-                        
-                        laVista.addSubview(auxPregunta)
-                        
-                        let auxBotonSwitch = pregunta["botonSwitch"] as! UISwitch
-                        
-                        auxBotonSwitch.frame.origin.y = offsetScrollNuevo + 10
-                        
-                        laVista.addSubview(auxBotonSwitch)
-                        
-                        offsetScrollNuevo += auxBotonSwitch.frame.height + 60
-                        
-                        
-                        
-                        
-                        var respuesta = "no"
-                        
-                        if auxBotonSwitch.isOn {
-                            
-                            respuesta = "si"
-                            
-                        }
-                        
-                        let idReporteLocal = defaults.object(forKey: "idReporteLocal") as! NSNumber
-                        
-                        let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
-                        
-                        let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
-                        
-                        
-                        
-                        let random = Int(arc4random_uniform(1000))
-                        
-                        let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
-                        
-                        let el_hash=String(tiempo_milisegundos) + String(describing: defaults.object(forKey: "idReporteLocal")!) + String(random)
-                        
-                        let hash = el_hash.md5()
-                        
-                        
-                        let sqlRespuesta = "select * from EARespuesta where idPregunta= '\(pregunta["id"]!)' and idReporteLocal='\(idReporteLocal)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
-                        
-                        let resultadoRespuesta = db.select_query_columns(sqlRespuesta)
-                        
-                        var sqlSwitch = ""
-                        
-                        if resultadoRespuesta.count < 1 {
-                            
-                            sqlSwitch = "insert into EARespuesta (hash,idPregunta,idReporteLocal,idEncuesta,numeroEncuesta,respuesta,campoExtra1,campoExtra2) values ('\(hash)','\(pregunta["id"]!)','\(idReporteLocal)','\(idPoll)','\(numeroEncuesta)','\(respuesta.replacingOccurrences(of: "'", with: "''"))','','')"
-                            
-                        }
-                        else{
-                            
-                            sqlSwitch = "update EARespuesta set respuesta = '\(respuesta.replacingOccurrences(of: "'", with: "''"))' where idPregunta= '\(pregunta["id"]!)' and idReporteLocal='\(idReporteLocal)'"
-                            
-                        }
-                        
-                        _ = db.execute_query(sqlSwitch)
-                        
-                        
-                        
-                    case 1,3:
-                        
-                        laVista.addSubview(auxPregunta)
-                        
-                        offsetScrollNuevo += auxPregunta.frame.height + 40
-                        
-                        let auxOpciones = pregunta["opciones"] as! [[String:AnyObject]]
-                        
-                        for opcion in auxOpciones {
-                            
-                            let auxBoton = opcion["boton"] as! UIButton
-                            
-                            auxBoton.frame.origin.y = offsetScrollNuevo + 40
-                            
-                            laVista.addSubview(auxBoton)
-                            
-                            offsetScrollNuevo += auxBoton.frame.height + 60
-                            
-                        }
-                        
-                    default:
-                        break
-                    }
-                    
-                }
-                
-            
-            }
-            
-        
-        }
-        
-        
-        laVista.contentSize = CGSize(width: laVista.contentSize.width, height: offsetScrollNuevo)
-    
-    
-    }
-    
-    @objc func mostrarOpciones(sender:UIButton) {
-        
-        defaults.set(sender.tag, forKey: "indicePregunta")
-        
-        let pregunta = preguntas[sender.tag]
-        
-        let opcionesVista:UIScrollView = UIScrollView()
-        
-        
-        opcionesVista.backgroundColor = UIColor(rgba: "#c70752")
-        
-        opcionesVista.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height/2)
-        
-        let textoSubTituloOpciones:UIButton = UIButton()
-        
-        textoSubTituloOpciones.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
-        
-        textoSubTituloOpciones.titleLabel!.font = textoSubTituloOpciones.titleLabel!.font.withSize(CGFloat(12))
-        
-        
-        
-        textoSubTituloOpciones.setAttributedTitle(nil, for: UIControlState())
-        textoSubTituloOpciones.setTitle("SELECCIONA UNA RESPUESTA", for: UIControlState())
-        textoSubTituloOpciones.tag = 0
-        
-        textoSubTituloOpciones.isSelected = false
-        textoSubTituloOpciones.setTitleColor(UIColor(rgba: "#ffffff"), for: UIControlState())
-        
-        
-        
-        textoSubTituloOpciones.titleLabel!.textColor = UIColor(rgba: "#ffffff")
-        textoSubTituloOpciones.titleLabel!.numberOfLines = 0
-        textoSubTituloOpciones.titleLabel!.textAlignment = .right
-        
-        
-        textoSubTituloOpciones.sizeToFit()
-        
-        textoSubTituloOpciones.frame = CGRect(x: 0, y: 0, width: opcionesVista.frame.width - opcionesVista.frame.width/20, height: 30)
-        
-        
-        
-        textoSubTituloOpciones.contentHorizontalAlignment = .right
-        textoSubTituloOpciones.contentVerticalAlignment = .center
-        
-        
-        
-        
-        
-        var offsetScroll:CGFloat = textoSubTituloOpciones.frame.height + 20
-        
-        let tamano_letra_menu:CGFloat = 20
-        
-        let alto_menu:CGFloat = self.view.frame.height/8
-        
-        
-        let offsetx:CGFloat = 5
-        
-        //print(pregunta["opciones"])
-        
-        for opcion in pregunta["opciones"] as! [[String:AnyObject]] {
-            
-            print(opcion)
-            
-            let botonOpcion:UIButton = UIButton()
-            
-            botonOpcion.titleLabel!.font = UIFont(name: fontFamilia, size: CGFloat(3))
-            
-            botonOpcion.titleLabel!.font = botonOpcion.titleLabel!.font.withSize(CGFloat(tamano_letra_menu))
-            
-            
-            
-            
-            botonOpcion.setAttributedTitle(nil, for: UIControlState())
-            botonOpcion.setTitle(opcion["opcion"] as? String, for: UIControlState())
-            botonOpcion.tag = Int(opcion["valor"] as! String)!
-            
-            botonOpcion.isSelected = false
-            botonOpcion.setTitleColor(UIColor(rgba: "#FFFFFF"), for: UIControlState())
-            
-            
-            
-            botonOpcion.titleLabel!.textColor = UIColor(rgba: "#FFFFFF")
-            botonOpcion.titleLabel!.numberOfLines = 0
-            botonOpcion.titleLabel!.textAlignment = .left
-            
-            let idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
-            
-            print(idReporteLocal as Any)
-            
-            if idReporteLocal != nil {
-                
-                let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
-                
-                let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
-                
-                let checarRespuesta = "select * from EARespuesta where idPregunta = '\(pregunta["id"]!)' and idReporteLocal = '\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)' and respuesta = '\(botonOpcion.tag)'"
-                
-                print(checarRespuesta)
-                
-                let resultadoChecarRespuesta = db.select_query_columns(checarRespuesta)
-                
-                if resultadoChecarRespuesta.count > 0 {
-                    
-                    botonOpcion.backgroundColor = UIColor(rgba: "#94003a")
-                    
-                }
-                
-            }
-            
-            
-            botonOpcion.sizeToFit()
-            
-            
-            
-            print(botonOpcion.titleLabel!.text!.characters.count)
-            
-            var lineas = Int(botonOpcion.titleLabel!.text!.characters.count/43)
-            
-            if lineas == 0 {
-                
-                lineas += 1
-                
-            }
-            
-            botonOpcion.frame = CGRect(x: offsetx, y: offsetScroll, width: self.view.frame.width - offsetx, height: alto_menu * CGFloat(lineas))
-            
-            botonOpcion.titleLabel!.adjustFontSizeToFitRect(rect: botonOpcion.frame, maximo: tamano_letra_menu)
-            
-            botonOpcion.contentHorizontalAlignment = .left
-            botonOpcion.contentVerticalAlignment = .center
-            
-            
-            //botonListaEncuestas(UIImage(named: "MenuHome"), forState: .Normal)
-            
-            botonOpcion.addTarget(self, action:#selector(EncuestaController.seleccionar_opcion(sender:)), for:.touchDown)
-            
-            opcionesVista.addSubview(botonOpcion)
-            
-            offsetScroll += botonOpcion.frame.height + 10
-            
-        }
-        
-        opcionesVista.contentSize = CGSize(width: opcionesVista.contentSize.width, height: offsetScroll)
-        
-        
-        self.view.addSubview(opcionesVista)
-        
-        sender.setImage(UIImage(named:"BotonResponderRojo"), for: .normal)
-        
-        laVista.isUserInteractionEnabled = false
-        
-        UIView.animate(withDuration: 0.5, delay: 0.1, options: [],animations: {
-            
-            opcionesVista.frame.origin.y = self.view.frame.height/2
-            // self.username.center.x += self.view.bounds.width
-            }, completion: nil)
-        
-        
-    }
-    
-    @objc func seleccionar_opcion(sender:UIButton) {
-        
-        var idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
-        
-        print(idReporteLocal as Any)
-        
-        if idReporteLocal == nil {
-            
-            print("vamos por uno nuevo")
-            
-            
-            
-            idReporteLocal = defaults.object(forKey: "idReporteLocal") as? NSNumber
-            
-        }
-        
-        
-        let idUser = defaults.object(forKey: "idUser") as! Int
-        
-        
-        
-        
-        
-        let random = Int(arc4random_uniform(1000))
-        
-        let tiempo_milisegundos = String(Int64(NSDate().timeIntervalSince1970*1000))
-        
-        let el_hash=String(tiempo_milisegundos) + String(describing: defaults.object(forKey: "idReporteLocal")!) + String(random)
-        
-        let hash = el_hash.md5()
-        
-        let indicePregunta = defaults.object(forKey: "indicePregunta") as! Int
-        
-        let pregunta = preguntas[indicePregunta]
-        
-        
-        
-        
-        let idPoll = defaults.object(forKey: "idPoll") as! NSNumber
-        
-        let numeroEncuesta = defaults.object(forKey: "numeroEncuesta") as! NSNumber
-        
-        let respuesta = pregunta["opciones"] as! [[String:AnyObject]]
-        
-        preguntas[indicePregunta]["respuesta"] = respuesta[sender.tag-1]["valor"]
-        
-        let checarRespuesta = "select * from EARespuesta where idPregunta = '\(pregunta["id"]!)' and idReporteLocal = '\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
-        
-        print(checarRespuesta)
-        
-        let resultadoChecarRespuesta = db.select_query_columns(checarRespuesta)
-        
-        if resultadoChecarRespuesta.count < 1 {
-            
-            let sqlRespuesta = "insert into EARespuesta (hash,idPregunta,idReporteLocal,idEncuesta,numeroEncuesta,respuesta,campoExtra1,campoExtra2) values ('\(hash)','\(pregunta["id"]!)','\(idReporteLocal!)','\(idPoll)','\(numeroEncuesta)','\(respuesta[sender.tag-1]["valor"]!.replacingOccurrences(of: "'", with: "''"))','','\(idUser)')"
-            
-            print(sqlRespuesta)
-            
-            let resultadoRespuesta = db.execute_query(sqlRespuesta)
-            
-            print(resultadoRespuesta)
-            
-        }
-        else{
-            
-            let sqlRespuesta = "update EARespuesta set respuesta = '\(respuesta[sender.tag-1]["valor"]!.replacingOccurrences(of: "'", with: "''"))' where idPregunta = '\(pregunta["id"]!)' and idReporteLocal = '\(idReporteLocal!)' and idEncuesta = '\(idPoll)' and numeroEncuesta = '\(numeroEncuesta)'"
-            
-            print(sqlRespuesta)
-            
-            let resultadoRespuesta = db.execute_query(sqlRespuesta)
-            
-            print(resultadoRespuesta)
-            
-        }
-        
-        UIView.animate(withDuration: 0.5, delay: 0.1, options: [],animations: {
-            
-            sender.superview!.frame.origin.y = self.view.frame.height
-            // self.username.center.x += self.view.bounds.width
-            }, completion: {finished in
-                
-                self.laVista.isUserInteractionEnabled = true
-                sender.superview?.removeFromSuperview()
-                // the code you put here will be executed when your animation finishes, therefore
-                // call your function here
-        } )
-        
-        
-        
-    }
-    
-    
-    
-    //tomar foto
-    
-    @objc func tomar_foto(sender:UIButton){
-        
-        foto_tag = sender.tag
-        
-        
-        
-        
-        
-        self.imagePicker =  UIImagePickerController()
-        self.imagePicker.delegate = self
-        self.imagePicker.sourceType = .camera
-        
-        //self.presentViewController(self.imagePicker, animated: true, completion: nil)
-        
-        self.addChildViewController(imagePicker)
-        imagePicker.didMove(toParentViewController: self)
-        self.view.addSubview(imagePicker.view)
-        
-        
-        
-    }
-    
-    
-    func imagePickerControllerDidCancel(_ picker:UIImagePickerController)
+   func imagePickerControllerDidCancel(_ picker:UIImagePickerController)
     {
         //imagePicker.dismissViewControllerAnimated(true, completion: nil)
         
@@ -2439,16 +2387,7 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
                 
                 DispatchQueue.main.async {
                     
-                    /*
-                    SwiftSpinner.show("Foto Guardada, Toque para cerrar").addTapHandler({
-                        
-                        self.imagePicker.view.removeFromSuperview()
-                        self.imagePicker.removeFromParentViewController()
-                        SwiftSpinner.hide()
-                        
-                    })
                     
-                    */
                     
                     // Create the alert controller
                     let alertController = UIAlertController(title: "¡Alerta!", message: "Foto Guardada", preferredStyle: .alert)
@@ -2483,23 +2422,7 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
                 
                 
             }
-            else{
-                
-                /*
-                DispatchQueue.main.async {
-                    
-                    SwiftSpinner.show("Hubo problema al guardar la foto intentalo nuevamente por favor").addTapHandler({
-                        
-                        self.imagePicker.view.removeFromSuperview()
-                        self.imagePicker.removeFromParentViewController()
-                        SwiftSpinner.hide()
-                        
-                    })
-                    
-                }
-                */
-                
-            }
+            
             
             
             
@@ -2509,6 +2432,8 @@ class EncuestaController: UIViewController,UIScrollViewDelegate,CLLocationManage
     }
     
     
+    
+    // MARK: - Funciones de guardar archivos
     
     func guardar_foto (imagen: UIImage, ruta: String ) -> Bool{
         
